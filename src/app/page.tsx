@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ButtonPruebaIA from "./_components/buttonPruebaIA";
 
 export default function Home() {
   return (
@@ -11,7 +12,12 @@ export default function Home() {
               Iniciar sesión
             </button>
           </Link>
-
+          
+          <div>
+            <h1>resouesta ia</h1>
+            <h4></h4>
+            <ButtonPruebaIA/>
+          </div>
         </div>
       </main>
     </div>
