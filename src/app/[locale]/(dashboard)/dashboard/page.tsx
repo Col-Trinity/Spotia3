@@ -12,18 +12,19 @@ export default function Dashboard() {
   console.log(session);
   return (
     <div>
-      <h1>Bienvenida {session.user?.name}</h1>
-      <p>Email: {session.user?.email}</p>
-
-      <div>
-        <TopArtist />
+      <div className="flex flex-col items-end">
+        <h1>Bienvenida {session.user?.name}</h1>
+        <p> {session.user?.email}</p>
       </div>
+
+
+      <TopArtist />
 
       <div>
         <p>Tu Play List</p>
         <PlayList />
       </div>
-      
+
       <div>
         <h1>resouesta ia</h1>
         <h4></h4>
