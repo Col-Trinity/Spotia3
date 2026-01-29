@@ -3,7 +3,7 @@
 import ButtonPruebaIA from "@/src/app/_components/buttonPruebaIA";
 import { useSession } from "next-auth/react";
 import { TopArtist } from "./data-spotify/top-artist";
-import { PlayList } from "./data-spotify/play-list";
+import { TopTracks } from "./data-spotify/top-tracks";
 export default function Dashboard() {
   const { data: session, status } = useSession();
 
@@ -20,10 +20,9 @@ export default function Dashboard() {
 
       <TopArtist />
 
-      <div>
-        <p>Tu Play List</p>
-        <PlayList />
-      </div>
+
+      <TopTracks />
+
 
       <div>
         <h1>resouesta ia</h1>
