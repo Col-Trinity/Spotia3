@@ -14,8 +14,8 @@ async function fetchWithToken(url: string, token: string) {
 }
 
 
-export function getPlayList(token: string,
-    limite: number = 10,
+export function getTopTracks(token: string,
+    limite: number = 5,
     rangoTiempo: "short_term" | "medium_term" | "long_term" = "medium_term") {
 
     const url = `${SPOTIFY_API}/me/top/tracks?limit=${limite}&time_range=${rangoTiempo}`;
