@@ -1,38 +1,35 @@
 "use client";
 import { useState, useEffect } from "react";
-import { TrackCard } from "@/src/app/_components/trackCard";
-import { Track } from "@/src/types/track";
 
-export function TopTracks() {
-    const [tracksList, setTracksList] = useState<Track[]>([]);
+
+export function Playlist() {
+    const [playList, setPlayList] = useState<[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        async function fetchTrackList() {
+        async function fetchPlayList() {
             try {
-                const res = await fetch("/api/spotify/top-tracks?limit=5&time_range=short_term");
+                const res = await fetch("/api/spotify/play-list?limit=5");
                 if (!res.ok) throw new Error(`Error fetching play list: ${res.statusText}`);
                 const data = await res.json();
-                console.log("Play List Data:", data.items);
-                setTracksList(data.items);
+                console.log("Play List Data:", data.items.id);
+                setPlayList(data.items);
             } catch (err) {
                 setError(`No se pudieron cargar las canciones: ${err}`);
             } finally {
                 setLoading(false);
             }
         }
-        fetchTrackList();
+        fetchPlayList();
     }, []);
-
-    if (loading) return <p>Cargando canciones...</p>;
+    console.log(playList);
+    if (loading) return <p>Cargando playlist...</p>;
     if (error) return <p>{error}</p>;
     return (
         <div className="max-w-3xl mx-auto flex flex-col gap-1">
             <h2 className="text-2xl font-bold mb-2 mt-4 flex justify-center items-center">Canciones que más te representan en este período</h2>
-            {tracksList.map((track: Track) => (
-                <TrackCard key={track.id} track={track} />
-            ))}
+            
         </div>
 
     );
