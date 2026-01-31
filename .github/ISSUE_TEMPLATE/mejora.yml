@@ -1,0 +1,42 @@
+name: "🔧 Mejora de Código"
+description: Proponer una mejora, refactor o limpieza de código
+title: "[Mejora] "
+labels: ["mejora"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Usá este template para proponer refactors, limpieza de código o mejoras técnicas.
+
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción
+      description: ¿Qué mejora querés hacer y por qué es importante?
+    validations:
+      required: true
+
+  - type: input
+    id: archivo
+    attributes:
+      label: Archivo o código actual
+      description: ¿En qué archivo o parte del código está el problema?
+      placeholder: "Ej: src/components/Dashboard.tsx"
+    validations:
+      required: false
+
+  - type: textarea
+    id: propuesta
+    attributes:
+      label: Mejora propuesta
+      description: ¿Cómo debería quedar el código después de la mejora?
+    validations:
+      required: true
+
+  - type: input
+    id: wiki
+    attributes:
+      label: Página de wiki relacionada
+      description: Si hay una página del wiki que da contexto, poné el link acá.
+    validations:
+      required: false

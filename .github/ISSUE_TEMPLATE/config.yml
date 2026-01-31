@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: "📖 Wiki del proyecto"
+    url: https://github.com/gianella12/Spotia3/wiki
+    about: Consultá la wiki para más contexto sobre el proyecto y el flujo de trabajo.

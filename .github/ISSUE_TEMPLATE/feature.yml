@@ -1,0 +1,33 @@
+name: "✨ Nueva Funcionalidad"
+description: Proponer una nueva funcionalidad o característica
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describí la funcionalidad que te gustaría agregar al proyecto.
+
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción
+      description: ¿Qué funcionalidad querés agregar y por qué?
+    validations:
+      required: true
+
+  - type: textarea
+    id: solucion
+    attributes:
+      label: Solución propuesta
+      description: ¿Cómo pensás que se podría implementar?
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas consideradas
+      description: ¿Consideraste otras formas de resolver esto?
+    validations:
+      required: false
