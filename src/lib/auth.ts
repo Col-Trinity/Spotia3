@@ -1,7 +1,8 @@
+import type { NextAuthOptions } from 'next-auth';
 import SpotifyProvider from 'next-auth/providers/spotify';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from './db';
-import { accounts, sessions, users, verificationTokens } from '@/db/schema';
+import { accounts, sessions, users, verificationTokens } from '@/src/db/schema';
 
 const spotifyScopes = [
   'user-read-email',
@@ -18,7 +19,7 @@ const spotifyScopes = [
   'user-modify-playback-state',
 ].join(' ');
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
