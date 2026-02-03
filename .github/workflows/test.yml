@@ -1,0 +1,58 @@
+name: Test Project
+
+on:
+    pull_request:
+        branches:
+            - main
+            - master
+
+jobs:
+    code-validation:
+        name: Code Validation
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        container:
+            image: node:20
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                node-version: 20
+
+            - name: PNPM setup
+              uses: pnpm/action-setup@v4
+              with:
+                version: 10
+            
+            - name: Install dependencies
+              run: pnpm ci
+
+            - name: Run lint
+              run: pnpm lint
+
+
+    test:
+        name: Test Project
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        container:
+            image: node:20
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                node-version: 20
+
+            - name: PNPM setup
+              uses: pnpm/action-setup@v4
+              with:
+                version: 10
+
+            - name: Install dependencies
+              run: pnpm ci
+
+            - name: Run tests
+              run: pnpm test
+
+            - name: Build
+              run: pnpm build
