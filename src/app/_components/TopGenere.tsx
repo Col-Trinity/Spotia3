@@ -30,11 +30,11 @@ export default function TopGenere() {
   const topGenereLimited = topGenere.slice(0, 5);
 
   const data = {
-    labels: topGenereLimited.map((item: any) => item.genre),
+    labels: topGenereLimited.map((item) => item.genre),
     datasets: [
       {
         label: "%",
-        data: topGenereLimited.map((item: any) => item.percentage),
+        data: topGenereLimited.map((item) => item.percentage),
         backgroundColor: ["red", "blue", "green", "yellow", "purple", "orange"],
       },
     ],

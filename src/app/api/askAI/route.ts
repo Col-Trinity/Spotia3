@@ -1,7 +1,7 @@
 import { askAI } from "@/src/lib/aiClient";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST() {
   try {
     const result = await askAI();
     console.log("Resultado de askAI:", result); 

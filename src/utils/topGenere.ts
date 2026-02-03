@@ -1,6 +1,6 @@
-export const topGenres = (artists: any[]) => {
+export const topGenres = (artists: { genres: string[] }[]) => {
   const genreCount = artists.reduce(
-    (acc: Record<string, number>, artist: any) => {
+    (acc: Record<string, number>, artist: { genres: string[] }) => {
       artist.genres.forEach((genre: string) => {
         acc[genre] = (acc[genre] || 0) + 1;
       });
