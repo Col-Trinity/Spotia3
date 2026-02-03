@@ -1,12 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import { PlaylistItem } from "@/src/types/playList";
+import { Track } from "@/src/types/track";
 
 
 export function Playlist() {
     const [playList, setPlayList] = useState<PlaylistItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [tracks, setTracks] = useState<Track[]>([]);
 
     useEffect(() => {
         async function fetchPlayList() {
@@ -14,7 +16,7 @@ export function Playlist() {
                 const res = await fetch("/api/spotify/play-list?limit=5");
                 if (!res.ok) throw new Error(`Error fetching play list: ${res.statusText}`);
                 const data = await res.json();
-                console.log("Play List Data:", data);
+
                 setPlayList(data);
             } catch (err) {
                 setError(`No se pudieron cargar las canciones: ${err}`);
@@ -24,7 +26,18 @@ export function Playlist() {
         }
         fetchPlayList();
     }, []);
-    console.log(playList);
+
+    const fetchTracks = async (playlistId: string) => {
+        const res = await fetch(`/api/spotify/play-list/${playlistId}/tracks`);
+        if (!res.ok) {
+            setError(`Error fetching tracks: ${res.statusText}`);
+            return;
+        }
+        const data = await res.json();
+        setTracks(data);
+        console.log("Tracks:", data.items);
+    }
+
     if (loading) return <p>Cargando playlist...</p>;
     if (error) return <p>{error}</p>;
     return (
@@ -34,14 +47,30 @@ export function Playlist() {
                 {playList.map((playlist) => (
                     <li key={playlist.id}>
                         {playlist.name}
-                        <button 
-                        onClick={() => fetch(`/api/spotify/play-list/${playlist.id}/tracks`)}
-                        className="border-r-green-400 border m-3">
+                        <button
+                            onClick={() => fetchTracks(playlist.id)}
+                            className="border-r-green-400 border m-3">
                             Ver canciones
                         </button>
                     </li>
                 ))}
             </ul>
+
+
+            {tracks.length > 0 && (
+                <div>
+                    <h3>Canciones de la Playlist</h3>
+                    <ul>
+                        {tracks.map((track) => (
+                            <li key={track.id}>
+                                {track.name} — {track.artists.map((a) => a.name).join(", ")}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )
+            }
+
         </div>
 
 
