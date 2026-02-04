@@ -1,29 +1,26 @@
 import { topGenres } from "@/src/utils/topGenere";
-import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
+  RadialLinearScale,
   PointElement,
   LineElement,
-  BarElement,
-  Title,
+  Filler,
   Tooltip,
   Legend,
 } from "chart.js";
+import { Radar } from "react-chartjs-2";
 import { useTopArtists } from "@/src/hooks/useTopArtists";
 
 export default function TopGenere() {
   ChartJS.register(
-    CategoryScale,
+    RadialLinearScale,
     PointElement,
-    BarElement,
-    LinearScale,
     LineElement,
-    Title,
+    Filler,
     Tooltip,
     Legend,
   );
+
   const { artists, loading, error } = useTopArtists();
 
   const topGenere = topGenres(artists);
@@ -35,7 +32,9 @@ export default function TopGenere() {
       {
         label: "%",
         data: topGenereLimited.map((item) => item.percentage),
-        backgroundColor: ["red", "blue", "green", "yellow", "purple", "orange"],
+        backgroundColor: "rgba(34, 202, 236, 0.2)",
+        borderColor: "rgba(34, 202, 236, 1)",
+        pointBackgroundColor: "rgba(34, 202, 236, 1)",
       },
     ],
   };
@@ -44,8 +43,18 @@ export default function TopGenere() {
   return (
     <div>
       <div>TopGenere Component</div>
-
-      <Bar data={data} />
+      <div className="relative w-full max-w-[600px] h-[300px] sm:h-[300px] md:h-[400px] mx-auto">
+        <Radar
+          data={data}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              r: { beginAtZero: true, max: 40, ticks: { stepSize: 20 } },
+            },
+          }}
+        />
+      </div>
     </div>
   );
 }
