@@ -43,7 +43,7 @@ export default function TopGenere() {
   return (
     <div>
       <div>TopGenere Component</div>
-      <div className="relative w-full max-w-[600px] h-[300px] sm:h-[300px] md:h-[400px] mx-auto">
+      <div className="relative w-full max-w-150 h-75 sm:h-75 md:h-100 mx-auto">
         <Radar
           data={data}
           options={{

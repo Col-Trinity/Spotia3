@@ -1,4 +1,6 @@
-export function CardArtist({ artist }) {
+import { Artist } from "@/src/types/spotify";
+
+export function CardArtist({ artist }: { artist: Artist }) {
     return (
         <>
             
