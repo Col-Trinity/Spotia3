@@ -35,7 +35,7 @@ export function Playlist() {
         }
         const data = await res.json();
         setTracks(data);
-        console.log("Tracks:", data.items);
+       
     }
 
     if (loading) return <p>Cargando playlist...</p>;

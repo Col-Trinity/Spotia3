@@ -6,7 +6,7 @@ import { getTopTracks } from "@/src/lib/spotify/top-tracks/route";
 export async function GET(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-    console.log("SESSION:", session);
+
 
     if (!session || !session.accessToken) {
       return NextResponse.json(
