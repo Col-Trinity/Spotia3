@@ -2,10 +2,10 @@
 
 import ButtonPruebaIA from "@/src/app/_components/buttonPruebaIA";
 import { useSession } from "next-auth/react";
-import { TopArtist } from "./data-spotify/top-artist";
+import { TopArtist } from "./_components/top-artist";
 import TopGenere from "@/src/app/_components/TopGenere";
-import { TopTracks } from "./data-spotify/top-tracks";
-import { Playlist } from "./data-spotify/play-list";
+import { TopTracks } from "./_components/top-tracks";
+import { Playlist } from "./_components/play-list";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();

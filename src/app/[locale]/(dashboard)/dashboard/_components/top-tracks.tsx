@@ -8,6 +8,7 @@ export function TopTracks() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    // TODO: Implementar en useSpotifyService
     useEffect(() => {
         async function fetchTrackList() {
             try {
