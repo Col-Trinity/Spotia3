@@ -4,6 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

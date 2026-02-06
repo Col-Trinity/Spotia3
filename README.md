@@ -74,26 +74,80 @@ docker exec -it spotia-db psql -U postgres -d spotia
 ---
 
 ##  Desarrollo local (sin Docker)
+### 1. Clonar el repositorio
 
-### 1 Instalar dependencias
+```bash
+git clone git@github.com:gianella12/Spotia3.git
+cd spotia3
+```
+
+---
+### 2 Instalar dependencias
+con npm:
 
 ```bash
 npm install
 ```
+O con pnpm:
 
-### 2 Ejecutar servidor de desarrollo
+```bash
+pnpm install
+```
+
+---
+
+### 3. Configurar variables de entorno
+
+Crear un archivo `.env` en la raíz del proyecto y agregar las variables necesarias.
+
+Ejemplo:
+
+```
+DATABASE_URL=postgres://usuario:password@localhost:5432/nombre_db
+```
+
+Asegurarse de que la base de datos exista y esté en funcionamiento.
+
+---
+
+### 4. Ejecutar migraciones con Drizzle
+Scripts definidos en `package.json`, también se puede ejecutar:
+
+```bash
+npm run db:generate
+npm run db:migrate
+```
+
+---
+### 5. Levantar el proyecto en modo desarrollo
 
 ```bash
 npm run dev
 ```
+O
+```bash
+pnpm run dev
+```
 
-### 3 Abrir la aplicación
+El servidor estará disponible en:
 
- URL: [http://localhost:3000](http://localhost:3000)
+```
+http://localhost:3000
+```
 
 ---
+
+
+## ⚠️ Problema conocido
+
+Si el proyecto queda detenido en `Starting...` al ejecutar `npm run dev`, eliminar la carpeta `.next` y volver a intentar:
+
+```bash
+rm -rf .next
+npm run dev
+```
 
 ##  Notas
 
 * Asegurate de que PostgreSQL esté corriendo si usás el proyecto sin Docker.
-* No olvides configurar correctamente las variables de entorno antes de iniciar la app.
+* No olvides configurar correctamente las variables de entorno antes de iniciar la app tienes el archivo .env.example como referencia.
