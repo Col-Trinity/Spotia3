@@ -1,23 +1,15 @@
 import Link from "next/link";
-import ButtonPruebaIA from "./_components/buttonPruebaIA";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
           <Link href="/auth/login">
             <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
               Iniciar sesión
             </button>
           </Link>
-          
-          <div>
-            <h1>resouesta ia</h1>
-            <h4></h4>
-            <ButtonPruebaIA/>
-          </div>
         </div>
       </main>
     </div>

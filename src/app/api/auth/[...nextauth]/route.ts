@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-
+pages:{error: "/auth/error"},
   callbacks: {
     async jwt({ token, account }) {
       if (account?.access_token) {
