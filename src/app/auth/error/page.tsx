@@ -1,5 +1,6 @@
 "use client";
 
+import { Link } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 export default function ErrorPage() {
@@ -13,13 +14,13 @@ export default function ErrorPage() {
         Error de Autenticación{" "}
       </h1>
       <p className="text-lg text-gray-400 text-center max-w-md"> {error}</p>
-      <a
+      <Link
         href="/auth/login"
         className="px-6 py-3 bg-green-500 text-black font-semibold rounded-lg shadow hover:bg-green-400 transition"
       >
         {" "}
         Reintentar Login{" "}
-      </a>
+      </Link>
     </div>
   );
 }
