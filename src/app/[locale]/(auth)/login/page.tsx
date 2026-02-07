@@ -5,6 +5,8 @@ export default function LoginPage() {
   const locale = 'es';
   const handleLogin = (provider: string) => {
     signIn(provider, { callbackUrl: `/${locale}/dashboard` });
+        // signIn(false , { callbackUrl: false });
+
   };
 
   return (
