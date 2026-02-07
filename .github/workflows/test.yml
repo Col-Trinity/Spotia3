@@ -9,7 +9,7 @@ on:
 jobs:
     code-validation:
         name: Code Validation
-        runs-on: ubuntu-latest
+        runs-on: tenki-standard-medium-4c-8g
         timeout-minutes: 10
         container:
             image: node:20
@@ -23,17 +23,16 @@ jobs:
               uses: pnpm/action-setup@v4
               with:
                 version: 10
-            
+
             - name: Install dependencies
               run: pnpm install
 
             - name: Run lint
               run: pnpm lint
 
-
     test:
         name: Test Project
-        runs-on: ubuntu-latest
+        runs-on: tenki-standard-medium-4c-8g
         timeout-minutes: 10
         container:
             image: node:20
