@@ -77,18 +77,13 @@ docker exec -it spotia-db psql -U postgres -d spotia
 ### 1. Clonar el repositorio
 
 ```bash
-git clone git@github.com:gianella12/Spotia3.git
+git clone https://github.com/Col-Trinity/Spotia3.git
 cd spotia3
 ```
 
 ---
 ### 2 Instalar dependencias
-con npm:
-
-```bash
-npm install
-```
-O con pnpm:
+Con pnpm:
 
 ```bash
 pnpm install
@@ -121,10 +116,7 @@ npm run db:migrate
 ---
 ### 5. Levantar el proyecto en modo desarrollo
 
-```bash
-npm run dev
-```
-O
+
 ```bash
 pnpm run dev
 ```
