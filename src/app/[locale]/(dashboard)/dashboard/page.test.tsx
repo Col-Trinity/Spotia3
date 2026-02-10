@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 
 vi.mock("next-auth/react", () => ({
   useSession: vi.fn(),
+   getProviders: vi.fn(),
 }));
 
 
