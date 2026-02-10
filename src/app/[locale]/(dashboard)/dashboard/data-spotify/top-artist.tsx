@@ -3,10 +3,13 @@ import { CardArtist } from "@/src/app/_components/cardArtist"
 import { useTopArtists } from "@/src/hooks/useTopArtists";
 import { Loading } from "@/src/app/_components/loading";
 
-export function TopArtist() {
-  const { artists, loading, error } = useTopArtists();
 
-  if (loading) return <Loading/>;
+type TypeTimeRange = {
+  timeRange: string;
+}
+export function TopArtist(timeRange: TypeTimeRange) {
+  const { artists, loading, error } = useTopArtists(timeRange);
+  if (loading) return <Loading />;
   if (error) return <p>{error}</p>;
   return (
     <>
