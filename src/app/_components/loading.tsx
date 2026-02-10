@@ -14,7 +14,7 @@ const messages = [
     "Ensayando el coro de tus datos 🎤🎶",
     "Chequeando que no haya feedback digital 🔄"
 ];
-export function Loading() {
+export default function Loading() {
     const [message, setMessage] = useState(messages[0]);
 
     useEffect(() => {

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { TrackCard } from "@/src/app/_components/trackCard";
 import { Track } from "@/src/types/track";
-import { Loading } from "@/src/app/_components/loading";
+import  Loading from "@/src/app/_components/loading";
 
 
 

@@ -1,7 +1,7 @@
 "use client";
 import { CardArtist } from "@/src/app/_components/cardArtist"
 import { useTopArtists } from "@/src/hooks/useTopArtists";
-import { Loading } from "@/src/app/_components/loading";
+import  Loading  from "@/src/app/_components/loading";
 
 
 type TypeTimeRange = {
