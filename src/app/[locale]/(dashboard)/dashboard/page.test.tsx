@@ -8,7 +8,7 @@ vi.mock("next-auth/react", () => ({
   useSession: vi.fn(),
 }));
 
-vi.mock("@/src/app/_components/Loading", () => ({
+vi.mock("@/src/app/_components/loading", () => ({
   default: () => <div data-testid="loading" />,
 }));
 
