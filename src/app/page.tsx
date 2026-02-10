@@ -1,16 +1,11 @@
-import Link from "next/link";
+import { Hero } from "./_components/hero";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <Link href="/auth/login">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-              Iniciar sesión
-            </button>
-          </Link>
-        </div>
+    <div className="flex  items-center justify-center font-sans w-full h-screen bg-linear-to-r from-green-400 to-blue-500 ">
+      <main className="flex  w-full max-w-3xl flex-col items-center justify-between  px-16 sm:items-start">
+       <Hero />
+     
       </main>
     </div>
   );
