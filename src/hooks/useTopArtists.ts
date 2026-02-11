@@ -1,5 +1,5 @@
 "use client";
-// import { useState, useEffect } from "react";
+
 import { Artist } from "@/src/types/spotify";
 import { useQuery } from '@tanstack/react-query';
 
