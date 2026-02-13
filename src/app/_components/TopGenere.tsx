@@ -10,6 +10,8 @@ import {
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
 import { useTopArtists } from "@/src/hooks/useTopArtists";
+import Loading from "@/src/app/_components/loading";
+import { Artist } from "@/src/types/spotify";
 
 export default function TopGenere() {
   ChartJS.register(
@@ -21,9 +23,10 @@ export default function TopGenere() {
     Legend,
   );
 
-  const { artists, loading, error } = useTopArtists();
+  const { data: artists, isLoading, isError, error, refetch } = useTopArtists();
 
-  const topGenere = topGenres(artists);
+  if (!artists) return null;
+  const topGenere = topGenres(artists as Artist[]);
   const topGenereLimited = topGenere.slice(0, 5);
 
   const data = {
@@ -38,8 +41,20 @@ export default function TopGenere() {
       },
     ],
   };
-  if (loading) return <p>Cargando generos ...</p>;
-  if (error) return <p>{error}</p>;
+
+  if (isLoading) return <Loading />;
+  if (isError) return (
+    <div>
+      <p>{(error as Error).message}</p>
+      <button
+        onClick={() => refetch()}
+        className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+      >
+        Reintentar
+      </button>
+    </div>
+
+  );
   return (
     <div>
       <div>TopGenere Component</div>

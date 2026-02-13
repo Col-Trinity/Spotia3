@@ -1,4 +1,5 @@
 export const topGenres = (artists: { genres: string[] }[]) => {
+
   const genreCount = artists.reduce(
     (acc: Record<string, number>, artist: { genres: string[] }) => {
       artist.genres.forEach((genre: string) => {
