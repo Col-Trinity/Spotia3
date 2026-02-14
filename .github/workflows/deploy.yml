@@ -9,10 +9,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Spotia3/Spotia3
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -27,8 +23,8 @@ jobs:
         with:
           version: 9
 
-    # - name: Verify pnpm
-       # run: pnpm --version
+      - name: Verify pnpm
+        run: pnpm --version
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
