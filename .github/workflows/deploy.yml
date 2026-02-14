@@ -19,6 +19,12 @@ jobs:
         with:
           version: 9
           run_install: false
+          
+      - name: Show current directory 
+        run: pwd 
+        
+      - name: List files 
+        run: ls -la    
            
       - name: Verify pnpm
         run: pnpm --version   
