@@ -8,13 +8,13 @@
     "db:migrate": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "build": "next build",
-    "build:opennext": "open-next build --verbose", 
+    "deploy": "wrangler deploy --no-bundle",
+    "build:opennext": "open-next build --config ./open-next.config.mjs --verbose",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "reset": "rm -rf node_modules .pnpm .next .open-next && pnpm install",  
+    "reset": "rm -rf node_modules .pnpm .next .open-next && pnpm install",
     "test:watch": "vitest"
-
   },
   "dependencies": {
     "@auth/core": "^0.34.3",
@@ -37,7 +37,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.16.4",
+    "@opennextjs/cloudflare": "^1.16.5",
     "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

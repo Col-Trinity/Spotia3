@@ -35,10 +35,7 @@ jobs:
       - name: Build OpenNext bundle
         run: npm run build:opennext
 
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: spotia3
-          directory: .open-next/assets
+      - name: Deploy to Cloudflare Workers  
+        run: npm run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
