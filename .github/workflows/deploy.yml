@@ -9,39 +9,34 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Spotia3/Spotia3
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: false
-          
-      - name: Show current directory 
-        run: pwd 
-        
-      - name: List files 
-        run: ls -la    
-           
-      - name: Verify pnpm
-        run: pnpm --version   
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Verify pnpm
+        run: pnpm --version
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build OpenNext bundle
         run: pnpm run build:opennext
 
-      - name: Deploy to Cloudflare Workers  
+      - name: Deploy to Cloudflare Workers
         run: pnpm run deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
