@@ -1,55 +1,83 @@
 
 import OpenAI from "openai";
 import { AI_PROVIDER, API_KEYS } from "../config/iaConfig";
+import { Artist } from "../types/spotify";
 
-export async function askAI() {
+//elige un provedor 
+export async function askAI(artistasReciente: Artist[]) {
   switch (AI_PROVIDER) {
     case "gemini":
-      return callGemini();
+      return callGemini(artistasReciente);
     case "claude":
-      return callClaude();
+      return callClaude(artistasReciente);
     case "gpt":
-      return callGPT();
+      return callGPT(artistasReciente);
     default:
       throw new Error("Proveedor de IA no soportado");
   }
 }
 //Gpt
-   async function callGPT() {
-    
-    const client = new OpenAI({
-      apiKey: API_KEYS.gpt,
-    });
+async function callGPT(artistas: Artist[]) {
 
-    const response= await client.chat.completions.create({
-      model:"gpt-4o-mini",
-      messages: [{ role: "user", content: "crea una lista de cancionesficticias o reales" }],
-    })
-    
-    return response.choices[0].message?.content ?? "";
-   }
-    // Gemini
-    async function callGemini() {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEYS.gemini}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: `A partir de esta lista de canciones: - La Bestia Pop - De Música Ligera - Demoliendo Hoteles - Lose Yourself - Stan - Without Me - Quién se ha tomado todo el vino - Intento - The Thrill Is Gone - Mannish Boy Genera una descripción breve de la persona que escucharía esta selección. Incluye su personalidad, estilo de vida y rasgos destacados, en un tono atractivo y conciso, ideal para mostrar en una aplicación musical como Spotia.`,
-                },
-              ],
-            },
-          ],
-        }),
+  const client = new OpenAI({
+    apiKey: API_KEYS.gpt,
+  });
+  const descripcionArtistas = artistas.map(
+    (artist) =>
+      `-${artist.name} | Generos: ${artist.genres.join(",")} | Popularidad: ${artist.popularity}`
+  ).join("\n")
+
+  const prompt = `
+Estos son los artistas escuchados recientemente por el usuario:
+
+${descripcionArtistas}
+
+Genera una descripción breve del perfil musical del usuario.
+Debe sonar atractiva, modernay graciosa.
+`;
+
+  const response = await client.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{ role: "user", content: prompt }],
+  })
+
+  return response.choices[0].message?.content ?? "";
+}
+// Gemini
+async function callGemini(artistas: Artist[]) {
+  const descripcionArtistas = artistas.map(
+    (artist) =>
+      `-${artist.name} | Generos: ${artist.genres.join(",")} | Popularidad: ${artist.popularity}`
+  ).join("\n")
+
+  const prompt = `
+Estos son los artistas escuchados recientemente por el usuario:
+
+${descripcionArtistas}
+
+Genera una descripción breve del perfil musical del usuario.
+Debe sonar atractiva, modernay graciosa.
+`;
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEYS.gemini}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              {
+                text: prompt,
+              },
+            ],
+          },
+        ],
+      }),
+    },
+  );
 
   const data = await res.json();
   console.log("Respuesta de Gemini:", data);
@@ -59,7 +87,20 @@ export async function askAI() {
 
 
 // Claude
-async function callClaude(){
+async function callClaude(artistas: Artist[]) {
+  const descripcionArtistas = artistas.map(
+    (artist) =>
+      `-${artist.name} | Generos: ${artist.genres.join(",")} | Popularidad: ${artist.popularity}`
+  ).join("\n")
+
+  const prompt = `
+Estos son los artistas escuchados recientemente por el usuario:
+
+${descripcionArtistas}
+
+Genera una descripción breve del perfil musical del usuario.
+Debe sonar atractiva, modernay graciosa.
+`;
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -71,7 +112,7 @@ async function callClaude(){
       messages: [
         {
           role: "user",
-          content: "crea una lista de canciones reales o ficticias",
+          content: prompt
         },
       ],
     }),

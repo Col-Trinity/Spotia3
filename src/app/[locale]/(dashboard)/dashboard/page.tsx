@@ -1,6 +1,6 @@
 "use client";
 
-import ButtonPruebaIA from "@/src/app/_components/buttonPruebaIA";
+import PerfilMusicalIA from "@/src/app/_components/buttonPruebaIA";
 import { useSession } from "next-auth/react";
 import { TopArtist } from "./data-spotify/top-artist";
 import TopGenere from "@/src/app/_components/TopGenere";
@@ -33,7 +33,7 @@ export default function Dashboard() {
       <div>
         <h1>resouesta ia</h1>
         <h4></h4>
-        <ButtonPruebaIA />
+        <PerfilMusicalIA />
       </div>
     </div>
   );

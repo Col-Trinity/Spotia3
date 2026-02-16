@@ -21,7 +21,7 @@ export function TrackCard({ track }: { track: Track }) {
             {track.artists.map(a => a.name).join(", ")}
           </p>
         </div>
-
+        <iframe data-testid="embed-iframe" src="https://open.spotify.com/embed/track/1btvwn9o5vsOkeIf8qJ4cP?utm_source=generator" width="100%" height="152" frameBorder="0" allowFullScreen={false} allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
         <span className="text-sm text-gray-400">
           {formatearDuracion(track.duration_ms)}
         </span>
