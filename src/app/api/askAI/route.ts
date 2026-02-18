@@ -5,10 +5,8 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const data = await req.json();
   
-  const artistasReciente = data.artists;
-  
   try {
-    const result = await askAI(artistasReciente);
+    const result = await askAI({ artists: data.artists });
 
     return NextResponse.json({ result });
   } catch (error) {

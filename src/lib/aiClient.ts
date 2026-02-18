@@ -4,14 +4,14 @@ import { AI_PROVIDER, API_KEYS } from "../config/iaConfig";
 import { Artist } from "../types/spotify";
 
 //elige un provedor 
-export async function askAI(artistasReciente: Artist[]) {
+export async function askAI({ artists }: { artists: Artist[] }) {
   switch (AI_PROVIDER) {
     case "gemini":
-      return callGemini(artistasReciente);
+      return callGemini(artists);
     case "claude":
-      return callClaude(artistasReciente);
+      return callClaude(artists);
     case "gpt":
-      return callGPT(artistasReciente);
+      return callGPT(artists);
     default:
       throw new Error("Proveedor de IA no soportado");
   }
