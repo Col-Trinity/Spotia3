@@ -1,72 +1,82 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { BaseAIProvider } from "./BaseAIProvider";
+import { Artist } from "../../types/spotify";
 
-// Mock the config so we can control which provider is active
-vi.mock('../config/iaConfig', () => ({
-  AI_PROVIDER: 'gemini',
-  API_KEYS: { gemini: 'fake-gemini-key', claude: '', gpt: '' },
+// Mock registry to return a fake provider
+const mockProvider = {
+  name: "mock",
+  stream: vi.fn(),
+  createStream: vi.fn(),
+} as unknown as BaseAIProvider;
+
+vi.mock("./registry", () => ({
+  getProvider: vi.fn(() => mockProvider),
 }));
 
-// Mock global fetch for the Gemini HTTP call
-const fetchMock = vi.fn();
-vi.stubGlobal('fetch', fetchMock);
+vi.mock("../../config/iaConfig", () => ({
+  AI_PROVIDER: "gemini",
+}));
 
-beforeEach(() => {
-  fetchMock.mockReset();
-});
-
-import { askAI } from './aiClient';
-import { Artist } from '../../types/spotify';
+import { askAIStream } from "./aiClient";
+import { getProvider } from "./registry";
 
 const mockArtists: Artist[] = [
   {
-    id: '1',
-    name: 'Dua Lipa',
-    genres: ['pop', 'dance pop'],
+    id: "1",
+    name: "Dua Lipa",
+    genres: ["pop", "dance pop"],
     popularity: 95,
     images: [],
-    external_urls: { spotify: '' },
+    external_urls: { spotify: "" },
     followers: { total: 0 },
   },
   {
-    id: '2',
-    name: 'The Weeknd',
-    genres: ['canadian contemporary r&b', 'pop'],
+    id: "2",
+    name: "The Weeknd",
+    genres: ["canadian contemporary r&b", "pop"],
     popularity: 97,
     images: [],
-    external_urls: { spotify: '' },
+    external_urls: { spotify: "" },
     followers: { total: 0 },
   },
 ];
-describe('askAI (gemini provider)', () => {
-  it('returns the text from Gemini response', async () => {
-    fetchMock.mockResolvedValue({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          candidates: [
-            { content: { parts: [{ text: 'Canción inventada - Artista' }] } },
-          ],
-        }),
-    });
 
-    const result = await askAI({ artists: mockArtists });
+beforeEach(() => {
+  vi.clearAllMocks();
+});
 
-    expect(fetchMock).toHaveBeenCalledOnce();
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining('generativelanguage.googleapis.com'),
-      expect.objectContaining({ method: 'POST' }),
+describe("askAIStream", () => {
+  it("calls getProvider with the configured AI_PROVIDER", async () => {
+    const fakeStream = new ReadableStream();
+    (mockProvider.createStream as ReturnType<typeof vi.fn>).mockResolvedValue(
+      fakeStream,
     );
-    expect(result).toBe('Canción inventada - Artista');
+
+    const result = await askAIStream({ artists: mockArtists });
+
+    expect(getProvider).toHaveBeenCalledWith("gemini");
+    expect(result).toBe(fakeStream);
   });
 
-  it('returns empty string when Gemini response has no candidates', async () => {
-    fetchMock.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({ candidates: [] }),
-    });
+  it("passes the built prompt to provider.createStream", async () => {
+    const fakeStream = new ReadableStream();
+    (mockProvider.createStream as ReturnType<typeof vi.fn>).mockResolvedValue(
+      fakeStream,
+    );
 
-    const result = await askAI({ artists: mockArtists });
+    await askAIStream({ artists: mockArtists });
 
-    expect(result).toBe('');
+    const promptArg = (mockProvider.createStream as ReturnType<typeof vi.fn>)
+      .mock.calls[0][0] as string;
+    expect(promptArg).toContain("Dua Lipa");
+    expect(promptArg).toContain("The Weeknd");
+  });
+
+  it("propagates errors from the provider", async () => {
+    (mockProvider.createStream as ReturnType<typeof vi.fn>).mockRejectedValue(
+      new Error("429"),
+    );
+
+    await expect(askAIStream({ artists: mockArtists })).rejects.toThrow("429");
   });
 });

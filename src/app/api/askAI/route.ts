@@ -1,10 +1,10 @@
-import { callGeminiStream } from "@/src/lib/ai_client/aiClient";
+import { askAIStream } from "@/src/lib/ai_client/aiClient";
 
 export async function POST(req: Request) {
   const data = await req.json();
-  
+
   try {
-    const stream = await callGeminiStream({ artists: data.artists });
+    const stream = await askAIStream({ artists: data.artists });
 
     // const result = await askAI({ artists: data.artists });
 
