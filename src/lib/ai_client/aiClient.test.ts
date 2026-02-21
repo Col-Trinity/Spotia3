@@ -15,7 +15,7 @@ beforeEach(() => {
 });
 
 import { askAI } from './aiClient';
-import { Artist } from '../types/spotify';
+import { Artist } from '../../types/spotify';
 
 const mockArtists: Artist[] = [
   {

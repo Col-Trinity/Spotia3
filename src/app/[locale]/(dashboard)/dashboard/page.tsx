@@ -27,15 +27,11 @@ export default function Dashboard() {
         <LogOut />
       </div>
       <Playlist />
+      <PerfilMusicalIA />
       <TopGenere />
       <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
       <TopArtist timeRange={timeRange} />
       <TopTracks timeRange={timeRange} />
-      <div>
-        <h1>resouesta ia</h1>
-        <h4></h4>
-        <PerfilMusicalIA />
-      </div>
     </div>
   );
 }
