@@ -9,7 +9,7 @@ export function CardArtist({ artist }: { artist: Artist }) {
                     key={artist.id}
                     className="flex flex-col items-center justify-center"
                 >
-                    <h3 className="text-lg font-semibold">{artist.name}</h3>
+                    <h3 className="text-lg font-semibold text-white">{artist.name}</h3>
                     <p className="text-sm text-gray-600">
                         {artist.genres.join(", ")}
                     </p>

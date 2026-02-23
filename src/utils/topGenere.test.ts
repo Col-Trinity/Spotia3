@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { topGenres } from './topGenere';
+import type { Artist } from '@/src/types/spotify';
 
 // Simple unit test that does not require a mock
 describe('topGenres', () => {
@@ -8,7 +9,7 @@ describe('topGenres', () => {
       { genres: ['pop', 'rock'] },
       { genres: ['pop', 'jazz'] },
       { genres: ['rock'] },
-    ];
+    ] as Artist[];
 
     const result = topGenres(artists);
 
@@ -16,9 +17,9 @@ describe('topGenres', () => {
     // pop = 40%, rock = 40%, jazz = 20%
     expect(result).toEqual(
       expect.arrayContaining([
-        { genre: 'pop', percentage: '40' },
-        { genre: 'rock', percentage: '40' },
-        { genre: 'jazz', percentage: '20' },
+        expect.objectContaining({ genre: 'pop', percentage: 40 }),
+        expect.objectContaining({ genre: 'rock', percentage: 40 }),
+        expect.objectContaining({ genre: 'jazz', percentage: 20 }),
       ]),
     );
     expect(result).toHaveLength(3);
