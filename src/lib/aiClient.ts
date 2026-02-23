@@ -3,6 +3,7 @@ import OpenAI from "openai";
 import { AI_PROVIDER, API_KEYS } from "../config/iaConfig";
 import { Artist } from "../types/spotify";
 import { buildAIPrompt } from "./helpers/buildAIPrompt";
+import { NextResponse } from "next/server";
 
 //elige un provedor 
 export async function askAI({ artists }: { artists: Artist[] }) {
@@ -58,7 +59,10 @@ async function callGemini(artistas: Artist[]) {
   );
 
   const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+if (res.status === 429) {
+  return NextResponse.json({ result: "La IA está ocupada, intenta más tarde." });
+}
+  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "no se genero texto";
 
 }
 

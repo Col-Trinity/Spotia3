@@ -1,21 +1,24 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTopArtists } from "@/src/hooks/useTopArtists";
-import Loading from "./loading"
 import { usePostMutation } from "@/src/hooks/usePostMutation";
 import { Artist } from "@/src/types/spotify";
+import Typewriter from 'typewriter-effect';
 
 export default function PerfilMusicalIA() {
   const { data: artists = [], isError, error, isLoading } = useTopArtists();
-  const { mutate, isPending, data: responseIa} = usePostMutation<{ artists: Artist[] }, { result: string }>("/api/askAI")
+  const { mutate, isPending, data: responseIa } = usePostMutation<{ artists: Artist[] }, { result: string }>("/api/askAI")
+  const [ia, setIa] = useState(false)
+  const [arrayTextIa, setArrayTextIa] = useState<string[]>()
 
- useEffect(() => {
+  useEffect(() => {
     if (!isLoading && !isError && artists.length > 0) {
-      mutate({artists});
+      mutate({ artists });
     }
-  }, [isLoading, isError, artists,mutate]);
+  }, [ ia]);
 
-  if (isPending || isLoading) return <Loading />;
+
+
 
   if (isError) {
     const err = error as Error;
@@ -25,19 +28,29 @@ export default function PerfilMusicalIA() {
     return <p>{err.message}</p>;
   }
 
-return (
-  <div>
 
-    {isPending && <p>La IA está pensando...</p>}
+  return (
 
-    {responseIa && (
-      <div className="w-90">
-        <h2 className="flex items-center justify-center border-green-500 border">
-          {responseIa.result}
-        </h2>
-      </div>
-    )}
-  </div>
-);
+    <div className=" flex justify-center ">
+      <button  className=" bg-[rgb(172,214,133)] w-[17vh] h-[10vh] " onClick={() => setIa((prev) => !prev)}> mostra decripcion</button>
+
+      {isPending && <p>La IA está pensando...</p>}
+
+      {responseIa && (
+        <div className="w-90">
+
+          <Typewriter
+            onInit={(typewriter) => {
+              typewriter
+                .changeDelay(20) 
+                .typeString(responseIa.result) 
+                .start();
+            }}
+          />
+
+        </div>
+      )}
+    </div>
+  );
 }
 
