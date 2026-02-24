@@ -67,6 +67,6 @@ describe('askAI (gemini provider)', () => {
 
     const result = await askAI({ artists: mockArtists });
 
-    expect(result).toBe('');
+    expect(result).toBe('no se genero texto');
   });
 });
