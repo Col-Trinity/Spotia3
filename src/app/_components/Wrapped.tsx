@@ -4,7 +4,7 @@ import TopGenere from "./TopGenere";
 import { toPng } from "html-to-image";
 
 type props = {
-    iaText: String;
+    iaText: string;
 };
 
 export function Wrapped({ iaText }: props) {
