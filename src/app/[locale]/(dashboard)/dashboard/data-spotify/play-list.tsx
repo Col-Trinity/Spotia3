@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { PlaylistItem } from "@/src/types/playList";
 import { Track } from "@/src/types/track";
-import Loading from "@/src/app/_components/loading";
 import { useRedirectOn401 } from "@/src/hooks/useRedirectOn401i";
 import { useFetchQuery } from "@/src/hooks/useFetchQuery";
 
@@ -46,7 +45,7 @@ export function Playlist() {
         }
         return <p>{err.message}</p>;
     }
-    if (isLoadingPlayList) return <Loading />;
+    if (isLoadingPlayList) return <p>Se estan cargando tus artistas...</p>;
     return (
         <div>
             <h2>Mis Playlists</h2>
@@ -70,7 +69,7 @@ export function Playlist() {
 
             {selectedPlaylistId && (
                 <div>
-                    {isLoadingTracks && <Loading />}
+                    {isLoadingTracks && <p>Cargando canciones de tu PlayList..</p>}
                     {isErrorTracks && <p>{(errorTracks as Error).message}</p>}
                     <ul>
                         {tracks.map((track) => (

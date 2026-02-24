@@ -1,7 +1,6 @@
 "use client";
 import { CardArtist } from "@/src/app/_components/cardArtist"
 import { useTopArtists } from "@/src/hooks/useTopArtists";
-import Loading from "@/src/app/_components/loading";
 import { Artist } from "@/src/types/spotify";
 import { useRedirectOn401 } from "@/src/hooks/useRedirectOn401i";
 
@@ -34,7 +33,7 @@ export function TopArtist(timeRange: TypeTimeRange) {
       </div>
     )
   }
-  if (isLoading) return <Loading />;
+  if (isLoading) return <p>Cargando tu Top de Artistas</p>;
   return (
     <>
       <div className="flex flex-col items-center justify-center">
