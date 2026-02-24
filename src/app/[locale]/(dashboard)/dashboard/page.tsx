@@ -1,21 +1,22 @@
 "use client";
 
-import PerfilMusicalIA from "@/src/app/_components/buttonPruebaIA";
+import PerfilMusicalIA from "@/src/app/_components/PerfilMusicalIA";
 import { useSession } from "next-auth/react";
 import { TopArtist } from "./data-spotify/top-artist";
 import TopGenere from "@/src/app/_components/TopGenere";
 import { TopTracks } from "./data-spotify/top-tracks";
 import { Playlist } from "./data-spotify/play-list";
-import  Loading  from "@/src/app/_components/loading";
+import Loading from "@/src/app/_components/loading";
 import { useState } from "react";
 import TimeRangeSelector from "@/src/app/_components/TimeRangeSelector";
 import LogOut from "@/src/app/_components/LogOut";
 import { redirect } from "next/navigation"
-
+import { Wrapped } from "@/src/app/_components/Wrapped";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
   const [timeRange, setTimeRange] = useState("short_term");
+  const [iaText, setIaText] = useState<string>("");
 
   if (status === "loading") return <Loading />;
   if (!session) return redirect("/auth/login");
@@ -33,9 +34,9 @@ export default function Dashboard() {
       <TopTracks timeRange={timeRange} />
       <div>
         <h1>resouesta ia</h1>
-        <h4></h4>
-        <PerfilMusicalIA />
+        <PerfilMusicalIA onResult={(texto) => setIaText(texto)} />
       </div>
+      <Wrapped iaText={iaText} />
     </div>
   );
 }

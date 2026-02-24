@@ -4,21 +4,25 @@ import { useTopArtists } from "@/src/hooks/useTopArtists";
 import { usePostMutation } from "@/src/hooks/usePostMutation";
 import { Artist } from "@/src/types/spotify";
 import Typewriter from 'typewriter-effect';
+interface Props {
+  onResult?: (texto: string) => void;  // funcion texto afuera
+}
 
-export default function PerfilMusicalIA() {
+export default function PerfilMusicalIA({ onResult }: Props) {
   const { data: artists = [], isError, error, isLoading } = useTopArtists();
   const { mutate, isPending, data: responseIa } = usePostMutation<{ artists: Artist[] }, { result: string }>("/api/askAI")
   const [ia, setIa] = useState(false)
-  const [arrayTextIa, setArrayTextIa] = useState<string[]>()
-
   useEffect(() => {
     if (!isLoading && !isError && artists.length > 0) {
       mutate({ artists });
     }
-  }, [ ia]);
+  }, [ia]);
 
-
-
+  useEffect(() => {
+    if (responseIa?.result && onResult) {
+      onResult(responseIa.result);
+    }
+  }, [responseIa]);
 
   if (isError) {
     const err = error as Error;
@@ -27,12 +31,9 @@ export default function PerfilMusicalIA() {
     }
     return <p>{err.message}</p>;
   }
-
-
   return (
-
     <div className=" flex justify-center ">
-      <button  className=" bg-[rgb(172,214,133)] w-[17vh] h-[10vh] " onClick={() => setIa((prev) => !prev)}> mostra decripcion</button>
+      <button className=" bg-[rgb(172,214,133)] w-[17vh] h-[10vh] " onClick={() => setIa((prev) => !prev)}> mostra decripcion</button>
 
       {isPending && <p>La IA está pensando...</p>}
 
@@ -42,8 +43,8 @@ export default function PerfilMusicalIA() {
           <Typewriter
             onInit={(typewriter) => {
               typewriter
-                .changeDelay(20) 
-                .typeString(responseIa.result) 
+                .changeDelay(20)
+                .typeString(responseIa.result)
                 .start();
             }}
           />
