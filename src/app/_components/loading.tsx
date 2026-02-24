@@ -22,7 +22,7 @@ export default function Loading() {
         const interval = setInterval(() => {
             const randomIndex = Math.floor(Math.random() * messages.length);
             setMessage(messages[randomIndex]);
-        }, 2000);
+        }, 1000);
 
         return () => clearInterval(interval);
     }, []);
@@ -63,10 +63,6 @@ export default function Loading() {
                 </motion.g>
             </motion.svg>
              <p className="mt-6 text-lg font-medium">{message}</p>
-
         </div>
-
-
-
     );
 }

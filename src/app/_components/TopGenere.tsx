@@ -1,31 +1,30 @@
 import { topGenres } from "@/src/utils/topGenere";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Tooltip,
-  Legend,
-  ChartOptions
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { useEffect, useMemo, useState } from "react";
 import { useTopArtists } from "@/src/hooks/useTopArtists";
-import Loading from "@/src/app/_components/loading";
 import { Artist } from "@/src/types/spotify";
 import Image from 'next/image';
 
 export default function TopGenere() {
-  ChartJS.register(
-    CategoryScale,    // Para el eje X (categorías/géneros)
-    LinearScale,      // Para el eje Y (números/porcentajes)
-    BarElement,       // Para las barras
-    Tooltip,          // Para mostrar info al pasar el mouse
-    Legend,          // Para la leyenda
+  const { data: artists, isLoading, isError, error, refetch } = useTopArtists();
+  const [animated, setAnimated] = useState(false);
+
+  const artistsKey = artists?.map((a) => a.id).join(',') ?? '';
+
+  const topGenere = useMemo(
+    () => (artists ? topGenres(artists as Artist[]) : []),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [artistsKey]
   );
 
-  const { data: artists, isLoading, isError, error, refetch } = useTopArtists();
+  useEffect(() => {
+    setAnimated(false);
+    const id = setTimeout(() => setAnimated(true), 100);
+     return () => clearTimeout(id);
 
-  if (isLoading) return <Loading />;
+  }, [topGenere]);
+
+  if (isLoading) return <p>Se esta cargando el grafico con tus generos favoritos...</p>;
+
   if (isError) return (
     <div>
       <p>{(error as Error).message}</p>
@@ -34,73 +33,6 @@ export default function TopGenere() {
   );
   if (!artists) return null;
 
-  const topGenere = topGenres(artists as Artist[]);
-
-  const data = {
-    labels: topGenere.map((item) => item.genre),
-    datasets: [
-      {
-        label: "Porcentaje",
-        data: topGenere.map((item) => item.percentage),
-        backgroundColor: topGenere.map((_, index) =>
-          `rgba(29, 185, 84, ${1 - index * 0.15})`
-        ),
-        borderColor: "rgba(29, 185, 84, 1)",
-        borderWidth: 2,
-        borderRadius: 12,
-      },
-    ],
-  };
-
-  const options: ChartOptions<'bar'> = {
-    indexAxis: 'y',
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: {
-      duration: 800,
-      easing: 'easeOutQuart'
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        padding: 12,
-        callbacks: {
-          label: function (context) {
-            const item = topGenere[context.dataIndex];
-            return [
-              `${context.parsed.x}%`,
-              `${item.count} artistas`
-            ];
-          }
-        }
-      }
-    },
-    scales: {
-      x: {
-        beginAtZero: true,
-        max: 100,
-        ticks: {
-          callback: function (value: string | number) {
-            return value + '%';
-          },
-        },
-        grid: {
-          display: false
-        }
-      },
-      y: {
-        ticks: {
-          display: false,
-        },
-        grid: {
-          display: false,
-        }
-      }
-    }
-  };
   return (
     <div className="w-115 p-6">
       <h2 className="text-2xl font-bold mb-6 text-center">
@@ -141,7 +73,25 @@ export default function TopGenere() {
         </div>
 
         <div className="relative h-80 bg-black rounded-xl p-4 pl-40">
-          <Bar data={data} options={options} />
+          <div className="flex flex-col justify-around h-full">
+            {topGenere.map((item, index) => (
+              <div key={index} className="flex items-center gap-3">
+                <div className="flex-1 bg-gray-800 rounded-full h-5 overflow-hidden">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: animated ? `${item.percentage}%` : '0%',
+                      backgroundColor: `rgba(29, 185, 84, ${1 - index * 0.15})`,
+                      transition: `width 800ms cubic-bezier(0.4, 0, 0.2, 1) ${index * 200}ms`,
+                    }}
+                  />
+                </div>
+                <span className="text-white text-xs w-10 text-right font-medium">
+                  {item.percentage}%
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
