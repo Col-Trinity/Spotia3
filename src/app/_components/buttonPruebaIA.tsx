@@ -15,7 +15,7 @@ export default function PerfilMusicalIA() {
     }
   }, [isLoading, isError, artists,mutate]);
 
-  if (isPending || isLoading) return <Loading />;
+  if (isLoading) <p>cargando artistas</p>;
 
   if (isError) {
     const err = error as Error;

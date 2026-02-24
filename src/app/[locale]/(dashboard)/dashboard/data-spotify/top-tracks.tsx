@@ -2,7 +2,7 @@
 
 import { TrackCard } from "@/src/app/_components/trackCard";
 import { Track } from "@/src/types/track";
-import Loading from "@/src/app/_components/loading";
+
 import { useRedirectOn401 } from "@/src/hooks/useRedirectOn401i";
 import { useFetchQuery } from "@/src/hooks/useFetchQuery";
 
@@ -46,7 +46,7 @@ export function TopTracks({ timeRange }: TypeTimeRange) {
             </div>
         )
     }
-    if (isLoading) return <Loading />;
+    if (isLoading) return <p>Aqui van tus canciones...</p>;
 
     return (
         <div className="max-w-3xl mx-auto flex flex-col gap-1">
