@@ -10,7 +10,7 @@ interface Props {
 
 export default function PerfilMusicalIA({ onResult }: Props) {
   const { data: artists = [], isError, error, isLoading } = useTopArtists();
-  const { mutate, isPending, data: responseIa } = usePostMutation<{ artists: Artist[] }, { result: string }>("/api/askAI")
+  const { mutate, isPending, data: responseIa } = usePostMutation<{ artists: Artist[] }, { result:{description:string, hygiene_level:string,dnd_alignment:string,voting_tendency:string} }>("/api/askAI")
   const [ia, setIa] = useState(false)
   useEffect(() => {
     if (!isLoading && !isError && artists.length > 0) {
@@ -20,9 +20,11 @@ export default function PerfilMusicalIA({ onResult }: Props) {
 
   useEffect(() => {
     if (responseIa?.result && onResult) {
-      onResult(responseIa.result);
+      onResult(responseIa.result.description);
     }
   }, [responseIa]);
+
+  console.log(responseIa)
 
   if (isError) {
     const err = error as Error;
@@ -44,11 +46,12 @@ export default function PerfilMusicalIA({ onResult }: Props) {
             onInit={(typewriter) => {
               typewriter
                 .changeDelay(20)
-                .typeString(responseIa.result)
+                .typeString(responseIa.result.description)
                 .start();
             }}
           />
 
+     
         </div>
       )}
     </div>

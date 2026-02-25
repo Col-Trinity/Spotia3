@@ -62,7 +62,13 @@ async function callGemini(artistas: Artist[]) {
 if (res.status === 429) {
   return NextResponse.json({ result: "La IA está ocupada, intenta más tarde." });
 }
-  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "no se genero texto";
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "no se genero texto";
+  try {
+  return JSON.parse(text)
+  } catch  {
+        return { description: text, hygiene_level: "", dnd_alignment: "", voting_tendency: "" };
+    
+  }
 
 }
 
