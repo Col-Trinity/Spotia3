@@ -4,7 +4,15 @@ import { AI_PROVIDER, API_KEYS } from "../config/iaConfig";
 import { Artist } from "../types/spotify";
 import { buildAIPrompt } from "./helpers/buildAIPrompt";
 import { NextResponse } from "next/server";
+import{z} from"zod"
 
+
+const AiResponseSchema= z.object({
+  description:z.string(),
+  hygiene_level: z.string(),
+  dnd_alignment: z.string(),
+  voting_tendency: z.string()
+})
 //elige un provedor 
 export async function askAI({ artists }: { artists: Artist[] }) {
   switch (AI_PROVIDER) {
@@ -64,7 +72,7 @@ if (res.status === 429) {
 }
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "no se genero texto";
   try {
-  return JSON.parse(text)
+  return AiResponseSchema.parse(JSON.parse(text))
   } catch  {
         return { description: text, hygiene_level: "", dnd_alignment: "", voting_tendency: "" };
     
