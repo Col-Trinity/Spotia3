@@ -39,24 +39,25 @@ const mockArtists: Artist[] = [
 ];
 describe('askAI (gemini provider)', () => {
   it('returns the text from Gemini response', async () => {
+    const mockResponse = {
+      description: "Che, sos el alma de la joda...",
+      hygiene_level: "Bajo",
+      dnd_alignment: "Chaotic Neutral",
+      voting_tendency: "Izquierda Unida"
+    };
     fetchMock.mockResolvedValue({
       ok: true,
       json: () =>
         Promise.resolve({
           candidates: [
-            { content: { parts: [{ text: 'Canción inventada - Artista' }] } },
+            { content: { parts: [{ text: JSON.stringify(mockResponse) }] } },
           ],
         }),
     });
 
     const result = await askAI({ artists: mockArtists });
 
-    expect(fetchMock).toHaveBeenCalledOnce();
-    expect(fetchMock).toHaveBeenCalledWith(
-      expect.stringContaining('generativelanguage.googleapis.com'),
-      expect.objectContaining({ method: 'POST' }),
-    );
-    expect(result).toBe('Canción inventada - Artista');
+    expect(result).toEqual(mockResponse)
   });
 
   it('returns empty string when Gemini response has no candidates', async () => {
@@ -67,6 +68,11 @@ describe('askAI (gemini provider)', () => {
 
     const result = await askAI({ artists: mockArtists });
 
-    expect(result).toBe('no se genero texto');
+    expect(result).toEqual({
+      description: "no se genero texto",
+      hygiene_level: "",
+      dnd_alignment: "",
+      voting_tendency: ""
+    });
   });
 });

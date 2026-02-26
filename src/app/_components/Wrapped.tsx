@@ -2,12 +2,14 @@
 import { useRef, useState } from "react";
 import TopGenere from "./TopGenere";
 import { toPng } from "html-to-image";
+import { MusicPredictions } from "./MusicPredictions";
 
 type props = {
     iaText: string;
+    iaDate:{ dnd_alignment: string; hygiene_level: string; voting_tendency: string; }
 };
 
-export function Wrapped({ iaText }: props) {
+export function Wrapped({ iaText,iaDate }: props) {
     const [button, setButton] = useState<boolean>(false)
 
     const tarjetaRef = useRef(null);
@@ -60,7 +62,7 @@ export function Wrapped({ iaText }: props) {
                             </blockquote>
                         </div>
                     )}
-
+                      <MusicPredictions responseIa={iaDate}/>
                 </div>
                 <button onClick={descargarImagen} className="bg-black px-6 py-3 rounded-full font-bold text-sm tracking-widest uppercase border-2 border-white/20 text-white/80 hover:border-white/60 hover:text-white hover:scale-105 active:scale-95 transition-all duration-200">
                     Descargar

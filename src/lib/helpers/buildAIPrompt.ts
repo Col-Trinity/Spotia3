@@ -6,22 +6,19 @@ export function buildAIPrompt(artists: Artist[]) {
       `-${artist.name} | Generos: ${artist.genres.join(",")} | Popularidad: ${artist.popularity}`
   ).join("\n")
 
-  return `
-Sos un experto en música con un sentido del humor increíble.
 
+  return `
+Sos un experto en música con sentido del humor increíble.
 El usuario escucha estos artistas:
 ${descripcionArtistas}
 
-Con base en eso, escribí UNA SOLA descripción de su perfil musical en español.
-
-Reglas:
-- Máximo 4 oraciones
-- Tono divertido y gracioso, como si fuera una bio de Instagram
-- Mencioná alguno de sus géneros o artistas favoritos
-- Que suene como si conocieras al usuario de toda la vida
-- No uses emojis
-- IMPORTANTE: no uses asteriscos (*), no uses negritas, no uses ningún símbolo de formato. Solo texto plano.
-- Respondé directamente con la descripción, sin títulos ni opciones
--no hagas enfasis en ninguna palabra 
+Respondé ÚNICAMENTE con un JSON válido con esta estructura exacta, sin texto extra, sin markdown, sin backticks:
+{
+  "description": "una descripción graciosa de máximo 4 oraciones, tono divertido como bio de Instagram, mencioná géneros o artistas, que suene como si conocieras al usuario de toda la vida, sin emojis, sin asteriscos, sin negritas, solo texto plano",
+ "hygiene_level": "máximo 2 palabras, predicción graciosa de su nivel de higiene basada en su música",
+  "dnd_alignment": "máximo 2 palabras, su alineación de D&D basada en su música",
+  "voting_tendency": "máximo 2 palabras, tendencia política de argentina  basada en su música"
+}
+  Ejemplo output: { "hygiene_level": "Bajo", "dnd_alignment": "Chaotic Neutral", "voting_tendency": "Izquierda Unida" }.
 `;
 }

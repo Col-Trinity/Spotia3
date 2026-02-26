@@ -6,11 +6,12 @@ import { Artist } from "@/src/types/spotify";
 import Typewriter from 'typewriter-effect';
 interface Props {
   onResult?: (texto: string) => void;  // funcion texto afuera
+  onData: (data: { description: string, hygiene_level: string, dnd_alignment: string, voting_tendency: string }) => void
 }
 
-export default function PerfilMusicalIA({ onResult }: Props) {
+export default function PerfilMusicalIA({ onResult ,onData }: Props) {
   const { data: artists = [], isError, error, isLoading } = useTopArtists();
-  const { mutate, isPending, data: responseIa } = usePostMutation<{ artists: Artist[] }, { result: string }>("/api/askAI")
+  const { mutate, isPending, data: responseIa } = usePostMutation<{ artists: Artist[] }, { result: { description: string, hygiene_level: string, dnd_alignment: string, voting_tendency: string } }>("/api/askAI")
   const [ia, setIa] = useState(false)
   useEffect(() => {
     if (!isLoading && !isError && artists.length > 0) {
@@ -19,8 +20,10 @@ export default function PerfilMusicalIA({ onResult }: Props) {
   }, [ia]);
 
   useEffect(() => {
-    if (responseIa?.result && onResult) {
-      onResult(responseIa.result);
+    if (responseIa && onResult ) {
+      onResult(responseIa.result.description);
+      onData(responseIa.result)
+      
     }
   }, [responseIa]);
 
@@ -44,7 +47,7 @@ export default function PerfilMusicalIA({ onResult }: Props) {
             onInit={(typewriter) => {
               typewriter
                 .changeDelay(20)
-                .typeString(responseIa.result)
+                .typeString(responseIa.result.description)
                 .start();
             }}
           />
