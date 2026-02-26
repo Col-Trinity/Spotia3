@@ -12,11 +12,17 @@ import TimeRangeSelector from "@/src/app/_components/TimeRangeSelector";
 import LogOut from "@/src/app/_components/LogOut";
 import { redirect } from "next/navigation"
 import { Wrapped } from "@/src/app/_components/Wrapped";
+import { MusicPredictions } from "@/src/app/_components/MusicPredictions";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
   const [timeRange, setTimeRange] = useState("short_term");
   const [iaText, setIaText] = useState<string>("");
+  const [iaDate, setIaDate] = useState<{
+    hygiene_level: string;
+    dnd_alignment: string;
+    voting_tendency: string;
+  } | null>(null);
 
   if (status === "loading") return <Loading />;
   if (!session) return redirect("/auth/login");
@@ -34,9 +40,13 @@ export default function Dashboard() {
       <TopTracks timeRange={timeRange} />
       <div>
         <h1>resouesta ia</h1>
-        <PerfilMusicalIA onResult={(texto) => setIaText(texto)} />
+        <PerfilMusicalIA onResult={(texto) => setIaText(texto)} onData={(data) => setIaDate(data)} />
+        {iaDate && <MusicPredictions responseIa={iaDate} />
+        }
+
       </div>
-      <Wrapped iaText={iaText} />
+      {iaDate && <Wrapped iaText={iaText} iaDate={iaDate} />
+      }
     </div>
   );
 }
