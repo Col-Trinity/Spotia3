@@ -4,6 +4,7 @@ import { useTopArtists } from "@/src/hooks/useTopArtists";
 import { usePostMutation } from "@/src/hooks/usePostMutation";
 import { Artist } from "@/src/types/spotify";
 import Typewriter from 'typewriter-effect';
+import {AiResponse} from "@/src/lib/aiClient"
 interface Props {
   onResult?: (texto: string) => void;  // funcion texto afuera
   onData: (data: { description: string, hygiene_level: string, dnd_alignment: string, voting_tendency: string }) => void
@@ -11,7 +12,7 @@ interface Props {
 
 export default function PerfilMusicalIA({ onResult ,onData }: Props) {
   const { data: artists = [], isError, error, isLoading } = useTopArtists();
-  const { mutate, isPending, data: responseIa } = usePostMutation<{ artists: Artist[] }, { result: { description: string, hygiene_level: string, dnd_alignment: string, voting_tendency: string } }>("/api/askAI")
+  const { mutate, isPending, data: responseIa } = usePostMutation<{ artists: Artist[] }, { result: AiResponse }>("/api/askAI")
   const [ia, setIa] = useState(false)
   useEffect(() => {
     if (!isLoading && !isError && artists.length > 0) {
@@ -23,7 +24,6 @@ export default function PerfilMusicalIA({ onResult ,onData }: Props) {
     if (responseIa && onResult ) {
       onResult(responseIa.result.description);
       onData(responseIa.result)
-      
     }
   }, [responseIa]);
 
