@@ -19,17 +19,20 @@ const pendingCallbacks: Array<(api: SpotifyIframeApi) => void> = [];
 export function Iframe({ src }: { src: string }) {
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const controllerRef = useRef<SpotifyIframeController | null>(null);
-    
+
     const spotifyDivRef = useRef<HTMLDivElement | null>(null);
     useEffect(() => {
         const wrapper = wrapperRef.current;
 
         const spotifyDiv = document.createElement("div");
         spotifyDiv.style.width = "100%";
-        spotifyDiv.style.height = "100%";
+        spotifyDiv.style.height = "380px";
+        spotifyDiv.style.borderRadius = "16px";
+        spotifyDiv.style.overflow = "hidden";
+        spotifyDiv.style.boxShadow = "0 10px 30px rgba(0,0,0,0.3)";
         spotifyDivRef.current = spotifyDiv;
 
-       
+
         wrapper?.appendChild(spotifyDiv);
 
         const initController = (api: SpotifyIframeApi) => {
@@ -68,13 +71,13 @@ export function Iframe({ src }: { src: string }) {
             const idx = pendingCallbacks.indexOf(initController);
             if (idx !== -1) pendingCallbacks.splice(idx, 1);
 
-    
+
             if (controllerRef.current?.destroy) {
                 controllerRef.current.destroy();
             }
             controllerRef.current = null;
 
-        
+
             if (spotifyDivRef.current && wrapper?.contains(spotifyDivRef.current)) {
                 wrapper.removeChild(spotifyDivRef.current);
             }
@@ -82,5 +85,5 @@ export function Iframe({ src }: { src: string }) {
         };
     }, [src]);
 
-    return <div ref={wrapperRef} className="w-full h-full" />;
+    return <div ref={wrapperRef} className="w-full max-w-105 h-95"/>;
 }
