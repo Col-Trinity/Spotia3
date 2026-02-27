@@ -4,6 +4,7 @@ import { PlaylistItem } from "@/src/types/playList";
 import { Track } from "@/src/types/track";
 import { useRedirectOn401 } from "@/src/hooks/useRedirectOn401i";
 import { useFetchQuery } from "@/src/hooks/useFetchQuery";
+import { Iframe } from "@/src/app/_components/Iframe";
 
 
 
@@ -21,7 +22,6 @@ export function Playlist() {
 
 
     const {
-        data: tracks = [],
         isLoading: isLoadingTracks,
         isError: isErrorTracks,
         error: errorTracks,
@@ -45,7 +45,7 @@ export function Playlist() {
         }
         return <p>{err.message}</p>;
     }
-    if (isLoadingPlayList) return <p>Se estan cargando tus artistas...</p>;
+    if (isLoadingPlayList) return <p>Se estan cargando tus playlists...</p>;
     return (
         <div>
             <h2>Mis Playlists</h2>
@@ -60,7 +60,7 @@ export function Playlist() {
                             }}
                             className="ml-2 px-2 py-1 bg-blue-500 text-white rounded"
                         >
-                            Ver tracks
+                            Ver PlayList
                         </button>
                     </li>
                 ))}
@@ -71,11 +71,8 @@ export function Playlist() {
                 <div>
                     {isLoadingTracks && <p>Cargando canciones de tu PlayList..</p>}
                     {isErrorTracks && <p>{(errorTracks as Error).message}</p>}
-                    <ul>
-                        {tracks.map((track) => (
-                            <li key={track.id}>{track.name}</li>
-                        ))}
-                    </ul>
+
+                    <Iframe key={selectedPlaylistId} src={`spotify:playlist:${selectedPlaylistId}`} />
                 </div>
             )}
         </div>
