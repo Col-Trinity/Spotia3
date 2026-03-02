@@ -47,7 +47,7 @@ export function Playlist() {
     }
     if (isLoadingPlayList) return <p>Se estan cargando tus playlists...</p>;
     return (
-        <div>
+        <div className="mt-4">
             <h2>Mis Playlists</h2>
             <ul>
                 {playList.map((pl) => (

@@ -14,7 +14,7 @@ export function TrackCard({ track }: { track: Track }) {
       <div className="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/5 transition group">
 
         <div className="flex-1 overflow-hidden">
-          <h3 className="text-white font-medium truncate">
+          <h3 className="text-black font-medium truncate">
             {track.name}
           </h3>
           <p className="text-sm text-gray-400 truncate">
