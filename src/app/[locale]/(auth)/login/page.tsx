@@ -2,8 +2,8 @@
 import OnBoarding from '@/src/app/_components/OnBoarding';
 import { signIn, getProviders } from 'next-auth/react';
 import { useEffect, useState, JSX } from 'react';
-
-
+import SpotiaLogo from "@/public/SpotIALogo.png"
+import Image from 'next/image';
 const providerIcons: Record<string, JSX.Element> = {
   spotify: (
     <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
@@ -34,10 +34,15 @@ export default function LoginPage() {
   return (
     <div className="flex  min-h-screen items-center justify-center px-4">
       <div className="flex flex-col items-center w-full max-w-sm space-y-6">
-       
-        <p className="text-lg font-semibold border-b-2 border-green-600 pb-2 w-full text-center">
-          Elige cómo quieres logearte
-        </p>
+        <Image
+          src={SpotiaLogo}
+          alt={"logo"}
+          width={171}
+          height={141} />
+        <h6 className="text-lg  font-medium text-base pb-2 w-full text-center">
+          Conecta tu musica
+        </h6>
+        <p className=' text-centeri  mt-[10vh] mb-[30vh] '>Para generar tu perfil, primero tenemos que conectar tu musica, necesitamos acceder a tu historial de escucha </p>
 
         <div className="flex flex-col space-y-4 w-full">
           {providers &&
@@ -47,14 +52,15 @@ export default function LoginPage() {
                 onClick={() =>
                   signIn(provider.id, { callbackUrl: `/${locale}/dashboard` })
                 }
-                className="w-full bg-gray-100 hover:bg-gray-200 text-black font-semibold py-3 px-6 rounded flex items-center justify-center transition shadow-sm"
+                className="w-full bg-[rgb(104,82,224)] text-white rounded-full
+                  hover:bg-gray-200 text-black font-semibold py-3 px-6 rounded flex items-center justify-center transition shadow-sm"
               >
                 {providerIcons[provider.id]}
                 Sign in with {provider.name}
               </button>
             ))}
         </div>
-              <OnBoarding page={2}/>
+        <OnBoarding page={2} />
 
       </div>
     </div>
