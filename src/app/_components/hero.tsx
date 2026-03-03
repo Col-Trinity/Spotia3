@@ -1,28 +1,44 @@
 import Link from 'next/link';
-
+import Image from 'next/image';
+import SpotiALogo from "@/public/SpotIALogo.png"
+import IlustracionOnboarding from "@/public/IlustracionOnboarding.png"
 export function Hero() {
     return (
-        <div className="flex flex-col items-center justify-center text-white w-full">
-
-            <h1 className="text-5xl font-bold mb-4 flex items     ">Bienvenido a SpotIA</h1>
-            <div className="max-w-md mx-auto text-center">
-                <p className="text-md mb-8 leading-relaxed">
-                    Descubre tus estadísticas de Spotify de una manera fácil y visual.
-                </p>
-                <p className="text-md mb-8 leading-relaxed">
-                    Inicia sesión con tu cuenta de Spotify para ver tus artistas, canciones y álbumes más escuchados.
-                </p>
-                <p className="text-md mb-8 leading-relaxed">
-                    ¡Explora tus hábitos de escucha y comparte tus estadísticas con tus amigos!
-                </p>
-            </div>
+        <div className=" flex flex-col items-center justify-center  w-full  font-sf-pro ">
+            <Image
+                className='mt-[20vh]'
+                src={SpotiALogo}
+                alt={"logo"}
+                width={171}
+                height={141} />
 
 
+            <h6 className="font-medium text-base leading-none tracking-tight text-center w-full mt-2"> Bienvenido a la mejor app de música e IA </h6>
+            <p className=' font-normal  text-sm text-center max-w-[30vh] mt-10  '> Analiza tu musica y descubri todo lo que eso puede decir sobre vos y tu personalidad </p>
+             <div className=' relative  flex items-center  justify-center mt-10 '>
+                <div className='absolute w-[40vh] h-[40 vh] rounded-full  blur-xl  bg-[radial-gradient(50%_50%_at_50%_50%,#EBE7FF_0%,rgba(147,128,255,0.25)_100%)]'/>
+                 <Image
+                     className='z-10'
+                src={IlustracionOnboarding}
+                alt='IlustracionOnboarding'
+                width={318}
+                height={318}
+            />
+            
+             </div>
+
+       
+            {
+                ////////////pasar al sigurnte componenten 
+            }
             <Link href="/auth/login">
-                <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                <button className="z-10 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                     Iniciar sesión
                 </button>
             </Link>
+            {
+                ////////////////////////////////////////////
+            }
         </div>
     )
 }
