@@ -1,4 +1,5 @@
 'use client';
+import OnBoarding from '@/src/app/_components/OnBoarding';
 import { signIn, getProviders } from 'next-auth/react';
 import { useEffect, useState, JSX } from 'react';
 
@@ -31,7 +32,7 @@ export default function LoginPage() {
   const locale = 'es';
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
+    <div className="flex  min-h-screen items-center justify-center px-4">
       <div className="flex flex-col items-center w-full max-w-sm space-y-6">
        
         <p className="text-lg font-semibold border-b-2 border-green-600 pb-2 w-full text-center">
@@ -53,6 +54,8 @@ export default function LoginPage() {
               </button>
             ))}
         </div>
+              <OnBoarding page={2}/>
+
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import SpotiALogo from "@/public/SpotIALogo.png"
 import IlustracionOnboarding from "@/public/IlustracionOnboarding.png"
+import OnBoarding from "@/src/app/_components/OnBoarding"
 export function Hero() {
     return (
         <div className=" flex flex-col items-center justify-center  w-full  font-sf-pro ">
@@ -27,18 +28,7 @@ export function Hero() {
             
              </div>
 
-       
-            {
-                ////////////pasar al sigurnte componenten 
-            }
-            <Link href="/auth/login">
-                <button className="z-10 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                    Iniciar sesión
-                </button>
-            </Link>
-            {
-                ////////////////////////////////////////////
-            }
+                <OnBoarding page={1}/>
         </div>
     )
 }
