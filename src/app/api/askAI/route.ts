@@ -7,7 +7,6 @@ export async function POST(req: Request) {
   
   try {
     const result = await askAI({ artists: data.artists });
-
     return NextResponse.json({ result });
   } catch (error) {
 

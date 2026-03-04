@@ -32,7 +32,7 @@ export function Playlist() {
         { enabled: !!selectedPlaylistId }
     );
 
-    console.log(playList[0]?.tracksTotal, 'total de canciones');
+ 
     useRedirectOn401({ isError: isErrorPlayList, error: errorPlayList });
 
     if (isErrorPlayList) {

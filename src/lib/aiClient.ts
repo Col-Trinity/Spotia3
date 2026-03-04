@@ -7,11 +7,16 @@ import { NextResponse } from "next/server";
 import{z} from"zod"
 
 
-const AiResponseSchema= z.object({
-  description:z.string(),
+const AiResponseSchema = z.object({
+  description: z.string(),
   hygiene_level: z.string(),
   dnd_alignment: z.string(),
-  voting_tendency: z.string()
+  voting_tendency: z.string(),
+  emotions: z.array(z.object({
+    name: z.string(),
+    percentage: z.number()
+  }))
+
 })
 //elige un provedor 
 export async function askAI({ artists }: { artists: Artist[] }) {
@@ -72,10 +77,9 @@ if (res.status === 429) {
 }
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "no se genero texto";
   try {
-  return AiResponseSchema.parse(JSON.parse(text))
-  } catch  {
-        return { description: text, hygiene_level: "", dnd_alignment: "", voting_tendency: "" };
-    
+    return AiResponseSchema.parse(JSON.parse(text))
+  } catch {
+    return { description: text, hygiene_level: "", dnd_alignment: "", voting_tendency: "", emotions: [] };
   }
 
 }
