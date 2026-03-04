@@ -1,7 +1,7 @@
 "use client";
 
 import PerfilMusicalIA from "@/src/app/_components/PerfilMusicalIA";
-
+import Image from "next/image";
 import { TopArtist } from "./data-spotify/top-artist";
 import TopGenere from "@/src/app/_components/TopGenere";
 import { Playlist } from "./data-spotify/play-list";
@@ -9,7 +9,8 @@ import { useState } from "react";
 import TimeRangeSelector from "@/src/app/_components/TimeRangeSelector";
 import { Wrapped } from "@/src/app/_components/Wrapped";
 import { MusicPredictions } from "@/src/app/_components/MusicPredictions";
-
+import spotiaLogo from "@/public/SpotIALogo.png"
+import TopNavBar from "@/src/app/_components/TopNavBar";
 export default function Dashboard() {
 
   const [timeRange, setTimeRange] = useState("short_term");
@@ -21,7 +22,9 @@ export default function Dashboard() {
   } | null>(null);
 
   return (
-    <div>
+    <div className=" flex flex-col items-center justify-center">
+        <Image alt="logo" src={spotiaLogo}  width={100} height={100}/>
+        <TopNavBar/>
       <Playlist />
       <TopGenere />
       <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />

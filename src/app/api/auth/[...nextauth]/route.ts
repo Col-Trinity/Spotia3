@@ -17,8 +17,11 @@ export const authOptions: NextAuthOptions = {
   pages: { error: "/auth/error" },
   callbacks: {
     async jwt({ token, account }) {
-
       if (account) {
+        // PedO el perfil completo 
+        //  headers: { Authorization: `Bearer ${account.access_token}` }
+        // })
+        // const profile = await res.json()
         return {
           ...token,
           accessToken: account.access_token,
@@ -26,7 +29,7 @@ export const authOptions: NextAuthOptions = {
           refreshToken: account.refresh_token,
         }
       } else if (Date.now() < (token.expires_at as number) * 1000) {
-     
+
         return token
       } else {
 
@@ -64,6 +67,9 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       session.accessToken = token.accessToken as string
       session.error = token.error as string
+
+      session.user.image = token.picture as string
+      session.user.name = token.name as string
       return session
     },
   },
