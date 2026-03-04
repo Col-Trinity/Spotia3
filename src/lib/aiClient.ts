@@ -3,8 +3,8 @@ import OpenAI from "openai";
 import { AI_PROVIDER, API_KEYS } from "../config/iaConfig";
 import { Artist } from "../types/spotify";
 import { buildAIPrompt } from "./helpers/buildAIPrompt";
-import { NextResponse } from "next/server";
-import{z} from"zod"
+import { AppError } from "./errors/appError";
+import { z } from "zod"
 
 
 const AiResponseSchema = z.object({
@@ -33,12 +33,12 @@ export async function askAI({ artists }: { artists: Artist[] }) {
 }
 //Gpt
 async function callGPT(artistas: Artist[]) {
-
+  console.log("1. entrando a callGemini");
   const client = new OpenAI({
     apiKey: API_KEYS.gpt,
   });
   const prompt = buildAIPrompt(artistas);
-
+  console.log("2. prompt generado:", prompt);
   const response = await client.chat.completions.create({
     model: process.env.GPT_MODEL!,
     messages: [{ role: "user", content: prompt }],
@@ -48,7 +48,9 @@ async function callGPT(artistas: Artist[]) {
 }
 // Gemini
 async function callGemini(artistas: Artist[]) {
+
   const prompt = buildAIPrompt(artistas);
+
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEYS.gemini}`,
     {
@@ -70,16 +72,19 @@ async function callGemini(artistas: Artist[]) {
       }),
     },
   );
+  if (res.status === 429) {
+  throw new AppError("La IA está ocupada, intenta más tarde.", 429);
+}
 
   const data = await res.json();
-if (res.status === 429) {
-  return NextResponse.json({ result: "La IA está ocupada, intenta más tarde." });
-}
+
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "no se genero texto";
   try {
+
     return AiResponseSchema.parse(JSON.parse(text))
+
   } catch {
-    return { description: text, hygiene_level: "", dnd_alignment: "", voting_tendency: "", emotions: [] };
+    throw new Error("La respuesta de Gemini no tiene el formato esperado.");
   }
 
 }
@@ -87,7 +92,7 @@ if (res.status === 429) {
 
 // Claude
 async function callClaude(artistas: Artist[]) {
-const prompt = buildAIPrompt(artistas);
+  const prompt = buildAIPrompt(artistas);
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {

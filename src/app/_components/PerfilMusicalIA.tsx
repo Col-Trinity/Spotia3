@@ -20,7 +20,7 @@ type AIResult = {
 }
 export default function PerfilMusicalIA({ onResult, onData }: Props) {
   const { data: artists = [], isError, error, isLoading } = useTopArtists();
-  const { mutate, isPending, data: responseIa } = usePostMutation<{ artists: Artist[] }, { result: AIResult }>(
+  const { mutate, isPending, data: responseIa, error: mutationError, isError: isMutationError } = usePostMutation<{ artists: Artist[] }, { result: AIResult }>(
     "/api/askAI"
   );
   const [ia, setIa] = useState<boolean>(false);
@@ -37,7 +37,7 @@ export default function PerfilMusicalIA({ onResult, onData }: Props) {
       onData(responseIa.result)
     }
   }, [responseIa]);
-console.log(responseIa);
+
   if (isError) {
     const err = error as Error;
     if (err.message.includes("401")) {
@@ -45,12 +45,23 @@ console.log(responseIa);
     }
     return <p>{err.message}</p>;
   }
-
+  
   return (
     <div className=" flex flex-col items-center gap-6">
 
       <div className="border border-violet-300 rounded-sm p-4 ">
         {isPending && <p>La IA está pensando...</p>}
+        {isMutationError && (
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-red-400">Te recomendamos intentarlo de nuevo mas tarde</p>
+            <button
+              onClick={() => mutate({ artists })}
+              className="px-4 py-2 rounded-full bg-violet-600 text-white"
+            >
+              Reintentar
+            </button>
+          </div>
+        )}
         {responseIa && (
           <div className="w-90">
 
