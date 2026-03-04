@@ -20,7 +20,7 @@ export default function DashboardLayout({
 
 
   return (
-    <div>
+    <div className="pb-16">
       <section className="p-6">
         {children}
       </section>
