@@ -50,7 +50,6 @@ export function TopTracks({ timeRange }: TypeTimeRange) {
 
     return (
         <div className="max-w-3xl mx-auto flex flex-col gap-1">
-            <h2 className="text-2xl font-bold mb-2 mt-4 flex justify-center items-center">Canciones que más te representan en este período</h2>
             {tracksList.map((track: Track) => (
                 <TrackCard key={track.id} track={track} />
             ))}

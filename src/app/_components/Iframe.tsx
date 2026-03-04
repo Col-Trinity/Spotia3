@@ -85,5 +85,5 @@ export function Iframe({ src }: { src: string }) {
         };
     }, [src]);
 
-    return <div ref={wrapperRef} className="w-full max-w-105 h-95"/>;
+    return <div ref={wrapperRef} />;
 }
