@@ -37,7 +37,8 @@ export function TopArtist(timeRange: TypeTimeRange) {
   return (
     <>
       <div className="flex flex-col items-center justify-center">
-        <h1 className="text-2xl font-bold mb-6">Tus artistas recientemente escuchados</h1>
+        <h1 className="text-2xl font-bold mb-6 bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Tus artistas recientemente escuchados</h1>
+        <p className="text-gray-400 text-center mb-4">Tus artistas mas escuchados en el rango de tiempo seleccionado..</p>
         <div className=" grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-4xl">
           {artists?.map((artist: Artist) => (
             <CardArtist key={artist.id} artist={artist} />

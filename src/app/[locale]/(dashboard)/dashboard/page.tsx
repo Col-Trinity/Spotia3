@@ -24,14 +24,14 @@ export default function Dashboard() {
     <div>
       <Playlist />
 
-      <div className="flex flex-col lg:flex-row gap-6 mt-6 justify-center items-start">
+      <div className="flex flex-col lg:flex-row gap-6 m-6 justify-center items-start">
         {/* Top Géneros */}
-        <div className="w-150 border border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-4">
+        <div className="w-full lg:w-150 border h-136 border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-4 flex justify-center items-center">
           <TopGenere />
         </div>
 
         {/* Top Artistas */}
-        <div className="w-150 h-[544px] border border-pink-500/20 shadow-[0_0_20px_2px_rgba(236,72,153,0.12)] rounded-2xl p-4 flex flex-col gap-4">
+        <div className="w-full lg:w-150 h-136 border border-pink-500/20 shadow-[0_0_20px_2px_rgba(236,72,153,0.12)] rounded-2xl p-4 flex flex-col gap-4">
           <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
           <TopArtist timeRange={timeRange} />
         </div>
