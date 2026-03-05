@@ -77,8 +77,8 @@ async function callGemini(artistas: Artist[]) {
 }
 
   const data = await res.json();
-
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "no se genero texto";
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+ 
   try {
 
     return AiResponseSchema.parse(JSON.parse(text))
