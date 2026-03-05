@@ -33,7 +33,9 @@ export default function Dashboard() {
         {/* Top Artistas */}
         <div className="w-full lg:w-150 h-136 border border-pink-500/20 shadow-[0_0_20px_2px_rgba(236,72,153,0.12)] rounded-2xl p-4 flex flex-col gap-4">
           <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
-          <TopArtist timeRange={timeRange} />
+          <div className="flex-1 min-h-0">
+            <TopArtist timeRange={timeRange} />
+          </div>
         </div>
       </div>
 
