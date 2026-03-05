@@ -81,10 +81,7 @@ export function Playlist() {
                     <h2 className="text-3xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                         Tus Playlists
                     </h2>
-                </div>
-                <p className="text-gray-600 ml-10">
-                    Selecciona una playlist para explorar con IA
-                </p>
+                </div>               
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
