@@ -43,7 +43,8 @@ describe('askAI (gemini provider)', () => {
       description: "Che, sos el alma de la joda...",
       hygiene_level: "Bajo",
       dnd_alignment: "Chaotic Neutral",
-      voting_tendency: "Izquierda Unida"
+      voting_tendency: "Izquierda Unida",
+      emotions: [{ name: "alegría", percentage: 80 }, { name: "tristeza", percentage: 20 }]
     };
     fetchMock.mockResolvedValue({
       ok: true,
@@ -60,19 +61,14 @@ describe('askAI (gemini provider)', () => {
     expect(result).toEqual(mockResponse)
   });
 
-  it('returns empty string when Gemini response has no candidates', async () => {
+  it('throws when Gemini response has no candidates', async () => {
     fetchMock.mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ candidates: [] }),
     });
 
-    const result = await askAI({ artists: mockArtists });
-
-    expect(result).toEqual({
-      description: "no se genero texto",
-      hygiene_level: "",
-      dnd_alignment: "",
-      voting_tendency: ""
-    });
+    await expect(askAI({ artists: mockArtists }))
+      .rejects
+      .toThrow("La respuesta de Gemini no tiene el formato esperado.");
   });
 });

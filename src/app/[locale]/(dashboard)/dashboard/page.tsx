@@ -27,12 +27,24 @@ export default function Dashboard() {
         <Image alt="logo" src={spotiaLogo}  width={100} height={100}/>
         <TopNavBar onRefresh={() => setRefresh(prev => prev + 1)}/>
       <Playlist />
-      <TopGenere />
-      <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
-      <TopArtist timeRange={timeRange} />
+
+      <div className="flex flex-col lg:flex-row gap-6 m-6 justify-center items-start">
+        {/* Top Géneros */}
+        <div className="w-full lg:w-150 border h-136 border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-4 flex justify-center items-center">
+          <TopGenere />
+        </div>
+
+        {/* Top Artistas */}
+        <div className="w-full lg:w-150 h-136 border border-pink-500/20 shadow-[0_0_20px_2px_rgba(236,72,153,0.12)] rounded-2xl p-4 flex flex-col gap-4">
+          <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
+          <div className="flex-1 min-h-0">
+            <TopArtist timeRange={timeRange} />
+          </div>
+        </div>
+      </div>
 
       <div>
-        <h1>resouesta ia</h1>
+  
         <PerfilMusicalIA onResult={(texto) => setIaText(texto)} onData={(data) => setIaDate(data)} />
         {iaDate && <MusicPredictions responseIa={iaDate} />
         }

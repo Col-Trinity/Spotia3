@@ -28,7 +28,7 @@ export async function GET(req: Request) {
             name: p.name,
             description: p.description,
             url: p.external_urls.spotify,
-            tracksTotal: p.tracksTotal,
+            tracksTotal: p.tracks.total,
         }));
 
 
