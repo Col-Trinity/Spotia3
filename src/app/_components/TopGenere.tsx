@@ -35,9 +35,12 @@ export default function TopGenere() {
 
   return (
     <div className="w-115 p-6">
-      <h2 className="text-2xl font-bold mb-6 text-center">
+      <h2 className="text-2xl font-bold mb-6 text-center bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
         Tus géneros favoritos
       </h2>
+      <p className="text-gray-400 text-center mb-4">
+        Grafico de tus géneros favoritos
+      </p>
       <div className="relative bg-linear-to-br from-gray-900 to-black rounded-2xl p-6 shadow-2xl">
         <div className="absolute left-6 top-6 h-80 flex flex-col justify-around z-10">
           {topGenere.map((item, index) => (

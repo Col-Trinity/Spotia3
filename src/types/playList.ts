@@ -3,7 +3,7 @@ export type PlaylistItem = {
     name: string;
     description: string;
     external_urls: { spotify: string };
-    tracks: { href: string; };
+    tracks: { href: string, total: number };
      tracksTotal: number;
 
 };
