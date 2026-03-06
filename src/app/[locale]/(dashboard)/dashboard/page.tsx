@@ -20,11 +20,12 @@ export default function Dashboard() {
     dnd_alignment: string;
     voting_tendency: string;
   } | null>(null);
+  const [refresh, setRefresh] = useState(0);
 
   return (
     <div className=" flex flex-col items-center justify-center">
         <Image alt="logo" src={spotiaLogo}  width={100} height={100}/>
-        <TopNavBar/>
+        <TopNavBar onRefresh={() => setRefresh(prev => prev + 1)}/>
       <Playlist />
       <TopGenere />
       <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />

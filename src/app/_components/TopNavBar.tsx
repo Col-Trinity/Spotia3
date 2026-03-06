@@ -1,10 +1,23 @@
 import { MdMenu } from "react-icons/md";
 import UseImg from "./UseImg";
-export default function TopNavBar() {
+import MenuToggle from "./MenuToggle";
+import { useState } from "react";
+export default function TopNavBar({ onRefresh }: { onRefresh: () => void }) {
+const [button,setButton]= useState(false)
+
+
 
     return (
-        <div className="flex justify-between w-[90%] sm:w-[80%]">
-            <MdMenu size={34} />
+        <div className="  flex justify-between w-[90%] sm:w-[80%]">
+            <div className="relative">
+                 <button className="" onClick={()=>setButton((prev)=>!prev) }>
+                <MdMenu size={34} />
+            </button>
+            {button && (
+                <MenuToggle setButtonClose={setButton} locale="" onRefresh={onRefresh}/>
+            )}
+            </div>
+           
             <UseImg />
         </div>
     )
