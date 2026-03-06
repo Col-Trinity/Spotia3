@@ -22,7 +22,7 @@ export default function UseImg({ size = 40 }: { size?: number }) {
   return (
     <div
       style={{ width: size, height: size }}
-      className="rounded-full bg-green-500 flex items-center justify-center"
+      className="rounded-full bg-[rgb(224,179,254)] flex items-center justify-center"
     >
       <span className="text-white font-bold">
         {session.user?.name?.[0]?.toUpperCase()}

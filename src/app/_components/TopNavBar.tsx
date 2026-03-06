@@ -14,7 +14,7 @@ const [button,setButton]= useState(false)
                 <MdMenu size={34} />
             </button>
             {button && (
-                <MenuToggle setButtonClose={setButton} locale="" onRefresh={onRefresh}/>
+                <MenuToggle setButtonClose={setButton}onRefresh={onRefresh}/>
             )}
             </div>
            

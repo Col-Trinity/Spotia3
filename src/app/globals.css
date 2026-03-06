@@ -19,6 +19,13 @@
   }
 } */
 
+/*@theme {
+  --font-sf-pro: "SF Pro", sans-serif;
+}*/
+
+body {
+  overflow-x: hidden;
+}
 
 body {
   /* background: var(--background); */
