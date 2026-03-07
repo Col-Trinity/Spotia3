@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import Image from 'next/image';
 import SpotiALogo from "@/public/SpotIALogo.png"
 import IlustracionOnboarding from "@/public/IlustracionOnboarding.png"

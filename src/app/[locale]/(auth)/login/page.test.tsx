@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import LoginPage from './page';
 
 vi.mock('next-auth/react', () => ({
   signIn: vi.fn(),
@@ -20,8 +21,6 @@ vi.mock('next/navigation',()=>({
       prefetch:vi.fn()
     })
 }))
-import LoginPage from './page';
-import { useRouter } from 'next/router';
 
 // Simple unit test to test the UI, is helpfull to ensure the page is rendered correctly and the button is displayed
 describe('LoginPage', () => {

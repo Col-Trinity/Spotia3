@@ -4,12 +4,13 @@ import Dashboard from "./page";
 
 vi.mock("next/image", () => ({
   default: ({ src, alt }: { src: string; alt: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} />
   ),
 }));
 
 vi.mock("@/src/app/_components/PerfilMusicalIA", () => ({
-  default: ({ onResult, onData }: { onResult: (t: string) => void; onData: (d: unknown) => void }) => (
+  default: () => (
     <div data-testid="perfil-musical-ia" />
   ),
 }));

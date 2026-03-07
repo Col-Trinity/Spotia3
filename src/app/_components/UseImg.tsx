@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useSession } from "next-auth/react";
 
 export default function UseImg({ size = 40 }: { size?: number }) {
@@ -8,13 +7,18 @@ export default function UseImg({ size = 40 }: { size?: number }) {
 
   if (session.user?.image) {
     return (
-      <Image
-        src={session.user.image}
-        alt={session.user.name || "Usuario"}
-        width={size}
-        height={size}
-        style={{ borderRadius: "50%" }}
-      />
+      <div
+        style={{ 
+          width: size, 
+          height: size, 
+          backgroundImage: `url(${session.user.image})`, 
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundSize: "cover"
+        }}
+        className="rounded-full flex items-center justify-center"
+      >
+      </div>
     );
   }
 
