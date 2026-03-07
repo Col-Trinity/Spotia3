@@ -10,8 +10,8 @@ export function NavBar({ locale }: { locale: string }) {
     const IsActive = (path: string) => pathname === path;
 
     return (
-        <nav className="fixed top-0 left-0 right-0 bg-white h-16 border-t border-gray-200">
-            <div className="flex flex-row justify-center items-center h-full px-2 gap-24">
+        <nav className="w-full bg-white h-16 border-t border-gray-200 shrink-0">
+            <div className="flex flex-row justify-center items-center h-full gap-24">
 
                 <button
                     onClick={() => router.push(`/${locale}/dashboard`)}

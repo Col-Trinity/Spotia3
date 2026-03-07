@@ -1,7 +1,7 @@
 "use client";
 
 import PerfilMusicalIA from "@/src/app/_components/PerfilMusicalIA";
-
+import Image from "next/image";
 import { TopArtist } from "./data-spotify/top-artist";
 import TopGenere from "@/src/app/_components/TopGenere";
 import { Playlist } from "./data-spotify/play-list";
@@ -9,7 +9,8 @@ import { useState } from "react";
 import TimeRangeSelector from "@/src/app/_components/TimeRangeSelector";
 import { Wrapped } from "@/src/app/_components/Wrapped";
 import { MusicPredictions } from "@/src/app/_components/MusicPredictions";
-
+import spotiaLogo from "@/public/SpotIALogo.png"
+import TopNavBar from "@/src/app/_components/TopNavBar";
 export default function Dashboard() {
 
   const [timeRange, setTimeRange] = useState("short_term");
@@ -19,35 +20,49 @@ export default function Dashboard() {
     dnd_alignment: string;
     voting_tendency: string;
   } | null>(null);
+  const [refresh, setRefresh] = useState(0);
 
-  return (
-    <div>
-      <Playlist />
+ return (
+  <div className="flex flex-col items-center justify-center  min-h-screen">
+    
+    <Image alt="logo" src={spotiaLogo} width={100} height={100} />
+    <TopNavBar onRefresh={() => setRefresh(prev => prev + 1)} />
 
-      <div className="flex flex-col lg:flex-row gap-6 m-6 justify-center items-start">
-        {/* Top Géneros */}
-        <div className="w-full lg:w-150 border h-136 border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-4 flex justify-center items-center">
-          <TopGenere />
-        </div>
-
-        {/* Top Artistas */}
-        <div className="w-full lg:w-150 h-136 border border-pink-500/20 shadow-[0_0_20px_2px_rgba(236,72,153,0.12)] rounded-2xl p-4 flex flex-col gap-4">
-          <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
-          <div className="flex-1 min-h-0">
-            <TopArtist timeRange={timeRange} />
-          </div>
-        </div>
+      <div className="flex flex-col lg:flex-row gap-6 m-6 w-full max-w-6xl">
+      
+      <div className="w-full lg:w-1/2 border border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-4">
+        <Playlist />
       </div>
 
-      <div>
-  
-        <PerfilMusicalIA onResult={(texto) => setIaText(texto)} onData={(data) => setIaDate(data)} />
-        {iaDate && <MusicPredictions responseIa={iaDate} />
-        }
-
+      <div className="w-full  lg:w-1/2 border border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-4 flex flex-col gap-4">
+        <PerfilMusicalIA
+          onResult={(texto) => setIaText(texto)}
+          onData={(data) => setIaDate(data)}
+          refresh={refresh}
+        />
+        {iaDate && <MusicPredictions responseIa={iaDate} />}
       </div>
-      {iaDate && <Wrapped iaText={iaText} iaDate={iaDate} />
-      }
+
     </div>
-  );
+
+    <div className="flex flex-col lg:flex-row gap-6 m-6 w-full max-w-6xl">
+
+      <div className="w-full lg:w-1/2 border border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-4 flex justify-center items-center">
+        <TopGenere />
+      </div>
+
+      <div className="w-full lg:w-1/2 border border-pink-500/20 shadow-[0_0_20px_2px_rgba(236,72,153,0.12)] rounded-2xl p-4 flex flex-col gap-4">
+        <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
+        <div className="flex-1 min-h-0">
+          <TopArtist timeRange={timeRange} />
+        </div>
+      </div>
+
+    </div>
+
+    {/* Wrapped */}
+    {iaDate && <Wrapped iaText={iaText} iaDate={iaDate} />}
+
+  </div>
+);
 }

@@ -8,7 +8,9 @@ import Image from "next/image";
 import corazon from "@/public/heart_smile.svg";
 interface Props {
   onResult?: (texto: string) => void;  // funcion texto afuera
-  onData: (data: { description: string, hygiene_level: string, dnd_alignment: string, voting_tendency: string, emotions: Array<{ name: string; percentage: number }> }) => void
+  onData: (data: { description: string, hygiene_level: string, dnd_alignment: string, voting_tendency: string, emotions: Array<{ name: string; percentage: number }> }) => void,
+      refresh:number,
+
 }
 type AIResult = {
   description: string,
@@ -20,7 +22,7 @@ type AIResult = {
     percentage: number;
   }>;
 }
-export default function PerfilMusicalIA({ onResult, onData }: Props) {
+export default function PerfilMusicalIA({ onResult, onData , refresh}: Props) {
   const { data: artists = [], isError, error, isLoading } = useTopArtists();
   const { mutate, isPending, data: responseIa, isError: isMutationError } = usePostMutation<{ artists: Artist[] }, { result: AIResult }>(
     "/api/askAI"
@@ -31,7 +33,7 @@ export default function PerfilMusicalIA({ onResult, onData }: Props) {
     if (!isLoading && !isError && artists.length > 0) {
       mutate({ artists });
     }
-  }, [artists, isLoading, isError, mutate]);
+  }, [artists, isLoading, isError, mutate,refresh]);
 
   useEffect(() => {
     if (responseIa && onResult) {

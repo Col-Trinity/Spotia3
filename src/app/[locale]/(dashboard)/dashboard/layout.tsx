@@ -20,8 +20,8 @@ export default function DashboardLayout({
 
 
   return (
-    <div>
-      <section className="p-6">
+    <div className="flex flex-col h-dvh">
+      <section className="flex-1 overflow-y-auto">
         {children}
       </section>
       <NavBar locale={locale} />
