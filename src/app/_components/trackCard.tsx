@@ -11,17 +11,17 @@ export function TrackCard({ track }: { track: Track }) {
   }
   return (
     <>
-      <div className="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-white/5 transition group">
+      <div className="flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-violet-50 border border-transparent hover:border-violet-200 transition-all group cursor-default">
 
         <div className="flex-1 overflow-hidden">
-          <h3 className="text-black font-medium truncate">
+          <h3 className="text-gray-900 text-base font-semibold truncate group-hover:text-violet-700 transition-colors">
             {track.name}
           </h3>
-          <p className="text-sm text-gray-400 truncate">
+          <p className="text-sm text-violet-500 truncate">
             {track.artists.map(a => a.name).join(", ")}
           </p>
         </div>
-        <span className="text-sm text-gray-400">
+        <span className="text-sm text-purple-400 tabular-nums">
           {formatearDuracion(track.duration_ms)}
         </span>
         <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition">
@@ -29,12 +29,11 @@ export function TrackCard({ track }: { track: Track }) {
             href={track.external_urls.spotify}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-green-500 hover:text-green-400"
+            className="text-violet-500 hover:text-rose-500 transition-colors"
             title="Abrir en Spotify"
           >
-            <ExternalLink size={18} />
+            <ExternalLink size={16} />
           </a>
-
         </div>
       </div>
     </>
