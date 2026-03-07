@@ -73,7 +73,7 @@ export default function TopGenere() {
               </span>
             </div>
 
-            <div className="w-full h-1.5 bg-[#1A1A2E] rounded-full overflow-hidden">
+            <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-purple-500 to-violet-400"
                 style={{

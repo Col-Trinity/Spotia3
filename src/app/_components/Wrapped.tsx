@@ -72,7 +72,7 @@ export function Wrapped({ iaText,iaDate }: props) {
 
         <button
           onClick={descargarImagen}
-          className="bg-[#0A0A0F] px-6 py-3 rounded-full font-bold text-sm tracking-widest uppercase border-2 border-purple-500/20 text-white/80 hover:border-purple-500/60 hover:text-white hover:scale-105 active:scale-95 transition-all duration-200"
+          className=" px-6 py-3 rounded-full font-bold text-sm tracking-widest uppercase border-2 border-purple-500/20  hover:border-purple-500/60  hover:scale-105 active:scale-95 transition-all duration-200"
         >
           Descargar
         </button>
