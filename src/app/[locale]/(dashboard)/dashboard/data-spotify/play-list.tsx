@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PlaylistItem } from "@/src/types/playList";
 import { Track } from "@/src/types/track";
 import { useRedirectOn401 } from "@/src/hooks/useRedirectOn401i";
@@ -20,6 +20,7 @@ export function Playlist() {
         "/api/spotify/play-list?limit=5"
     );
 
+    const effectivePlaylistId = selectedPlaylistId || playList[0]?.id || '';
 
     const {
         isLoading: isLoadingTracks,
@@ -27,17 +28,10 @@ export function Playlist() {
         error: errorTracks,
         refetch: refetchTracks,
     } = useFetchQuery<Track[]>(
-        `playlist-tracks-${selectedPlaylistId}`,
-        selectedPlaylistId ? `/api/spotify/play-list/${selectedPlaylistId}/tracks` : '',
-        { enabled: !!selectedPlaylistId }
+        `playlist-tracks-${effectivePlaylistId}`,
+        effectivePlaylistId ? `/api/spotify/play-list/${effectivePlaylistId}/tracks` : '',
+        { enabled: !!effectivePlaylistId }
     );
-
-
-    useEffect(() => {
-        if (playList.length > 0 && !selectedPlaylistId) {
-            setSelectedPlaylistId(playList[0].id);
-        }
-    }, [playList]);
 
     useRedirectOn401({ isError: isErrorPlayList, error: errorPlayList });
 
@@ -123,7 +117,7 @@ export function Playlist() {
                             "from-pink-300 to-violet-400",
                         ];
                         const gradient = gradients[index % gradients.length];
-                        const isSelected = selectedPlaylistId === pl.id;
+                        const isSelected = effectivePlaylistId === pl.id;
 
                         return (
                             <div
@@ -197,7 +191,7 @@ export function Playlist() {
             </div>
 
             {/* Player */}
-            {selectedPlaylistId && (
+            {effectivePlaylistId && (
                 <div className="mt-5">
                     {isLoadingTracks && (
                         <div className="flex items-center justify-center py-8">
@@ -217,8 +211,8 @@ export function Playlist() {
                     {!isLoadingTracks && !isErrorTracks && (
                         <div className="relative rounded-2xl overflow-hidden shadow-lg border-2 border-pink-100">
                             <Iframe
-                                key={selectedPlaylistId}
-                                src={`spotify:playlist:${selectedPlaylistId}`}
+                                key={effectivePlaylistId}
+                                src={`spotify:playlist:${effectivePlaylistId}`}
                             />
                         </div>
                     )}
