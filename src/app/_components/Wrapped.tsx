@@ -40,27 +40,27 @@ export function Wrapped({ iaText,iaDate }: props) {
 
     {iaText && button && (
       <>
-        <div ref={tarjetaRef} className="min-h-screen w-[60%] border border-violet-500/20 text-white px-4 py-10 flex flex-col items-center gap-10">
+        <div ref={tarjetaRef} className="min-h-screen w-full md:w-[60%] max-w-2xl border border-violet-500/20 text-white px-4 py-8 md:py-10 flex flex-col items-center gap-6 md:gap-10 overflow-hidden">
 
-          <div className="text-center">
-            <h1 className="text-5xl font-black tracking-tight uppercase bg-gradient-to-r from-purple-400 via-violet-300 to-fuchsia-400 bg-clip-text text-transparent">
+          <div className="text-center w-full">
+            <h1 className="text-2xl md:text-5xl font-black tracking-tight uppercase bg-gradient-to-r from-purple-400 via-violet-300 to-fuchsia-400 bg-clip-text text-transparent">
               Wrapped
             </h1>
-            <p className="text-[#888899] text-sm mt-2 tracking-widest uppercase">
+            <p className="text-[#888899] text-xs md:text-sm mt-2 tracking-wider md:tracking-widest uppercase">
               Tu año en música
             </p>
           </div>
 
-          <div className="w-full max-w-xl rounded-3xl bg-gradient-to-br from-purple-900/60 to-black border border-purple-500/20 shadow-2xl shadow-purple-950/50 p-2">
+          <div className="w-full max-w-xl rounded-2xl md:rounded-3xl bg-gradient-to-br from-purple-900/60 to-black border border-purple-500/20 shadow-2xl shadow-purple-950/50 p-2">
             <TopGenere />
           </div>
 
           {iaText && (
-            <div className="w-full max-w-xl rounded-3xl bg-gradient-to-br from-purple-900/70 via-fuchsia-950/60 to-black border border-purple-800/30 shadow-2xl shadow-purple-950/50 p-8 flex flex-col gap-4">
+            <div className="w-full max-w-xl rounded-2xl md:rounded-3xl bg-gradient-to-br from-purple-900/70 via-fuchsia-950/60 to-black border border-purple-800/30 shadow-2xl shadow-purple-950/50 p-5 md:p-8 flex flex-col gap-4">
               <span className="text-xs font-bold tracking-widest uppercase text-purple-400">
                 Lo que dice la IA de ti
               </span>
-              <blockquote className="text-xl font-semibold leading-relaxed text-white/90">
+              <blockquote className="text-base md:text-xl font-semibold leading-relaxed text-white/90">
                 {iaText}
               </blockquote>
             </div>
