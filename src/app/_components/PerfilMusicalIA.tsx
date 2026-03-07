@@ -51,8 +51,8 @@ export default function PerfilMusicalIA({ onResult, onData , refresh}: Props) {
   }
 
   return (
-    <div className=" flex justify-content items-center gap-6">
-      <div className="border border-violet-300 rounded-3xl p-4 ">
+    <div className="flex justify-center items-center w-full">
+      <div className="border border-violet-300 rounded-3xl p-4 w-full">
         <h1 className="font-semibold text-gray-800">Perfil Musical</h1>
 
         <p className="text-xs text-gray-500">Tu personalidad según tus artistas favoritos</p>
@@ -70,7 +70,7 @@ export default function PerfilMusicalIA({ onResult, onData , refresh}: Props) {
         )}
         {responseIa && (
           <>
-            <div className="w-90 mb-4 mt-4">
+            <div className="w-full mb-4 mt-4 text-sm">
 
               <Typewriter
                 onInit={(typewriter) => {
@@ -87,16 +87,16 @@ export default function PerfilMusicalIA({ onResult, onData , refresh}: Props) {
                 <Image src={corazon} alt="corazon" className="w-5 h-5" />
                 <p className="font-medium">Estado de ánimo</p>
               </div>
-              <div className="h-32 w-full ">
+              <div className="w-full space-y-2">
                 {responseIa?.result?.emotions?.map((emotion, index) => (
-                  <div key={emotion.name} className="mb-2">
+                  <div key={emotion.name}>
 
                     <div className="flex justify-between text-sm font-medium">
                       <span>{emotion.name}</span>
                       <span>{emotion.percentage}%</span>
                     </div>
 
-                    <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden ">
+                    <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-violet-500 rounded-full"
                         style={{
@@ -108,7 +108,7 @@ export default function PerfilMusicalIA({ onResult, onData , refresh}: Props) {
 
                   </div>
                 )) || (
-                    <p className="flex  text-gray-400">Consulta a la IA</p>
+                    <p className="text-gray-400">Consulta a la IA</p>
                   )}
               </div>
 
