@@ -5,7 +5,7 @@ import { Track } from "@/src/types/track";
 import { useRedirectOn401 } from "@/src/hooks/useRedirectOn401i";
 import { useFetchQuery } from "@/src/hooks/useFetchQuery";
 import { Iframe } from "@/src/app/_components/Iframe";
-import { HiPlay, HiSparkles, HiXMark } from "react-icons/hi2";
+import { HiPlay, HiSparkles } from "react-icons/hi2";
 
 
 export function Playlist() {
@@ -20,6 +20,7 @@ export function Playlist() {
         "/api/spotify/play-list?limit=5"
     );
 
+    const effectivePlaylistId = selectedPlaylistId || playList[0]?.id || '';
 
     const {
         isLoading: isLoadingTracks,
@@ -27,11 +28,10 @@ export function Playlist() {
         error: errorTracks,
         refetch: refetchTracks,
     } = useFetchQuery<Track[]>(
-        `playlist-tracks-${selectedPlaylistId}`,
-        selectedPlaylistId ? `/api/spotify/play-list/${selectedPlaylistId}/tracks` : '',
-        { enabled: !!selectedPlaylistId }
+        `playlist-tracks-${effectivePlaylistId}`,
+        effectivePlaylistId ? `/api/spotify/play-list/${effectivePlaylistId}/tracks` : '',
+        { enabled: !!effectivePlaylistId }
     );
-
 
     useRedirectOn401({ isError: isErrorPlayList, error: errorPlayList });
 
@@ -56,17 +56,17 @@ export function Playlist() {
     }
     if (isLoadingPlayList) {
         return (
-            <div className="p-6">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-8 h-8 rounded-full bg-linear-to-r from-purple-500 to-pink-500 animate-pulse" />
-                    <div className="h-6 bg-gray-200 rounded w-48 animate-pulse" />
+            <div className="px-4 py-5">
+                <div className="flex items-center gap-2 mb-5">
+                    <div className="w-6 h-6 rounded-full bg-linear-to-r from-pink-400 to-violet-500 animate-pulse" />
+                    <div className="h-5 bg-pink-100 rounded-full w-36 animate-pulse" />
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {[1, 2, 3].map((i) => (
-                        <div key={i} className="bg-gray-100 rounded-lg p-4 animate-pulse">
-                            <div className="w-full aspect-square bg-gray-200 rounded-md mb-4" />
-                            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-                            <div className="h-3 bg-gray-200 rounded w-1/2" />
+                <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                    {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="shrink-0 w-32 sm:w-36 bg-pink-50 rounded-2xl p-3 animate-pulse">
+                            <div className="w-full h-20 sm:h-24 bg-pink-100 rounded-xl mb-3" />
+                            <div className="h-3 bg-pink-100 rounded-full w-3/4 mb-2" />
+                            <div className="h-2.5 bg-pink-100 rounded-full w-1/2" />
                         </div>
                     ))}
                 </div>
@@ -74,146 +74,145 @@ export function Playlist() {
         );
     }
     return (
-        <div className="p-6 mt-4 max-w-7xl mx-auto">
+        <div className="px-4 py-5 mt-2 max-w-4xl mx-auto">
 
-            {}
-            <div className="mb-8">
-                <div className="flex items-center gap-3 mb-2">
-                    <HiSparkles className="text-purple-500" size={28} />
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text text-transparent">
+            <div className="mb-5">
+                <div className="flex items-center gap-2 mb-1">
+                    <HiSparkles className="text-pink-400" size={22} />
+                    <h2 className="text-xl font-bold bg-linear-to-r from-pink-500 via-fuchsia-500 to-violet-500 bg-clip-text text-transparent">
                         Tus Playlists
                     </h2>
                 </div>
             </div>
 
-            
             <div className="relative flex items-center">
 
                 {/* Flecha izquierda */}
                 <button
                     onClick={() => {
-                        document.getElementById("carousel")?.scrollBy({ left: -400, behavior: "smooth" });
+                        document.getElementById("carousel")?.scrollBy({ left: -280, behavior: "smooth" });
                     }}
-                    className="absolute -left-6 z-10
-          w-10 h-40 rounded-full
-          bg-white/5 backdrop-blur-sm
-          border border-white/10
-          text-black/40 text-2xl
+                    className="absolute -left-3 z-10
+          w-7 h-7 rounded-full
+          bg-white shadow-md border border-pink-100
+          text-fuchsia-400 text-lg
           flex items-center justify-center
-          hover:bg-purple-500/30 hover:border-purple-400/50 hover:text-white
-          active:scale-95 transition-all duration-200 shadow-lg"
+          hover:bg-pink-50 hover:text-fuchsia-600
+          active:scale-90 transition-all duration-200"
                 >
                     ‹
                 </button>
 
                 <div
                     id="carousel"
-                    className="flex gap-4 overflow-x-auto scroll-smooth pb-2 w-full
-          scrollbar-hide snap-x snap-mandatory px-2"
+                    className="flex gap-3 overflow-x-auto scroll-smooth pb-2 w-full
+          scrollbar-hide snap-x snap-mandatory px-6"
                 >
-                    {playList.map((pl) => (
-                        <div
-                            key={pl.id}
-                            onClick={() => {
-                                setSelectedPlaylistId(pl.id);
-                                refetchTracks();
-                            }}
-                            className={`
-              group relative flex-shrink-0 cursor-pointer
-              w-full
-              snap-center
-              bg-gradient-to-br from-[#1A1A2E] to-[#0A0A0F]
-              rounded-2xl overflow-hidden
-              border transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl
-              ${selectedPlaylistId === pl.id
-                                    ? "border-purple-500 shadow-lg shadow-purple-500/40"
-                                    : "border-purple-500/20 hover:border-purple-500/50"
-                                }
-            `}
-                        >
-                            {/* Imagen */}
-                            <div className="relative aspect-square overflow-hidden">
-                                <div className="w-full h-full bg-gradient-to-br from-purple-600/80 to-violet-900 flex items-center justify-center">
-                                    <HiSparkles className="text-white/60" size={80} />
-                                </div>
+                    {playList.map((pl, index) => {
+                        const gradients = [
+                            "from-pink-400 to-rose-400",
+                            "from-fuchsia-400 to-pink-400",
+                            "from-violet-400 to-fuchsia-400",
+                            "from-purple-400 to-violet-400",
+                            "from-pink-300 to-violet-400",
+                        ];
+                        const gradient = gradients[index % gradients.length];
+                        const isSelected = effectivePlaylistId === pl.id;
 
-                                {/* Overlay hover */}
-                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
-                                        <div className="bg-purple-500 rounded-full p-4 shadow-lg">
-                                            <HiPlay className="text-white" size={32} />
+                        return (
+                            <div
+                                key={pl.id}
+                                onClick={() => {
+                                    setSelectedPlaylistId(pl.id);
+                                    refetchTracks();
+                                }}
+                                className={`
+                  group relative shrink-0 cursor-pointer
+                  w-32 sm:w-36
+                  snap-center
+                  bg-white rounded-2xl overflow-hidden
+                  border-2 transition-all duration-300
+                  hover:-translate-y-1 hover:shadow-lg
+                  ${isSelected
+                                        ? "border-fuchsia-400 shadow-md shadow-fuchsia-200"
+                                        : "border-pink-100 hover:border-fuchsia-300 shadow-sm"
+                                    }
+                `}
+                            >
+                                {/* Área de icono */}
+                                <div className={`relative h-20 sm:h-24 bg-linear-to-br ${gradient} flex items-center justify-center`}>
+                                    <HiSparkles className="text-white/70" size={32} />
+
+                                    {/* Overlay hover con botón play */}
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                                        <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
+                                            <div className="bg-white/90 rounded-full p-2 shadow-md">
+                                                <HiPlay className="text-fuchsia-500" size={18} />
+                                            </div>
                                         </div>
                                     </div>
+
+                                    {isSelected && (
+                                        <div className="absolute top-2 right-2 bg-white text-fuchsia-500 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                                            ▶
+                                        </div>
+                                    )}
                                 </div>
 
-                                {selectedPlaylistId === pl.id && (
-                                    <div className="absolute top-3 right-3 bg-purple-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                                        Activa
-                                    </div>
-                                )}
+                                {/* Info */}
+                                <div className="px-3 py-2.5">
+                                    <p className="font-semibold text-gray-800 text-xs leading-tight line-clamp-1 mb-0.5">
+                                        {pl.name}
+                                    </p>
+                                    <p className="text-[10px] text-gray-400 line-clamp-1">
+                                        {pl.description || `${pl.tracksTotal || 0} canciones`}
+                                    </p>
+                                </div>
                             </div>
-
-                            {/* Info */}
-                            <div className="p-4">
-                                <h3 className="font-semibold text-white mb-1 line-clamp-1">
-                                    {pl.name}
-                                </h3>
-                                <p className="text-sm text-[#888899] line-clamp-2">
-                                    {pl.description || `${pl.tracksTotal || 0} canciones`}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 {/* Flecha derecha */}
                 <button
                     onClick={() => {
-                        document.getElementById("carousel")?.scrollBy({ left: 400, behavior: "smooth" });
+                        document.getElementById("carousel")?.scrollBy({ left: 280, behavior: "smooth" });
                     }}
-                    className="absolute -right-6 z-10
-          w-10 h-40 rounded-full
-          bg-white/5 backdrop-blur-sm
-          border border-white/10
-          text-black/40 text-2xl
+                    className="absolute -right-3 z-10
+          w-7 h-7 rounded-full
+          bg-white shadow-md border border-pink-100
+          text-fuchsia-400 text-lg
           flex items-center justify-center
-          hover:bg-purple-500/30 hover:border-purple-400/50 hover:text-white
-          active:scale-95 transition-all duration-200 shadow-lg"
+          hover:bg-pink-50 hover:text-fuchsia-600
+          active:scale-90 transition-all duration-200"
                 >
                     ›
                 </button>
             </div>
 
             {/* Player */}
-            {selectedPlaylistId && (
-                
-                <div className="mt-8">
+            {effectivePlaylistId && (
+                <div className="mt-5">
                     {isLoadingTracks && (
-                        <div className="flex items-center justify-center py-12">
-                            <div className="flex flex-col items-center gap-4">
-                                <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
-                                <p className="text-[#888899]">Cargando canciones...</p>
+                        <div className="flex items-center justify-center py-8">
+                            <div className="flex flex-col items-center gap-3">
+                                <div className="w-8 h-8 border-3 border-fuchsia-400 border-t-transparent rounded-full animate-spin" />
+                                <p className="text-sm text-gray-400">Cargando canciones...</p>
                             </div>
                         </div>
                     )}
 
                     {isErrorTracks && (
-                        <div className="bg-red-950/40 border border-red-500/30 rounded-xl p-4">
-                            <p className="text-red-400">{(errorTracks as Error).message}</p>
+                        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                            <p className="text-sm text-red-500">{(errorTracks as Error).message}</p>
                         </div>
                     )}
 
                     {!isLoadingTracks && !isErrorTracks && (
-                        <div className="relative rounded-xl overflow-hidden shadow-2xl">
-                            <button
-                                onClick={() => setSelectedPlaylistId('')}
-                                className="absolute top-3 right-3 z-10 p-1.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 text-white/60 hover:bg-white/10 hover:text-white transition-all duration-200"
-                            >
-                                <HiXMark size={20} />
-                            </button>
+                        <div className="relative rounded-2xl overflow-hidden shadow-lg border-2 border-pink-100">
                             <Iframe
-                                key={selectedPlaylistId}
-                                src={`spotify:playlist:${selectedPlaylistId}`}
+                                key={effectivePlaylistId}
+                                src={`spotify:playlist:${effectivePlaylistId}`}
                             />
                         </div>
                     )}
