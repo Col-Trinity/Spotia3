@@ -22,25 +22,47 @@ export default function Dashboard() {
   } | null>(null);
   const [refresh, setRefresh] = useState(0);
 
-  return (
-    <div className=" flex flex-col items-center justify-center">
-        <Image alt="logo" src={spotiaLogo}  width={100} height={100}/>
-        <TopNavBar onRefresh={() => setRefresh(prev => prev + 1)}/>
-      <Playlist />
-      <TopGenere /> 
-      <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
-      <TopArtist timeRange={timeRange} />
+ return (
+  <div className="flex flex-col items-center justify-center  min-h-screen">
+    
+    <Image alt="logo" src={spotiaLogo} width={100} height={100} />
+    <TopNavBar onRefresh={() => setRefresh(prev => prev + 1)} />
 
-      <div>
-        <h1>resouesta ia</h1>
-        <PerfilMusicalIA onResult={(texto) => setIaText(texto)} onData={(data) => setIaDate(data)}  refresh={refresh}/>
-        {iaDate && <MusicPredictions responseIa={iaDate} />
-        }
-
+      <div className="flex flex-col lg:flex-row gap-6 m-6 w-full max-w-6xl">
+      
+      <div className="w-full lg:w-1/2 border border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-4">
+        <Playlist />
       </div>
-      {iaDate && <Wrapped iaText={iaText} iaDate={iaDate} />
-      }
+
+      <div className="w-full  lg:w-1/2 border border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-4 flex flex-col gap-4">
+        <PerfilMusicalIA
+          onResult={(texto) => setIaText(texto)}
+          onData={(data) => setIaDate(data)}
+          refresh={refresh}
+        />
+        {iaDate && <MusicPredictions responseIa={iaDate} />}
+      </div>
+
     </div>
-  );
+
+    <div className="flex flex-col lg:flex-row gap-6 m-6 w-full max-w-6xl">
+
+      <div className="w-full lg:w-1/2 border border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-4 flex justify-center items-center">
+        <TopGenere />
+      </div>
+
+      <div className="w-full lg:w-1/2 border border-pink-500/20 shadow-[0_0_20px_2px_rgba(236,72,153,0.12)] rounded-2xl p-4 flex flex-col gap-4">
+        <TimeRangeSelector timeRange={timeRange} setTimeRange={setTimeRange} />
+        <div className="flex-1 min-h-0">
+          <TopArtist timeRange={timeRange} />
+        </div>
+      </div>
+
+    </div>
+
+    {/* Wrapped */}
+    {iaDate && <Wrapped iaText={iaText} iaDate={iaDate} />}
+
+  </div>
+);
 }
-  

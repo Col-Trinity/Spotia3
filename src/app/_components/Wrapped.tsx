@@ -40,7 +40,7 @@ export function Wrapped({ iaText,iaDate }: props) {
 
     {iaText && button && (
       <>
-        <div ref={tarjetaRef} className="min-h-screen w-[60%] bg-[#0A0A0F] text-white px-4 py-10 flex flex-col items-center gap-10">
+        <div ref={tarjetaRef} className="min-h-screen w-[60%] border border-violet-500/20 text-white px-4 py-10 flex flex-col items-center gap-10">
 
           <div className="text-center">
             <h1 className="text-5xl font-black tracking-tight uppercase bg-gradient-to-r from-purple-400 via-violet-300 to-fuchsia-400 bg-clip-text text-transparent">
@@ -81,3 +81,4 @@ export function Wrapped({ iaText,iaDate }: props) {
   </>
 );
 }
+

@@ -2,6 +2,12 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import Dashboard from "./page";
 
+vi.mock("next/image", () => ({
+  default: ({ src, alt }: { src: string; alt: string }) => (
+    <img src={src} alt={alt} />
+  ),
+}));
+
 vi.mock("@/src/app/_components/PerfilMusicalIA", () => ({
   default: ({ onResult, onData }: { onResult: (t: string) => void; onData: (d: unknown) => void }) => (
     <div data-testid="perfil-musical-ia" />
@@ -30,6 +36,10 @@ vi.mock("@/src/app/_components/Wrapped", () => ({
 
 vi.mock("@/src/app/_components/MusicPredictions", () => ({
   MusicPredictions: () => <div data-testid="music-predictions" />,
+}));
+
+vi.mock("@/src/app/_components/TopNavBar", () => ({
+  default: () => <div data-testid="top-nav-bar" />,
 }));
 
 describe("Dashboard", () => {

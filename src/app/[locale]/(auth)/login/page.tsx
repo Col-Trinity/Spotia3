@@ -56,7 +56,7 @@ export default function LoginPage() {
                   hover:bg-gray-200 text-black font-semibold py-3 px-6 rounded flex items-center justify-center transition shadow-sm"
               >
                 {providerIcons[provider.id]}
-              Continuar con  {provider.name}
+              Continuar con {provider.name}
               </button>
             ))}
         </div>

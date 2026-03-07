@@ -2,8 +2,10 @@ import { MdMenu } from "react-icons/md";
 import UseImg from "./UseImg";
 import MenuToggle from "./MenuToggle";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 export default function TopNavBar({ onRefresh }: { onRefresh: () => void }) {
 const [button,setButton]= useState(false)
+const router = useRouter()
 
 
 
@@ -17,8 +19,8 @@ const [button,setButton]= useState(false)
                 <MenuToggle setButtonClose={setButton}onRefresh={onRefresh}/>
             )}
             </div>
-           
-            <UseImg />
+           <button onClick={()=>router.push("/es/dashboard/perfil")}>            <UseImg />
+</button>
         </div>
     )
 }
