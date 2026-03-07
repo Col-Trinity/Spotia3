@@ -88,25 +88,26 @@ export function Playlist() {
             <div className="relative flex items-center">
 
                 {/* Flecha izquierda */}
-                <button
-                    onClick={() => {
-                        document.getElementById("carousel")?.scrollBy({ left: -280, behavior: "smooth" });
-                    }}
-                    className="absolute -left-3 z-10
+                {playList.length > 3 && (
+                    <button
+                        onClick={() => {
+                            document.getElementById("carousel")?.scrollBy({ left: -280, behavior: "smooth" });
+                        }}
+                        className="absolute -left-3 z-10
           w-7 h-7 rounded-full
           bg-white shadow-md border border-pink-100
           text-fuchsia-400 text-lg
           flex items-center justify-center
           hover:bg-pink-50 hover:text-fuchsia-600
           active:scale-90 transition-all duration-200"
-                >
-                    ‹
-                </button>
+                    >
+                        ‹
+                    </button>
+                )}
 
                 <div
                     id="carousel"
-                    className="flex gap-3 overflow-x-auto scroll-smooth pb-2 w-full
-          scrollbar-hide snap-x snap-mandatory px-6"
+                    className={`flex gap-3 pb-2 w-full overflow-x-hidden ${playList.length > 3 ? "scroll-smooth snap-x snap-mandatory px-6" : ""}`}
                 >
                     {playList.map((pl, index) => {
                         const gradients = [
@@ -129,6 +130,7 @@ export function Playlist() {
                                 className={`
                   group relative shrink-0 cursor-pointer
                   w-32 sm:w-36
+                  mt-2
                   snap-center
                   bg-white rounded-2xl overflow-hidden
                   border-2 transition-all duration-300
@@ -174,20 +176,22 @@ export function Playlist() {
                 </div>
 
                 {/* Flecha derecha */}
-                <button
-                    onClick={() => {
-                        document.getElementById("carousel")?.scrollBy({ left: 280, behavior: "smooth" });
-                    }}
-                    className="absolute -right-3 z-10
+                {playList.length > 3 && (
+                    <button
+                        onClick={() => {
+                            document.getElementById("carousel")?.scrollBy({ left: 280, behavior: "smooth" });
+                        }}
+                        className="absolute -right-3 z-10
           w-7 h-7 rounded-full
           bg-white shadow-md border border-pink-100
           text-fuchsia-400 text-lg
           flex items-center justify-center
           hover:bg-pink-50 hover:text-fuchsia-600
           active:scale-90 transition-all duration-200"
-                >
-                    ›
-                </button>
+                    >
+                        ›
+                    </button>
+                )}
             </div>
 
             {/* Player */}
