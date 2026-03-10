@@ -1,17 +1,26 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// Mock the config so we can control which provider is active
 vi.mock('../config/iaConfig', () => ({
   AI_PROVIDER: 'gemini',
   API_KEYS: { gemini: 'fake-gemini-key', claude: '', gpt: '' },
 }));
 
-// Mock global fetch for the Gemini HTTP call
-const fetchMock = vi.fn();
-vi.stubGlobal('fetch', fetchMock);
+const { mockGenerateContent } = vi.hoisted(() => ({
+  mockGenerateContent: vi.fn(),
+}));
+
+vi.mock('@google/generative-ai', () => ({
+  GoogleGenerativeAI: vi.fn(function () {
+    return {
+      getGenerativeModel: vi.fn().mockReturnValue({
+        generateContent: mockGenerateContent,
+      }),
+    };
+  }),
+}));
 
 beforeEach(() => {
-  fetchMock.mockReset();
+  mockGenerateContent.mockReset();
 });
 
 import { askAI } from './aiClient';
@@ -37,6 +46,7 @@ const mockArtists: Artist[] = [
     followers: { total: 0 },
   },
 ];
+
 describe('askAI (gemini provider)', () => {
   it('returns the text from Gemini response', async () => {
     const mockResponse = {
@@ -46,28 +56,19 @@ describe('askAI (gemini provider)', () => {
       voting_tendency: "Izquierda Unida",
       emotions: [{ name: "alegría", percentage: 80 }, { name: "tristeza", percentage: 20 }]
     };
-    fetchMock.mockResolvedValue({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          candidates: [
-            { content: { parts: [{ text: JSON.stringify(mockResponse) }] } },
-          ],
-        }),
+    mockGenerateContent.mockResolvedValue({
+      response: { text: () => JSON.stringify(mockResponse) },
     });
 
-    const result = await askAI({ artists: mockArtists });
+    const result = await askAI({ mode: 'profile', artists: mockArtists });
 
-    expect(result).toEqual(mockResponse)
+    expect(result).toEqual(mockResponse);
   });
 
   it('throws when Gemini response has no candidates', async () => {
-    fetchMock.mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve({ candidates: [] }),
-    });
+    mockGenerateContent.mockRejectedValue(new Error('invalid response'));
 
-    await expect(askAI({ artists: mockArtists }))
+    await expect(askAI({ mode: 'profile', artists: mockArtists }))
       .rejects
       .toThrow("La respuesta de Gemini no tiene el formato esperado.");
   });
