@@ -17,3 +17,10 @@ export const createGeneration = async (userId: string, newGeneration: z.infer<ty
     });
     return generation;
 };
+
+export const updateGeneration = async (userId: string, newGeneration: z.infer<typeof AiResponseSchema>) => {
+    const generation = await db.update(generations).set({
+        generation: newGeneration,
+    }).where(eq(generations.userId, userId));
+    return generation;
+};
