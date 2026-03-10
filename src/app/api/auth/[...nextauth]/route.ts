@@ -18,10 +18,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
-        // PedO el perfil completo 
-        //  headers: { Authorization: `Bearer ${account.access_token}` }
-        // })
-        // const profile = await res.json()
         return {
           ...token,
           accessToken: account.access_token,

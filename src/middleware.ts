@@ -6,7 +6,8 @@ export async function middleware(req: NextRequest) {
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
 
     if (!token) {
-        return NextResponse.redirect(new URL('/auth/login', req.url));
+        const locale = req.nextUrl.pathname.split('/')[1] || 'es';
+        return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
     }
 
   return NextResponse.next();
