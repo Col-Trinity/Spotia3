@@ -7,8 +7,10 @@ import {
   integer,
   index,
   primaryKey,
+  json,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from '@auth/core/adapters';
+import { AiResponseSchema } from "../types/ia";
 
 // Users table
 export const users = pgTable(
@@ -83,9 +85,20 @@ export const verificationTokens = pgTable(
 );
 
 // Music analyses table
+export const generations = pgTable(
+  'generations',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    generation: json().$type<typeof AiResponseSchema>().notNull(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { mode: 'date' })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' })
+  }
 
-
-
+)
 // Types
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
