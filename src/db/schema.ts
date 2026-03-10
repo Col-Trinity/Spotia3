@@ -11,6 +11,7 @@ import {
 } from "drizzle-orm/pg-core";
 import type { AdapterAccount } from '@auth/core/adapters';
 import { AiResponseSchema } from "../types/ia";
+import { z } from "zod";
 
 // Users table
 export const users = pgTable(
@@ -89,14 +90,17 @@ export const generations = pgTable(
   'generations',
   {
     id: uuid('id').defaultRandom().primaryKey(),
-    generation: json().$type<typeof AiResponseSchema>().notNull(),
+    generation: json().$type<z.infer<typeof AiResponseSchema>>().notNull(),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
     updatedAt: timestamp('updated_at', { mode: 'date' })
       .defaultNow()
       .$onUpdate(() => new Date())
       .notNull(),
    userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' })
-  }
+  },
+    (table) => ({
+    userIdIdx: index('generations_user_id_idx').on(table.userId),
+  })
 
 )
 // Types
@@ -109,5 +113,6 @@ export type NewAccount = typeof accounts.$inferInsert;
 export type Session = typeof sessions.$inferSelect;
 export type NewSession = typeof sessions.$inferInsert;
 
-
+export type Generation = typeof generations.$inferSelect;
+export type NewGeneration = typeof generations.$inferInsert;
 

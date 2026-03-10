@@ -1,0 +1,1 @@
+CREATE INDEX "generations_user_id_idx" ON "generations" USING btree ("user_id");
