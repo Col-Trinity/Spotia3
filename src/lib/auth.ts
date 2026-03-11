@@ -70,7 +70,7 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
   },
   pages: {
-    signIn: '/login',
+    signIn: '/es/login',
     error: '/auth/error',
   },
 };
