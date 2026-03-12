@@ -73,7 +73,9 @@ async function callGPT(prompt: string, schema: z.ZodTypeAny) {
 
 // Gemini
 async function callGemini(prompt: string, schema: z.ZodTypeAny) {
-  if(API_KEYS.gemini){
+  if (!API_KEYS.gemini) {
+    throw new AppError("GEMINI_API_KEY no está configurada.", 500);
+  }
   const genAI = new GoogleGenerativeAI(API_KEYS.gemini);
   const model = genAI.getGenerativeModel({
     model: process.env.GEMINI_MODEL ?? "gemini-2.5-flash",
@@ -84,11 +86,11 @@ async function callGemini(prompt: string, schema: z.ZodTypeAny) {
     const text = result.response.text();
     return schema.parse(JSON.parse(text));
   } catch (err: unknown) {
+    if (err instanceof AppError) throw err;
     if (err instanceof Error && err.message.includes("429")) {
       throw new AppError("La IA está ocupada, intenta más tarde.", 429);
     }
     throw new Error("La respuesta de Gemini no tiene el formato esperado.");
-  }
   }
 }
 

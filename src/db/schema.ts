@@ -96,9 +96,9 @@ export const generations = pgTable(
       .defaultNow()
       .$onUpdate(() => new Date())
       .notNull(),
-   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' })
+    userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' })
   },
-    (table) => ({
+  (table) => ({
     userIdIdx: index('generations_user_id_idx').on(table.userId),
   })
 
