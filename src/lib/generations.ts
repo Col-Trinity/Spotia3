@@ -32,12 +32,14 @@ export const getCachedGeneration = async (userId: string, artists: Artist[]) => 
     const generation = await getGeneration(userId);
 
     const fetchFromAI = async () => {
-        const response = await askAI({ mode: "profile", artists });
-        return AiResponseSchema.parse(response);
+        return await askAI({ mode: "profile", artists }) as z.infer<typeof AiResponseSchema>;
     }
 
     if (!generation) {
         const newGeneration = await fetchFromAI();
+        if (!newGeneration) {
+            throw new Error("Error al obtener generación de la IA");
+        }
         await createGeneration(userId, newGeneration);
         return newGeneration;
     }
@@ -55,3 +57,12 @@ export const getCachedGeneration = async (userId: string, artists: Artist[]) => 
 
     return generation.generation;
 }
+export const getUserByEmail = async (email: string) => {
+    const user = await db.query.users.findFirst({
+        where: (users) => eq(users.email, email)
+    });
+    if (!user) {
+        throw new Error("User not found");
+    }
+    return user.id;
+} 
