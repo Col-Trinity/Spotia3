@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useState} from "react";
 
 export function GeneratePlalist() {
   const [prompt, setPrompt] = useState("");
 
   async function handleGenerate(){
-      const res = await fetch('/api/generatePlaylist',{
+  const res = await fetch('/api/generatePlaylist',{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body: JSON.stringify({userInput:prompt})
@@ -14,6 +14,21 @@ export function GeneratePlalist() {
       const data = await res.json()
       console.log(data.result.playlist.songs )
       console.log(data)
+
+  const songs = data.result.playlist.songs
+  if(songs){
+    const SpotifyRes= await Promise.all(
+      songs.slice(0,5).map(async(song: {title: string, artis: string})=>{
+        const response = await fetch('/api/spotify/serch-track',{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({song})
+        });
+        return response.json();
+      })
+    )
+    console.log(SpotifyRes)
+  }
   }
   return (
 
