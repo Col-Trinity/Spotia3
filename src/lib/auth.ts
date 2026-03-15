@@ -48,6 +48,7 @@ export const authOptions: NextAuthOptions = {
           accessTokenExpires: account.expires_at ? account.expires_at * 1000 : 0,
           provider: account.provider,
           userId: user.id,
+          spotifyUserId: account.providerAccountId,
         };
       }
 
@@ -62,7 +63,7 @@ export const authOptions: NextAuthOptions = {
       session.accessToken = token.accessToken as string;
       session.provider = token.provider as string;
       session.error = token.error as string | undefined;
-
+      session.spotifyUserId = token.spotifyUserId as string; // 👈 agregar esto
       return session;
     },
   },

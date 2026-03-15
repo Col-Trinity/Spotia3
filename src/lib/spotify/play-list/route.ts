@@ -22,3 +22,44 @@ export async function getPlayList(token: string,
     return fetchWithToken(url, token);
 
 }
+
+export async function createPlaylist(token: string, spotifyUserId: string, name: string) {
+  const res = await fetch(`${SPOTIFY_API}/users/${spotifyUserId}/playlists`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      name,
+      public: false
+    })
+  })
+
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Error creando playlist: ${res.status} : ${text}`)
+  }
+
+  return res.json() // devuelve la playlist con su id
+}
+
+export async function addTracksToPlaylist(token: string, playlistId: string, trackIds: string[]) {
+  const uris = trackIds.map(id => `spotify:track:${id}`) // 👈 Spotify necesita este formato
+
+  const res = await fetch(`${SPOTIFY_API}/playlists/${playlistId}/tracks`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ uris })
+  })
+
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Error agregando canciones: ${res.status} : ${text}`)
+  }
+
+  return res.json()
+}
