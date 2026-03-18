@@ -1,25 +1,25 @@
 const SPOTIFY_API = "https://api.spotify.com/v1";
 
 async function fetchWithToken(url: string, token: string) {
-    const res = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            cache: 'no-store'
-        }
-    });
-    if (!res.ok) {
-        const text = await res.text()
-        throw new Error(`Error fetching ${url}: ${res.status} : ${text}`);
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      cache: 'no-store'
     }
-    
-    return res.json();
+  });
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Error fetching ${url}: ${res.status} : ${text}`);
+  }
+
+  return res.json();
 }
 
 export async function getPlayList(token: string,
-    limite: number = 10) {
+  limite: number = 10) {
 
-    const url = `${SPOTIFY_API}/me/playlists?limit=${limite}`;
-    return fetchWithToken(url, token);
+  const url = `${SPOTIFY_API}/me/playlists?limit=${limite}`;
+  return fetchWithToken(url, token);
 
 }
 
@@ -45,8 +45,7 @@ export async function createPlaylist(token: string, spotifyUserId: string, name:
 }
 
 export async function addTracksToPlaylist(token: string, playlistId: string, trackIds: string[]) {
-  const uris = trackIds.map(id => `spotify:track:${id}`) // 👈 Spotify necesita este formato
-
+  const uris = trackIds.map(id => `spotify:track:${id}`) //  Spotify necesita este formato
   const res = await fetch(`${SPOTIFY_API}/playlists/${playlistId}/tracks`, {
     method: "POST",
     headers: {
