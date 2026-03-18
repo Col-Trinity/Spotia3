@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
-export function GeneratePlalist() {
+export function GeneratePlaylist() {
   const queryClient = useQueryClient();
   const [prompt, setPrompt] = useState("");
   const [songs, setSongs] = useState<{ title: string, artist: string }[]>()

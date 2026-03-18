@@ -11,7 +11,7 @@ import { Wrapped } from "@/src/app/_components/Wrapped";
 import { MusicPredictions } from "@/src/app/_components/MusicPredictions";
 import spotiaLogo from "@/public/SpotIALogo.png"
 import TopNavBar from "@/src/app/_components/TopNavBar";
-import { GeneratePlalist } from "@/src/app/_components/GeneratePlaylist";
+import { GeneratePlaylist } from "@/src/app/_components/GeneratePlaylist";
 export default function Dashboard() {
 
   const [timeRange, setTimeRange] = useState("short_term");
@@ -29,7 +29,7 @@ export default function Dashboard() {
     <Image alt="logo" src={spotiaLogo} width={100} height={100} />
     <TopNavBar onRefresh={() => setRefresh(prev => prev + 1)} />
                <div>
-                <GeneratePlalist/>
+                <GeneratePlaylist/>
                </div>
       <div className="flex flex-col lg:flex-row gap-6 m-6 w-full max-w-6xl">
       
