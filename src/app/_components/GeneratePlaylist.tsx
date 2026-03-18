@@ -1,17 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function GeneratePlalist() {
+  const queryClient = useQueryClient();
   const [prompt, setPrompt] = useState("");
   const [songs, setSongs] = useState<{ title: string, artist: string }[]>()
   const [loading, setLoading] = useState(false)
   const [confirming, setConfirming] = useState(false)
-
+  const [namePlayList, setNamePlayList] = useState('')
   async function handleGenerate() {
     if (loading) return
     setLoading(true)
-    //mock
+    /*mock
     setSongs([
       { title: "Bohemian Rhapsody", artist: "Queen" },
       { title: "Blinding Lights", artist: "The Weeknd" },
@@ -21,7 +23,7 @@ export function GeneratePlalist() {
     ])
     setLoading(false)
     return
-
+*/
 
     const res = await fetch('/api/generatePlaylist', {
       method: "POST",
@@ -29,7 +31,9 @@ export function GeneratePlalist() {
       body: JSON.stringify({ userInput: prompt })
     })
     const data = await res.json()
+    console.log(data)
     const songs = data.result.playlist.songs
+    setNamePlayList(data.result.playlist.title)
     setSongs(songs)
     if (songs) {
       console.log(songs.artis, "song")
@@ -51,7 +55,28 @@ export function GeneratePlalist() {
       })
     )
     console.log(spotifyRes)
+
+    const trackIds = spotifyRes
+      .map((track) => {
+        console.log(track)
+        return track.trackId
+      })
+      .filter((id) => id != null)
+    console.log(namePlayList)
+    await fetch('/api/spotify/create-playList', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: namePlayList,
+        trackIds
+      })
+    })
+
+    await queryClient.invalidateQueries({ queryKey: ["playlists"] })
     setConfirming(false)
+    setSongs(undefined)
+    setNamePlayList('')
+    setPrompt('')
   }
   return (
 
@@ -133,7 +158,7 @@ export function GeneratePlalist() {
                 className="flex-1 py-2.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-purple-600 to-violet-500 text-white shadow-lg shadow-purple-500/30 hover:scale-105 hover:shadow-purple-400/50 active:scale-95 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100">
                 {confirming ? "Confirmando..." : "Confirmar Playlist"}
               </button>
-              <button onClick={handleGenerate} disabled={loading}
+              <button onClick={ handleGenerate} disabled={loading}
                 className="px-5 py-2.5 rounded-xl font-semibold text-sm border border-violet-500/30 text-violet-300 hover:bg-violet-500/10 active:scale-95 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed">
                 {loading ? "Generando..." : "Regenerar"}
               </button>
