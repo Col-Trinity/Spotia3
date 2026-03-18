@@ -1,7 +1,8 @@
+
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import { AiResponseSchema } from "../types/ia";
-import { generations } from "../db/schema";
+import { generations, users } from "../db/schema";
 import { z } from "zod";
 import { Artist } from "../types/spotify";
 import { askAI } from "./aiClient";
@@ -57,12 +58,17 @@ export const getCachedGeneration = async (userId: string, artists: Artist[]) => 
 
     return generation.generation;
 }
-export const getUserByEmail = async (email: string) => {
-    const user = await db.query.users.findFirst({
+export const getUserByEmail = async (email: string, name?: string) => {
+    let user = await db.query.users.findFirst({
         where: (users) => eq(users.email, email)
     });
+
     if (!user) {
-        throw new Error("User not found");
+        const result = await db.insert(users).values({
+            email,
+            name: name ?? email,
+        }).returning();
+        user = result[0];
     }
     return user.id;
-} 
+}
