@@ -1,32 +1,55 @@
-
-import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { supabase } from "../lib/supabase";
 import { AiResponseSchema } from "../types/ia";
-import { generations, users } from "../db/schema";
 import { z } from "zod";
 import { Artist } from "../types/spotify";
 import { askAI } from "./aiClient";
 
 export const getGeneration = async (userId: string) => {
-    const generation = await db.query.generations.findFirst({
-        where: (generations) => eq(generations.userId, userId)
-    });
-    return generation;
+    const { data, error } = await supabase
+        .from('generations')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
+
+    if (error) {
+        console.error('Error fetching generation:', error);
+        return null;
+    }
+    return data;
 }
 
 export const createGeneration = async (userId: string, newGeneration: z.infer<typeof AiResponseSchema>) => {
-    const generation = await db.insert(generations).values({
-        userId,
-        generation: newGeneration,
-    });
-    return generation;
+    const { data, error } = await supabase
+        .from('generations')
+        .insert({
+            user_id: userId,
+            generation: newGeneration,
+        })
+        .select()
+        .single();
+
+    if (error) {
+        console.error('Error creating generation:', error);
+        throw error;
+    }
+    return data;
 };
 
 export const updateGeneration = async (userId: string, newGeneration: z.infer<typeof AiResponseSchema>) => {
-    const generation = await db.update(generations).set({
-        generation: newGeneration,
-    }).where(eq(generations.userId, userId));
-    return generation;
+    const { data, error } = await supabase
+        .from('generations')
+        .update({
+            generation: newGeneration,
+        })
+        .eq('user_id', userId)
+        .select()
+        .single();
+
+    if (error) {
+        console.error('Error updating generation:', error);
+        throw error;
+    }
+    return data;
 };
 
 export const getCachedGeneration = async (userId: string, artists: Artist[]) => {
@@ -46,7 +69,7 @@ export const getCachedGeneration = async (userId: string, artists: Artist[]) => 
     }
 
     const hoy = new Date().getTime()
-    const updatedAt = generation.updatedAt.getTime()
+    const updatedAt = new Date(generation.updated_at).getTime()
     const diferencia = hoy - updatedAt
     const meses = diferencia / (1000 * 60 * 60 * 24 * 30)
 
@@ -58,17 +81,36 @@ export const getCachedGeneration = async (userId: string, artists: Artist[]) => 
 
     return generation.generation;
 }
+
 export const getUserByEmail = async (email: string, name?: string) => {
-    let user = await db.query.users.findFirst({
-        where: (users) => eq(users.email, email)
-    });
+    const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .single();
+
+    let user = data;
+
+    if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching user:', error);
+        throw error;
+    }
 
     if (!user) {
-        const result = await db.insert(users).values({
-            email,
-            name: name ?? email,
-        }).returning();
-        user = result[0];
+        const { data: newUser, error: insertError } = await supabase
+            .from('users')
+            .insert({
+                email,
+                name: name ?? email,
+            })
+            .select()
+            .single();
+
+        if (insertError) {
+            console.error('Error creating user:', insertError);
+            throw insertError;
+        }
+        user = newUser;
     }
     return user.id;
 }
