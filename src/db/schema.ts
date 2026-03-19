@@ -12,7 +12,6 @@ import {
 import type { AdapterAccount } from '@auth/core/adapters';
 import { AiResponseSchema } from "../types/ia";
 import { z } from "zod";
-import { id } from "zod/v4/locales";
 
 // Users table
 export const users = pgTable(
@@ -106,7 +105,7 @@ export const generations = pgTable(
 )
 
 export const playlistAiGenerations = pgTable(
-  'playlistGenerations',
+  'playlistAiGenerations',
   {
     id: uuid('id').defaultRandom().primaryKey(),
     userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
@@ -123,7 +122,7 @@ export const playlistGenerations = pgTable(
   userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   prompt: text('prompt').notNull(),
   playlistName: varchar('playlist_name', { length: 255 }).notNull(),
-  songs: json().$type<{ title: string, artist: string, spotifyId: string }[]>().notNull(),
+  songs: json().$type<{ title: string, artist: string, spotifyId?: string }[]>().notNull(),
   spotifyPlaylistId: varchar('spotify_playlist_id', { length: 255 }),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
 },

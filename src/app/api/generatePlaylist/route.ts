@@ -2,12 +2,31 @@
   import { NextResponse } from "next/server";
   import { AppError } from "@/src/lib/errors/appError";
 
+  import { getServerSession } from "next-auth"
+  import { authOptions } from "@/src/lib/auth"
+  import { db } from "@/src/lib/db"
+  import { playlistAiGenerations, users } from "@/src/db/schema"
+  import { eq } from "drizzle-orm"
+
   export async function POST(req: Request) {
+    const session = await getServerSession(authOptions)
+    if (!session) {
+      return NextResponse.json({ error: "No autenticado" }, { status: 401 })
+    }
+
+    const user = await db.query.users.findFirst({
+      where: eq(users.email, session.user.email!)
+    })
+    if (!user) {
+      return NextResponse.json({ error: "Usuario no encontrado" }, { status: 400 })
+    }
     const data = await req.json();
-    console.log(data)
 
     try {
       const result = await askAI({ mode: "playlist", userInput: data.userInput });
+      await db.insert(playlistAiGenerations).values({
+        userId: user.id
+      })
       return NextResponse.json({ result });
     } catch (error) {
       if (error instanceof AppError) {

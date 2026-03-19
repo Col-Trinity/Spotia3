@@ -10,65 +10,73 @@ export function GeneratePlaylist() {
   const [loading, setLoading] = useState(false)
   const [confirming, setConfirming] = useState(false)
   const [namePlayList, setNamePlayList] = useState('')
+  const [error, setError] = useState<string | null>(null)
+
   async function handleGenerate() {
     if (loading) return
     setLoading(true)
-    /*mock
-    setSongs([
-      { title: "Bohemian Rhapsody", artist: "Queen" },
-      { title: "Blinding Lights", artist: "The Weeknd" },
-      { title: "Shape of You", artist: "Ed Sheeran" },
-      { title: "Shape of You", artist: "Ed Sheeran" },
-      { title: "Shape of You", artist: "Ed Sheeran" },
-    ])
-    setLoading(false)
-    return
-*/
-
-    const res = await fetch('/api/generatePlaylist', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userInput: prompt })
-    })
-    const data = await res.json()
-    const songs = data.result.playlist.songs
-    setNamePlayList(data.result.playlist.title)
-    setSongs(songs)
-    setLoading(false)
+    setError(null)
+    setSongs(undefined)
+    try {
+      const res = await fetch('/api/generatePlaylist', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userInput: prompt })
+      })
+      if (!res.ok) throw new Error("Error al generar la playlist")
+      const data = await res.json()
+      setNamePlayList(data.result.playlist.title)
+      setSongs(data.result.playlist.songs)
+    } catch {
+      setError("No se pudo generar la playlist. Intentá de nuevo.")
+    } finally {
+      setLoading(false)
+    }
   }
+
   async function handleConfirm() {
     if (!songs) return
     setConfirming(true)
-    const spotifyRes = await Promise.all(
-      songs.map(async (song) => {
-        const response = await fetch('/api/spotify/serch-track', {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ song })
-        });
-        return response.json();
-      })
-    )
-    const trackIds = spotifyRes
-      .map((track) => {
-        return track.trackId
-      })
-      .filter((id) => id != null)
-    await fetch('/api/spotify/create-playList', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: namePlayList,
-        trackIds
-      })
-    })
+    setError(null)
+    try {
+      const spotifyRes = await Promise.all(
+        songs.map(async (song) => {
+          try {
+            const response = await fetch('/api/spotify/search-track', {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ song })
+            });
+            return response.json();
+          } catch {
+            return null
+          }
+        })
+      )
+      const trackIds = spotifyRes
+        .filter((track) => track != null)
+        .map((track) => track.trackId)
+        .filter((id) => id != null)
 
-    await queryClient.invalidateQueries({ queryKey: ["playlists"] })
-    setConfirming(false)
-    setSongs(undefined)
-    setNamePlayList('')
-    setPrompt('')
+      const res = await fetch('/api/spotify/create-playList', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: namePlayList, trackIds, prompt, songs })
+      })
+
+      if (!res.ok) throw new Error("Error creando playlist")
+
+      await queryClient.invalidateQueries({ queryKey: ["playlists"] })
+      setSongs(undefined)
+      setNamePlayList('')
+      setPrompt('')
+    } catch {
+      setError("No se pudo crear la playlist. Intentá de nuevo.")
+    } finally {
+      setConfirming(false)
+    }
   }
+
   return (
 
     <div className="w-full max-w-6xl mx-auto px-6 py-4">
@@ -105,6 +113,10 @@ export function GeneratePlaylist() {
             {loading ? "Generando..." : "Generar ✦"}
           </button>
         </div>
+
+        {error && (
+          <p className="mt-3 text-sm text-red-400/80">{error}</p>
+        )}
 
         {loading && (
           <div className="mt-4 border border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl overflow-hidden">
