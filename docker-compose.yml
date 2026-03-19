@@ -3,6 +3,8 @@ services:
   app:
     build: .
     container_name: spotia-app
+    profiles:
+      - production
     ports:
       - "3000:3000"
     env_file:
