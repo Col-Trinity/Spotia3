@@ -4,6 +4,7 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { db } from './db';
 import { accounts, sessions, users, verificationTokens } from '@/src/db/schema';
 import { JWT } from 'next-auth/jwt';
+import { getUserByEmail } from './generations';
 
 const spotifyScopes = [
   'user-read-email',
@@ -41,6 +42,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, account, user }) {
       if (account && user) {
+
+        await getUserByEmail(user.email!, user.name ?? undefined);
+
         return {
           ...token,
           accessToken: account.access_token,

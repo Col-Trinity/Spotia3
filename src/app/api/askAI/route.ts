@@ -8,10 +8,8 @@ import { getCachedGeneration, getUserByEmail } from "@/src/lib/generations";
 
 
 export async function POST(req: Request) {
-
   const session = await getServerSession(authOptions);
   const data = await req.json();
-
   if (!session) {
     return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   }
@@ -24,7 +22,6 @@ export async function POST(req: Request) {
     const result = await getCachedGeneration(userId, data.artists);
     return NextResponse.json({ result });
   } catch (error) {
-
     if (error instanceof AppError) {
       return NextResponse.json({ error: error.message }, { status: error.status });
     }
