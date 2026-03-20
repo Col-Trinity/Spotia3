@@ -17,7 +17,7 @@ export function Playlist() {
         error: errorPlayList,
     } = useFetchQuery<PlaylistItem[]>(
         "playlists",
-        "/api/spotify/play-list?limit=5"
+        "/api/spotify/play-list"
     );
 
     const effectivePlaylistId = selectedPlaylistId || playList[0]?.id || '';
