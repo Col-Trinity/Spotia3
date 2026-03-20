@@ -103,7 +103,40 @@ export const generations = pgTable(
   })
 
 )
+
+export const playlistAiGenerations = pgTable(
+  'playlistAiGenerations',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  },
+  (table) => ({
+    userIdIdx: index('ai_generations_user_id_idx').on(table.userId),
+  })
+)
+
+export const playlistGenerations = pgTable(
+  'playlistGenerations', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  prompt: text('prompt').notNull(),
+  playlistName: varchar('playlist_name', { length: 255 }).notNull(),
+  songs: json().$type<{ title: string, artist: string, spotifyId?: string }[]>().notNull(),
+  spotifyPlaylistId: varchar('spotify_playlist_id', { length: 255 }),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+},
+  (table) => ({
+    userIdIdx: index('playlist_generations_user_id_idx').on(table.userId),
+  })
+)
 // Types
+export type PlaylistGeneration = typeof playlistGenerations.$inferSelect;
+export type NewPlaylistGeneration = typeof playlistGenerations.$inferInsert;
+
+export type PlaylistAiGeneration = typeof playlistAiGenerations.$inferSelect;
+export type NewPlaylistAiGeneration = typeof playlistAiGenerations.$inferInsert;
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 

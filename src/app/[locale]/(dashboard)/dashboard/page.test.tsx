@@ -1,7 +1,9 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import Dashboard from "./page";
-
+vi.mock("@/src/app/_components/GeneratePlaylist", () => ({
+  GeneratePlaylist: () => <div data-testid="generate-playlist" />,
+}))
 vi.mock("next/image", () => ({
   default: ({ src, alt }: { src: string; alt: string }) => (
     // eslint-disable-next-line @next/next/no-img-element
