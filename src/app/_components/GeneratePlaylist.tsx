@@ -1,22 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export function GeneratePlalist() {
   const [prompt, setPrompt] = useState("");
+  const t = useTranslations("generatePlaylist");
 
-  async function handleGenerate(){
-      const res = await fetch('/api/generatePlaylist',{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({userInput:prompt})
-      })
-      const data = await res.json()
-      console.log(data.result.playlist.songs )
-      console.log(data)
+  async function handleGenerate() {
+    const res = await fetch('/api/generatePlaylist', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userInput: prompt })
+    })
+    const data = await res.json()
+    console.log(data.result.playlist.songs)
+    console.log(data)
   }
-  return (
 
+  return (
     <div className="w-full max-w-6xl mx-auto px-6 py-4">
       <div className="border border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-6">
         {/* Header */}
@@ -27,8 +29,8 @@ export function GeneratePlalist() {
             </svg>
           </div>
           <div>
-            <h2 className="text-base font-bold  leading-tight">Generador de Playlists</h2>
-            <p className="text-xl text-violet-300/70">Describe lo que querés y la IA crea tu playlist perfecta</p>
+            <h2 className="text-base font-bold leading-tight">{t("title")}</h2>
+            <p className="text-xl text-violet-300/70">{t("subtitle")}</p>
           </div>
         </div>
 
@@ -39,8 +41,8 @@ export function GeneratePlalist() {
               type="text"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Ej: música para estudiar de noche con lluvia..."
-              className="w-full bg-white/5 border border-violet-500/20 rounded-xl px-4 py-3 text-sm  placeholder-violet-300/40 focus:outline-none focus:border-violet-500/60 focus:shadow-[0_0_12px_1px_rgba(139,92,246,0.2)] transition-all duration-200"
+              placeholder={t("placeholder")}
+              className="w-full bg-white/5 border border-violet-500/20 rounded-xl px-4 py-3 text-sm placeholder-violet-300/40 focus:outline-none focus:border-violet-500/60 focus:shadow-[0_0_12px_1px_rgba(139,92,246,0.2)] transition-all duration-200"
             />
           </div>
           <button
@@ -48,7 +50,7 @@ export function GeneratePlalist() {
             onClick={handleGenerate}
             className="px-5 py-3 rounded-xl font-bold text-sm tracking-wide bg-gradient-to-r from-purple-600 to-violet-500 text-white shadow-lg shadow-purple-500/30 hover:scale-105 hover:shadow-purple-400/50 active:scale-95 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 whitespace-nowrap"
           >
-            Generar ✦
+            {t("generate")}
           </button>
         </div>
       </div>

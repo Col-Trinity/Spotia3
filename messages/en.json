@@ -1,0 +1,85 @@
+{
+  "nav": {
+    "home": "Home",
+    "history": "History",
+    "profile": "Profile"
+  },
+  "menu": {
+    "home": "Home",
+    "favorites": "Favorites",
+    "fullHistory": "Full history",
+    "generateNew": "Generate new\nanalysis"
+  },
+  "login": {
+    "connectMusic": "Connect your music",
+    "description": "To generate your profile, we need to connect your music and access your listening history",
+    "continueWith": "Continue with"
+  },
+  "historial": {
+    "title": "Listening History",
+    "description": "Here you can see your listening history."
+  },
+  "perfil": {
+    "title": "Profile",
+    "loading": "Loading..."
+  },
+  "timeRange": {
+    "lastMonth": "Last month",
+    "last6Months": "Last 6 months",
+    "last12Months": "Last 12 months"
+  },
+  "logout": {
+    "button": "Sign out"
+  },
+  "hero": {
+    "title": "Welcome to the best music & AI app",
+    "description": "Analyze your music and discover what it says about you and your personality"
+  },
+  "perfilMusical": {
+    "title": "Music Profile",
+    "subtitle": "Your personality according to your favorite artists",
+    "thinking": "AI is thinking...",
+    "unauthorized": "Unauthorized: your session expired or you don't have permissions.",
+    "retryLater": "We recommend trying again later",
+    "retry": "Retry",
+    "mood": "Mood",
+    "consultAI": "Consult AI"
+  },
+  "generatePlaylist": {
+    "title": "Playlist Generator",
+    "subtitle": "Describe what you want and the AI creates your perfect playlist",
+    "placeholder": "E.g: music to study at night with rain...",
+    "generate": "Generate ✦"
+  },
+  "predictions": {
+    "alignment": "Alignment",
+    "hygiene": "Hygiene",
+    "tendency": "Tendency"
+  },
+  "wrapped": {
+    "hide": "Hide Wrapped",
+    "show": "Show Wrapped",
+    "yearInMusic": "Your year in music",
+    "aiSays": "What the AI says about you",
+    "download": "Download"
+  },
+  "topTracks": {
+    "unauthorized": "Unauthorized: your session expired or you don't have permissions. Redirecting...",
+    "retry": "Retry"
+  },
+  "topArtist": {
+    "title": "Your recently listened artists",
+    "subtitle": "Your most listened artists in the selected time range..",
+    "loading": "Loading your Top Artists",
+    "unauthorized": "Unauthorized: your session expired or you don't have permissions. Redirecting...",
+    "retry": "Retry"
+  },
+  "topGenre": {
+    "loading": "Loading your favorite genres chart...",
+    "retry": "Retry",
+    "title": "Your favorite genres",
+    "subtitle": "Chart of your favorite genres",
+    "artist": "artist",
+    "artists": "artists"
+  }
+}

@@ -4,6 +4,10 @@ import { signIn, getProviders } from 'next-auth/react';
 import { useEffect, useState, JSX } from 'react';
 import SpotiaLogo from "@/public/SpotIALogo.png"
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
+import LanguageSwitcher from '@/src/app/_components/LanguageSwitcher';
+
 const providerIcons: Record<string, JSX.Element> = {
   spotify: (
     <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
@@ -24,25 +28,29 @@ const providerIcons: Record<string, JSX.Element> = {
 
 export default function LoginPage() {
   const [providers, setProviders] = useState<Awaited<ReturnType<typeof getProviders>> | null>(null);
+  const t = useTranslations('login');
+  const params = useParams();
+  const locale = (params.locale as string) || 'es';
 
   useEffect(() => {
     getProviders().then((prov) => setProviders(prov));
   }, []);
 
-  const locale = 'es';
-
   return (
-    <div className="flex  min-h-screen items-center justify-center px-4">
+    <div className="flex min-h-screen items-center justify-center px-4">
       <div className="flex flex-col items-center w-full max-w-sm space-y-6">
+        <div className="self-end">
+          <LanguageSwitcher />
+        </div>
         <Image
           src={SpotiaLogo}
           alt={"logo"}
           width={171}
           height={141} />
-        <h6 className="text-lg  font-medium text-base pb-2 w-full text-center">
-          Conecta tu musica
+        <h6 className="text-lg font-medium text-base pb-2 w-full text-center">
+          {t('connectMusic')}
         </h6>
-        <p className=' text-centeri  mt-[10vh] mb-[30vh] '>Para generar tu perfil, primero tenemos que conectar tu musica, necesitamos acceder a tu historial de escucha </p>
+        <p className='text-center mt-[10vh] mb-[30vh]'>{t('description')}</p>
 
         <div className="flex flex-col space-y-4 w-full">
           {providers &&
@@ -56,7 +64,7 @@ export default function LoginPage() {
                   hover:bg-gray-200 text-black font-semibold py-3 px-6 rounded flex items-center justify-center transition shadow-sm"
               >
                 {providerIcons[provider.id]}
-              Continuar con {provider.name}
+                {t('continueWith')} {provider.name}
               </button>
             ))}
         </div>
@@ -66,4 +74,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

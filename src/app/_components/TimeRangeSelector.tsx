@@ -1,11 +1,18 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 type TypeTimeRange = {
   timeRange: string;
   setTimeRange: (timeRange: string) => void;
 };
+
 export default function TimeRangeSelector({
   timeRange,
   setTimeRange,
 }: TypeTimeRange) {
+  const t = useTranslations("timeRange");
+
   return (
     <div>
       <select
@@ -14,9 +21,9 @@ export default function TimeRangeSelector({
         onChange={(e) => setTimeRange(e.target.value)}
         value={timeRange}
       >
-        <option value="short_term">Últimos mes</option>
-        <option value="medium_term">Últimos 6 meses</option>
-        <option value="long_term">Últimos 12 meses</option>
+        <option value="short_term">{t("lastMonth")}</option>
+        <option value="medium_term">{t("last6Months")}</option>
+        <option value="long_term">{t("last12Months")}</option>
       </select>
     </div>
   );
