@@ -17,22 +17,22 @@ export function GeneratePlaylist() {
     setLoading(true)
     setError(null)
     setSongs(undefined)
-    try {
-      const res = await fetch('/api/generatePlaylist', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userInput: prompt })
-      })
-      if (!res.ok) throw new Error("Error al generar la playlist")
-      const data = await res.json()
-      setNamePlayList(data.result.playlist.title)
-      setSongs(data.result.playlist.songs)
-    } catch {
-      setError("No se pudo generar la playlist. Intentá de nuevo.")
-    } finally {
-      setLoading(false)
+      try {
+        const res = await fetch('/api/generatePlaylist', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userInput: prompt })
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error ?? "Error al generar la playlist")
+        setNamePlayList(data.result.playlist.title)
+        setSongs(data.result.playlist.songs)
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "No se pudo generar la playlist. Intentá de nuevo.")
+      } finally {
+        setLoading(false)
+      }
     }
-  }
 
   async function handleConfirm() {
     if (!songs) return
