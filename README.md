@@ -74,7 +74,11 @@ POSTGRES_DB="spotia"
 
 1. Ve a [Supabase](https://supabase.com) y crea un proyecto
 2. Copia tu URL y API Key en `.env.local`
-3. Las tablas ya están configuradas en el proyecto
+3. **Ejecuta las migraciones para crear las tablas:**
+
+```bash
+pnpm run db:migrate
+```
 
 **Para verificar que funcionó:**
 
