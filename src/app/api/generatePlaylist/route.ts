@@ -22,28 +22,41 @@ export async function POST(req: Request) {
   }
   const data = await req.json();
 
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const now = new Date()
+  const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
 
   const generationsToday = await db.select({ count: count() }).from(playlistAiGenerations).where(and(
     eq(playlistAiGenerations.userId, user.id), // que sean del usuario
     gte(playlistAiGenerations.createdAt, today) // que sean de hoy
   ))
   const total = generationsToday[0].count
-  if (total >= 3) {
+  if (total >= 10) {
     return NextResponse.json({ error: "Limite diario alcazado intenta mas tarde " }, { status: 429 })
   }
+  if (!data.userInput?.trim()) {
+    return NextResponse.json({ error: "El campo de descripción es requerido." }, { status: 400 });
+  }
+
   try {
     const result = await askAI({ mode: "playlist", userInput: data.userInput, options: data.options });
-    await db.insert(playlistAiGenerations).values({
-      userId: user.id
-    })
+    await db.insert(playlistAiGenerations).values({ userId: user.id })
     return NextResponse.json({ result });
   } catch (error) {
     if (error instanceof AppError) {
       return NextResponse.json({ error: error.message }, { status: error.status });
     }
 
-    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 });
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("[generatePlaylist] Error:", message);
+
+    if (message.includes("API_KEY") || message.includes("api key") || message.includes("401") || message.includes("403")) {
+      return NextResponse.json({ error: "API key de IA inválida o sin permisos. Revisá la configuración del servidor." }, { status: 500 });
+    }
+
+    if (message.includes("429")) {
+      return NextResponse.json({ error: "La IA está saturada, intentá de nuevo en unos segundos." }, { status: 429 });
+    }
+
+    return NextResponse.json({ error: `Error interno: ${message}` }, { status: 500 });
   }
 }
