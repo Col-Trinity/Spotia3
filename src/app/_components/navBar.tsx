@@ -3,10 +3,12 @@
 import { useRouter, usePathname } from "next/navigation";
 import { HiOutlineHome, HiOutlineBookOpen, HiOutlineUser } from "react-icons/hi";
 import { HiHome, HiBookOpen, HiUser } from "react-icons/hi2";
+import { useTranslations } from "next-intl";
 
 export function NavBar({ locale }: { locale: string }) {
     const router = useRouter();
     const pathname = usePathname();
+    const t = useTranslations("nav");
     const IsActive = (path: string) => pathname === path;
 
     return (
@@ -19,7 +21,7 @@ export function NavBar({ locale }: { locale: string }) {
                 >
                     {IsActive(`/${locale}/dashboard`) ? <HiHome className="text-purple-600" size={24} /> : <HiOutlineHome className="text-black" size={24} />}
                     <span className={`text-xs ${IsActive(`/${locale}/dashboard`) ? "text-purple-600" : "text-black"}`}>
-                        Inicio
+                        {t("home")}
                     </span>
                 </button>
 
@@ -33,7 +35,7 @@ export function NavBar({ locale }: { locale: string }) {
                         <HiOutlineBookOpen className="text-black" size={24} />
                     )}
                     <span className={`text-xs ${IsActive(`/${locale}/dashboard/historial`) ? "text-purple-600" : "text-black"}`}>
-                        Historial
+                        {t("history")}
                     </span>
                 </button>
 
@@ -47,7 +49,7 @@ export function NavBar({ locale }: { locale: string }) {
                         <HiOutlineUser className="text-black" size={24} />
                     )}
                     <span className={`text-xs ${IsActive(`/${locale}/dashboard/perfil`) ? "text-purple-600" : "text-black"}`}>
-                        Perfil
+                        {t("profile")}
                     </span>
                 </button>
             </div>
