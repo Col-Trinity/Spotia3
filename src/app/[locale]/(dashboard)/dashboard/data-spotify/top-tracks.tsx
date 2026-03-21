@@ -2,10 +2,9 @@
 
 import { TrackCard } from "@/src/app/_components/trackCard";
 import { Track } from "@/src/types/track";
-
 import { useRedirectOn401 } from "@/src/hooks/useRedirectOn401i";
 import { useFetchQuery } from "@/src/hooks/useFetchQuery";
-
+import { useTranslations } from "next-intl";
 
 type TopTracksResponse = {
     items: Track[];
@@ -14,14 +13,15 @@ type TopTracksResponse = {
 type TypeTimeRange = {
     timeRange: string;
 }
+
 export function TopTracks({ timeRange }: TypeTimeRange) {
+    const t = useTranslations("topTracks");
     const { data: tracksList = [], isLoading, isError, error, refetch } = useFetchQuery<TopTracksResponse, Track[]>(
         `top-tracks-${timeRange}`,
         `/api/spotify/top-tracks?limit=10&time_range=${timeRange}`,
         {
             select: (data) => data.items,
         }
-
     );
 
     useRedirectOn401({ isError, error });
@@ -30,9 +30,8 @@ export function TopTracks({ timeRange }: TypeTimeRange) {
         const err = error as Error;
         if (err.message.includes("401")) {
             return (
-                <p className="text-rose-500 text-sm font-medium">No autorizado: tu sesión expiró o no tienes permisos. Redirigiendo...</p>
+                <p className="text-rose-500 text-sm font-medium">{t("unauthorized")}</p>
             );
-
         }
         return (
             <div className="rounded-2xl bg-rose-50 border border-rose-200 p-6 text-center">
@@ -41,11 +40,12 @@ export function TopTracks({ timeRange }: TypeTimeRange) {
                     onClick={() => refetch()}
                     className="px-5 py-2 rounded-full bg-gradient-to-r from-violet-500 to-rose-500 text-white text-sm font-medium hover:opacity-90 transition"
                 >
-                    Reintentar
+                    {t("retry")}
                 </button>
             </div>
         )
     }
+
     if (isLoading) return (
         <div className="flex flex-col gap-2">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -66,6 +66,5 @@ export function TopTracks({ timeRange }: TypeTimeRange) {
                 <TrackCard key={track.id} track={track} />
             ))}
         </div>
-
     );
 }

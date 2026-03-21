@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 
 export function GeneratePlaylist() {
   const queryClient = useQueryClient();
+  const t = useTranslations("generatePlaylist");
   const [prompt, setPrompt] = useState("");
   const [options, setOptions] = useState({
     quantity: 10,
@@ -91,36 +93,38 @@ export function GeneratePlaylist() {
     }`;
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-4">
-      <div className="border border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-5 sm:p-6">
+    <div className="w-full max-w-6xl mx-auto px-6 py-4">
+      <div className="border border-violet-500/20 shadow-[0_0_20px_2px_rgba(139,92,246,0.12)] rounded-2xl p-6">
 
         {/* Header */}
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-9 h-9 shrink-0 rounded-full bg-gradient-to-br from-purple-600 to-violet-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-9 h-9 shrink-0 rounded-full bg-linear-to-br from-purple-600 to-violet-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
             </svg>
           </div>
           <div>
-            <h2 className="text-sm font-bold text-gray-800 leading-tight">Generador de Playlists</h2>
-            <p className="text-xs text-violet-400 mt-0.5">Describí lo que querés y la IA crea tu playlist perfecta</p>
+            <h2 className="text-base font-bold leading-tight">{t("title")}</h2>
+            <p className="text-xl text-violet-300/70">{t("subtitle")}</p>
           </div>
         </div>
 
         {/* Input + Button */}
-        <div className="flex gap-2 sm:gap-3">
-          <input
-            type="text"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && prompt.trim() && !loading && handleGenerate()}
-            placeholder="Ej: música para estudiar de noche con lluvia..."
-            className="flex-1 min-w-0 bg-violet-50/50 border border-violet-200 rounded-xl px-4 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:border-violet-400 focus:shadow-[0_0_0_3px_rgba(139,92,246,0.1)] transition-all duration-200"
-          />
+        <div className="flex gap-3">
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && prompt.trim() && !loading && handleGenerate()}
+              placeholder={t("placeholder")}
+              className="w-full bg-white/5 border border-violet-500/20 rounded-xl px-4 py-3 text-sm placeholder-violet-300/40 focus:outline-none focus:border-violet-500/60 focus:shadow-[0_0_12px_1px_rgba(139,92,246,0.2)] transition-all duration-200"
+            />
+          </div>
           <button
             disabled={!prompt.trim() || loading}
             onClick={handleGenerate}
-            className="shrink-0 px-4 sm:px-5 py-2.5 rounded-xl font-bold text-sm tracking-wide bg-gradient-to-r from-purple-600 to-violet-500 text-white shadow-lg shadow-purple-500/30 hover:scale-105 hover:shadow-purple-400/50 active:scale-95 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="px-5 py-3 rounded-xl font-bold text-sm tracking-wide bg-linear-to-r from-purple-600 to-violet-500 text-white shadow-lg shadow-purple-500/30 hover:scale-105 hover:shadow-purple-400/50 active:scale-95 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 whitespace-nowrap"
           >
             {loading ? (
               <span className="flex items-center gap-1.5">
@@ -128,7 +132,7 @@ export function GeneratePlaylist() {
                 <span className="hidden sm:inline">Generando</span>
               </span>
             ) : (
-              <span>Generar <span className="hidden sm:inline">✦</span></span>
+              t("generate")
             )}
           </button>
         </div>
@@ -238,20 +242,29 @@ export function GeneratePlaylist() {
               ))}
             </div>
 
-            {/* Botón confirmar — misma paleta que generar */}
-            <button
-              onClick={handleConfirm}
-              disabled={confirming}
-              className="mt-4 w-full py-3 rounded-xl font-bold text-sm tracking-wide bg-gradient-to-r from-purple-600 to-violet-500 text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-400/50 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            >
-              {confirming ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="animate-spin inline-block">✦</span> Creando en Spotify...
-                </span>
-              ) : (
-                "Crear playlist en Spotify ✦"
-              )}
-            </button>
+            {/* Botones de acción */}
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={handleConfirm}
+                disabled={confirming}
+                className="flex-1 py-3 rounded-xl font-bold text-sm tracking-wide bg-linear-to-r from-purple-600 to-violet-500 text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-400/50 hover:scale-[1.01] active:scale-[0.99] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                {confirming ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="animate-spin inline-block">✦</span> Creando en Spotify...
+                  </span>
+                ) : (
+                  "Crear playlist en Spotify ✦"
+                )}
+              </button>
+              <button
+                onClick={handleGenerate}
+                disabled={loading}
+                className="px-5 py-3 rounded-xl font-semibold text-sm border border-violet-500/30 text-violet-300 hover:bg-violet-500/10 active:scale-95 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {loading ? "Generando..." : "Regenerar"}
+              </button>
+            </div>
           </div>
         )}
 

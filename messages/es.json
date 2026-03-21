@@ -1,0 +1,85 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "history": "Historial",
+    "profile": "Perfil"
+  },
+  "menu": {
+    "home": "Inicio",
+    "favorites": "Favoritos",
+    "fullHistory": "Historial completo",
+    "generateNew": "Generar nueva\ndevolucion"
+  },
+  "login": {
+    "connectMusic": "Conecta tu musica",
+    "description": "Para generar tu perfil, primero tenemos que conectar tu musica, necesitamos acceder a tu historial de escucha",
+    "continueWith": "Continuar con"
+  },
+  "historial": {
+    "title": "Historial de Escucha",
+    "description": "Aquí puedes ver tu historial de escucha."
+  },
+  "perfil": {
+    "title": "Perfil",
+    "loading": "Cargando..."
+  },
+  "timeRange": {
+    "lastMonth": "Último mes",
+    "last6Months": "Últimos 6 meses",
+    "last12Months": "Últimos 12 meses"
+  },
+  "logout": {
+    "button": "Cerrar sesión"
+  },
+  "hero": {
+    "title": "Bienvenido a la mejor app de música e IA",
+    "description": "Analiza tu musica y descubri todo lo que eso puede decir sobre vos y tu personalidad"
+  },
+  "perfilMusical": {
+    "title": "Perfil Musical",
+    "subtitle": "Tu personalidad según tus artistas favoritos",
+    "thinking": "La IA está pensando...",
+    "unauthorized": "No autorizado: tu sesión expiró o no tienes permisos.",
+    "retryLater": "Te recomendamos intentarlo de nuevo mas tarde",
+    "retry": "Reintentar",
+    "mood": "Estado de ánimo",
+    "consultAI": "Consulta a la IA"
+  },
+  "generatePlaylist": {
+    "title": "Generador de Playlists",
+    "subtitle": "Describe lo que querés y la IA crea tu playlist perfecta",
+    "placeholder": "Ej: música para estudiar de noche con lluvia...",
+    "generate": "Generar ✦"
+  },
+  "predictions": {
+    "alignment": "Alineación",
+    "hygiene": "Higiene",
+    "tendency": "Tendencia"
+  },
+  "wrapped": {
+    "hide": "Ocultar Wrapped",
+    "show": "Mostrar Wrapped",
+    "yearInMusic": "Tu año en música",
+    "aiSays": "Lo que dice la IA de ti",
+    "download": "Descargar"
+  },
+  "topTracks": {
+    "unauthorized": "No autorizado: tu sesión expiró o no tienes permisos. Redirigiendo...",
+    "retry": "Reintentar"
+  },
+  "topArtist": {
+    "title": "Tus artistas recientemente escuchados",
+    "subtitle": "Tus artistas mas escuchados en el rango de tiempo seleccionado..",
+    "loading": "Cargando tu Top de Artistas",
+    "unauthorized": "No autorizado: tu sesión expiró o no tienes permisos. Redirigiendo...",
+    "retry": "Reintentar"
+  },
+  "topGenre": {
+    "loading": "Se esta cargando el grafico con tus generos favoritos...",
+    "retry": "Reintentar",
+    "title": "Tus géneros favoritos",
+    "subtitle": "Gráfico de tus géneros favoritos",
+    "artist": "artista",
+    "artists": "artistas"
+  }
+}
