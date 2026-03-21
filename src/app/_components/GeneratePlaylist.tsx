@@ -4,12 +4,18 @@ import { useEffect, useState } from "react";
 
 export function GeneratePlalist() {
   const [prompt, setPrompt] = useState("");
+  const [options, setOptions] = useState({
+  quantity: 10,           // cantidad de canciones
+  nationality: "cualquiera", // nacionalidad
+  era: "actualidad",      // época
+  userAge: "18-25"        // edad del usuario
+})
 
   async function handleGenerate(){
       const res = await fetch('/api/generatePlaylist',{
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({userInput:prompt})
+        body: JSON.stringify({userInput:prompt,options})
       })
       const data = await res.json()
       console.log(data.result.playlist.songs )
@@ -51,6 +57,90 @@ export function GeneratePlalist() {
             Generar ✦
           </button>
         </div>
+        {/* Opciones configurables */}
+<div className="mt-4 flex flex-col gap-4">
+
+  {/* Cantidad de canciones */}
+  <div>
+    <p className="text-xs text-violet-300/70 mb-2">Cantidad de canciones</p>
+    <div className="flex gap-2">
+      {[5, 10, 15, 20].map((q) => (
+        <button
+          key={q}
+          onClick={() => setOptions({ ...options, quantity: q })}
+          className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200
+            ${options.quantity === q
+              ? "bg-violet-500 text-white"
+              : "border border-violet-500/30 text-violet-300 hover:bg-violet-500/10"
+            }`}
+        >
+          {q}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {/* Nacionalidad */}
+  <div>
+    <p className="text-xs text-violet-300/70 mb-2">Nacionalidad</p>
+    <div className="flex gap-2 flex-wrap">
+      {["Argentina", "España", "EEUU", "Cualquiera"].map((n) => (
+        <button
+          key={n}
+          onClick={() => setOptions({ ...options, nationality: n })}
+          className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200
+            ${options.nationality === n
+              ? "bg-violet-500 text-white"
+              : "border border-violet-500/30 text-violet-300 hover:bg-violet-500/10"
+            }`}
+        >
+          {n}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {/* Época */}
+  <div>
+    <p className="text-xs text-violet-300/70 mb-2">Época</p>
+    <div className="flex gap-2 flex-wrap">
+      {["80s", "90s", "2000s", "Actualidad"].map((e) => (
+        <button
+          key={e}
+          onClick={() => setOptions({ ...options, era: e })}
+          className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200
+            ${options.era === e
+              ? "bg-violet-500 text-white"
+              : "border border-violet-500/30 text-violet-300 hover:bg-violet-500/10"
+            }`}
+        >
+          {e}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {/* Edad del usuario */}
+  <div>
+    <p className="text-xs text-violet-300/70 mb-2">Tu edad</p>
+    <div className="flex gap-2 flex-wrap">
+      {["18-25", "26-35", "36-50", "50+"].map((a) => (
+        <button
+          key={a}
+          onClick={() => setOptions({ ...options, userAge: a })}
+          className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200
+            ${options.userAge === a
+              ? "bg-violet-500 text-white"
+              : "border border-violet-500/30 text-violet-300 hover:bg-violet-500/10"
+            }`}
+        >
+          {a}
+        </button>
+      ))}
+    </div>
+  </div>
+
+</div>
       </div>
     </div>
   );

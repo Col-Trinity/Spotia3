@@ -7,7 +7,7 @@ import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { AI_PROVIDER, API_KEYS } from "../config/iaConfig";
 import { Artist } from "../types/spotify";
 import { buildAIPrompt } from "./helpers/buildAIPrompt";
-import { buildPlayListPrompt } from "./helpers/buildPlayListPromp";
+import { buildPlayListPrompt ,Options} from "./helpers/buildPlayListPromp";
 import { AppError } from "./errors/appError";
 import { z } from "zod"
 
@@ -38,12 +38,12 @@ export type PlaylistResponse = z.infer<typeof PlaylistResponseSchema>;
 
 type AskAIParams =
   | { mode: "profile"; artists: Artist[] }
-  | { mode: "playlist"; userInput: string };
+  | { mode: "playlist"; userInput: string, options:Options };
 
 //elige un provedor
 export async function askAI(params: AskAIParams) {
   const prompt = params.mode === "playlist"
-    ? buildPlayListPrompt({ userInput: params.userInput })
+    ? buildPlayListPrompt({ userInput: params.userInput, options:params.options })
     : buildAIPrompt(params.artists);
 
   const schema = params.mode === "playlist" ? PlaylistResponseSchema : AiResponseSchema;
