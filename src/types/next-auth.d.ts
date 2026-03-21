@@ -5,6 +5,7 @@ declare module 'next-auth' {
     accessToken?: string;
     provider?: string;
     error?: string;
+    spotifyUserId?: string;
     user: {
       id: string;
     } & DefaultSession['user'];
@@ -22,6 +23,7 @@ declare module 'next-auth/jwt' {
     accessTokenExpires?: number;
     provider?: string;
     userId?: string;
+    spotifyUserId?: string;
     error?: string;
   }
 }

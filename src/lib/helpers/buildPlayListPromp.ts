@@ -29,8 +29,8 @@ Responde ÚNICAMENTE con un objeto JSON válido con la siguiente estructura, sin
     "description": "Breve descripción(1 parrafo de 4 oraciones) de por qué estas canciones encajan con lo pedido",
     "songs": [
       {
-        "artist": "Nombre del artista o banda",
-        "title": "Nombre de la canción"
+        "artist": "Nombre del artista o banda que lo entienda la api de spotify",
+        "title": "Nombre de la canción que lo entienda la api de spotify"
       }
     ]
   }

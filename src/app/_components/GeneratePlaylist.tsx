@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
-export function GeneratePlalist() {
+export function GeneratePlaylist() {
+  const queryClient = useQueryClient();
   const [prompt, setPrompt] = useState("");
   const [options, setOptions] = useState({
   quantity: 10,           // cantidad de canciones
@@ -10,17 +12,77 @@ export function GeneratePlalist() {
   era: "actualidad",      // época
   userAge: "18-25"        // edad del usuario
 })
+  const [songs, setSongs] = useState<{ title: string, artist: string }[]>()
+  const [loading, setLoading] = useState(false)
+  const [confirming, setConfirming] = useState(false)
+  const [namePlayList, setNamePlayList] = useState('')
+  const [error, setError] = useState<string | null>(null)
 
-  async function handleGenerate(){
-      const res = await fetch('/api/generatePlaylist',{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({userInput:prompt,options})
+  async function handleGenerate() {
+    if (loading) return
+    setLoading(true)
+    setError(null)
+    setSongs(undefined)
+      try {
+        const res = await fetch('/api/generatePlaylist', {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userInput: prompt,options })
+        })
+        const data = await res.json()
+        if (!res.ok) throw new Error(data.error ?? "Error al generar la playlist")
+        setNamePlayList(data.result.playlist.title)
+        setSongs(data.result.playlist.songs)
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : "No se pudo generar la playlist. Intentá de nuevo.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+  async function handleConfirm() {
+    if (!songs) return
+    setConfirming(true)
+    setError(null)
+    try {
+      const spotifyRes = await Promise.all(
+        songs.map(async (song) => {
+          try {
+            const response = await fetch('/api/spotify/search-track', {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ song })
+            });
+            return response.json();
+          } catch {
+            return null
+          }
+        })
+      )
+      const trackIds = spotifyRes
+        .filter((track) => track != null)
+        .map((track) => track.trackId)
+        .filter((id) => id != null)
+
+      const res = await fetch('/api/spotify/create-playList', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: namePlayList, trackIds, prompt, songs })
       })
-      const data = await res.json()
-      console.log(data.result.playlist.songs )
-      console.log(data)
+
+      if (!res.ok) throw new Error("Error creando playlist")
+
+      await queryClient.invalidateQueries({ queryKey: ["playlists"] })
+      setSongs(undefined)
+      setNamePlayList('')
+      setPrompt('')
+    } catch {
+      setError("No se pudo crear la playlist. Intentá de nuevo.")
+    } finally {
+      setConfirming(false)
+    }
   }
+
   return (
 
     <div className="w-full max-w-6xl mx-auto px-6 py-4">
@@ -50,11 +112,11 @@ export function GeneratePlalist() {
             />
           </div>
           <button
-            disabled={!prompt.trim()}
+            disabled={!prompt.trim() || loading}
             onClick={handleGenerate}
             className="px-5 py-3 rounded-xl font-bold text-sm tracking-wide bg-gradient-to-r from-purple-600 to-violet-500 text-white shadow-lg shadow-purple-500/30 hover:scale-105 hover:shadow-purple-400/50 active:scale-95 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 whitespace-nowrap"
           >
-            Generar ✦
+            {loading ? "Generando..." : "Generar ✦"}
           </button>
         </div>
         {/* Opciones configurables */}
@@ -142,6 +204,8 @@ export function GeneratePlalist() {
 
 </div>
       </div>
+
+
     </div>
   );
 }
