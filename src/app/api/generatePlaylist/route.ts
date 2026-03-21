@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Limite diario alcazado intenta mas tarde " }, { status: 429 })
   }
   try {
-    const result = await askAI({ mode: "playlist", userInput: data.userInput });
+    const result = await askAI({ mode: "playlist", userInput: data.userInput, options: data.options });
     await db.insert(playlistAiGenerations).values({
       userId: user.id
     })

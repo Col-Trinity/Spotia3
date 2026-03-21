@@ -44,6 +44,7 @@ export default function Dashboard() {
           refresh={refresh}
         />
         {iaDate && <MusicPredictions responseIa={iaDate} />}
+        {iaDate && <Wrapped iaText={iaText} iaDate={iaDate} />}
       </div>
 
     </div>
@@ -62,9 +63,6 @@ export default function Dashboard() {
       </div>
 
     </div>
-
-    {/* Wrapped */}
-    {iaDate && <Wrapped iaText={iaText} iaDate={iaDate} />}
 
   </div>
 );
