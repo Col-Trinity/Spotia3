@@ -49,6 +49,7 @@ export async function POST(req: Request) {
     })
     return NextResponse.json({ ok: true })
   } catch (error) {
+    console.error("[create-playList] ERROR completo:", error)
     return NextResponse.json({ error: String(error) }, { status: 500 })
   }
 }
