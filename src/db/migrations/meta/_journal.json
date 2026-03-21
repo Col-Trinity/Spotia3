@@ -36,6 +36,13 @@
       "when": 1773864839790,
       "tag": "0004_smooth_nomad",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1774037562266,
+      "tag": "0005_fuzzy_human_torch",
+      "breakpoints": true
     }
   ]
 }
