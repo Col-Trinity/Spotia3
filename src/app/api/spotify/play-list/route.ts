@@ -23,7 +23,6 @@ export async function GET(req: Request) {
             session.accessToken,
             limite
         );
-        console.log(data, 'data de playlists')
         const playlists = data.items.map((p: PlaylistItem & { images: { url: string }[] }) => ({
             id: p.id,
             name: p.name,

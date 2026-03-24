@@ -8,11 +8,16 @@ export function GeneratePlaylist() {
   const queryClient = useQueryClient();
   const t = useTranslations("generatePlaylist");
   const [prompt, setPrompt] = useState("");
-  const [options, setOptions] = useState({
-    quantity: 10,
-    nationality: "Cualquiera",
-    era: "Actualidad",
-    userAge: "18-25",
+  const [options, setOptions] = useState<{
+    quantity: number;
+    nationality: string | null;
+    era: string | null;
+    userAge: string | null;
+  }>({
+    quantity: 5,
+    nationality: null,
+    era: null,
+    userAge: null,
   });
   const [songs, setSongs] = useState<{ title: string; artist: string }[]>();
   const [loading, setLoading] = useState(false);
@@ -86,10 +91,9 @@ export function GeneratePlaylist() {
   }
 
   const optionBtn = (active: boolean) =>
-    `px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
-      active
-        ? "bg-violet-500 text-white shadow shadow-violet-300"
-        : "border border-violet-200 text-violet-500 hover:border-violet-400 hover:bg-violet-50"
+    `px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${active
+      ? "bg-violet-500 text-white shadow shadow-violet-300"
+      : "border border-violet-200 text-violet-500 hover:border-violet-400 hover:bg-violet-50"
     }`;
 
   return (
@@ -153,10 +157,10 @@ export function GeneratePlaylist() {
             </div>
 
             <div>
-              <p className="text-xs font-semibold text-gray-500 mb-2">Nacionalidad</p>
+              <p className="text-xs font-semibold text-gray-500 mb-2">Nacionalidad <span className="font-normal text-gray-400">(opcional)</span></p>
               <div className="flex gap-2 flex-wrap">
                 {["Argentina", "España", "EEUU", "Cualquiera"].map((n) => (
-                  <button key={n} onClick={() => setOptions({ ...options, nationality: n })} className={optionBtn(options.nationality === n)}>
+                  <button key={n} onClick={() => setOptions({ ...options, nationality: options.nationality === n ? null : n })} className={optionBtn(options.nationality === n)}>
                     {n}
                   </button>
                 ))}
@@ -164,10 +168,10 @@ export function GeneratePlaylist() {
             </div>
 
             <div>
-              <p className="text-xs font-semibold text-gray-500 mb-2">Época</p>
+              <p className="text-xs font-semibold text-gray-500 mb-2">Época <span className="font-normal text-gray-400">(opcional)</span></p>
               <div className="flex gap-2 flex-wrap">
                 {["80s", "90s", "2000s", "Actualidad"].map((e) => (
-                  <button key={e} onClick={() => setOptions({ ...options, era: e })} className={optionBtn(options.era === e)}>
+                  <button key={e} onClick={() => setOptions({ ...options, era: options.era === e ? null : e })} className={optionBtn(options.era === e)}>
                     {e}
                   </button>
                 ))}
@@ -175,10 +179,10 @@ export function GeneratePlaylist() {
             </div>
 
             <div>
-              <p className="text-xs font-semibold text-gray-500 mb-2">Tu edad</p>
+              <p className="text-xs font-semibold text-gray-500 mb-2">Tu edad <span className="font-normal text-gray-400">(opcional)</span></p>
               <div className="flex gap-2 flex-wrap">
                 {["18-25", "26-35", "36-50", "50+"].map((a) => (
-                  <button key={a} onClick={() => setOptions({ ...options, userAge: a })} className={optionBtn(options.userAge === a)}>
+                  <button key={a} onClick={() => setOptions({ ...options, userAge: options.userAge === a ? null : a })} className={optionBtn(options.userAge === a)}>
                     {a}
                   </button>
                 ))}
@@ -217,7 +221,7 @@ export function GeneratePlaylist() {
                 <h3 className="text-base font-bold text-gray-800">{namePlayList}</h3>
                 <p className="text-xs text-violet-400 mt-0.5">{songs.length} canciones generadas</p>
               </div>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-violet-400 flex items-center justify-center shadow shadow-purple-200">
+              <div className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-violet-400 flex items-center justify-center shadow shadow-purple-200">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
                 </svg>
@@ -256,13 +260,6 @@ export function GeneratePlaylist() {
                 ) : (
                   "Crear playlist en Spotify ✦"
                 )}
-              </button>
-              <button
-                onClick={handleGenerate}
-                disabled={loading}
-                className="px-5 py-3 rounded-xl font-semibold text-sm border border-violet-500/30 text-violet-300 hover:bg-violet-500/10 active:scale-95 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                {loading ? "Generando..." : "Regenerar"}
               </button>
             </div>
           </div>

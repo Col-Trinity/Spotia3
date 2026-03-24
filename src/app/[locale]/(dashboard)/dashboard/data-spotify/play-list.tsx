@@ -19,7 +19,7 @@ export function Playlist() {
         "playlists",
         "/api/spotify/play-list"
     );
-    console.log(playList, 'playlists')
+
     const effectivePlaylistId = selectedPlaylistId || playList[0]?.id || '';
 
     const {
