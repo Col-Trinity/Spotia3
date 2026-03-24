@@ -35,44 +35,44 @@ const PlaylistResponseSchema = z.object({
 })
 
 export type PlaylistResponse = z.infer<typeof PlaylistResponseSchema>;
+export type AiProfileResponse = z.infer<typeof AiResponseSchema>;
 
 type AskAIParams =
   | { mode: "profile"; artists: Artist[] }
   | { mode: "playlist"; userInput: string, options:Options };
 
-//elige un provedor
-export async function askAI(params: AskAIParams) {
-  const prompt = params.mode === "playlist"
-    ? buildPlayListPrompt({ userInput: params.userInput, options:params.options })
-    : buildAIPrompt(params.artists);
-
-  const schema = params.mode === "playlist" ? PlaylistResponseSchema : AiResponseSchema;
-
+function callProvider<T>(prompt: string, schema: z.ZodType<T>): Promise<T> {
   switch (AI_PROVIDER) {
-    case "gemini":
-      return callGemini(prompt, schema);
-    case "claude":
-      return callClaude(prompt, schema);
-    case "gpt":
-      return callGPT(prompt, schema);
-    default:
-      throw new Error("Proveedor de IA no soportado");
+    case "gemini": return callGemini(prompt, schema);
+    case "claude": return callClaude(prompt, schema);
+    case "gpt": return callGPT(prompt, schema);
+    default: throw new Error("Proveedor de IA no soportado");
   }
 }
 
+//elige un provedor
+export async function askAI(params: { mode: "playlist"; userInput: string; options: Options }): Promise<PlaylistResponse>;
+export async function askAI(params: { mode: "profile"; artists: Artist[] }): Promise<AiProfileResponse>;
+export async function askAI(params: AskAIParams): Promise<PlaylistResponse | AiProfileResponse> {
+  if (params.mode === "playlist") {
+    return callProvider(buildPlayListPrompt({ userInput: params.userInput, options: params.options }), PlaylistResponseSchema);
+  }
+  return callProvider(buildAIPrompt(params.artists), AiResponseSchema);
+}
+
 //Gpt
-async function callGPT(prompt: string, schema: z.ZodTypeAny) {
+async function callGPT<T>(prompt: string, schema: z.ZodType<T>): Promise<T> {
   const client = new OpenAI({ apiKey: API_KEYS.gpt });
   const response = await client.chat.completions.parse({
     model: process.env.GPT_MODEL!,
     messages: [{ role: "user", content: prompt }],
     response_format: zodResponseFormat(schema, "ai_response"),
   });
-  return response.choices[0].message.parsed;
+  return response.choices[0].message.parsed as T;
 }
 
 // Gemini
-async function callGemini(prompt: string, schema: z.ZodTypeAny) {
+async function callGemini<T>(prompt: string, schema: z.ZodType<T>): Promise<T> {
   if (!API_KEYS.gemini) {
     throw new AppError("GEMINI_API_KEY no está configurada.", 500);
   }
@@ -95,7 +95,7 @@ async function callGemini(prompt: string, schema: z.ZodTypeAny) {
 }
 
 // Claude
-async function callClaude(prompt: string, schema: z.ZodTypeAny) {
+async function callClaude<T>(prompt: string, schema: z.ZodType<T>): Promise<T> {
   const client = new Anthropic({ apiKey: API_KEYS.claude });
   const response = await client.messages.parse({
     model: process.env.CLAUDE_MODEL!,
@@ -105,5 +105,5 @@ async function callClaude(prompt: string, schema: z.ZodTypeAny) {
       format: zodOutputFormat(schema),
     },
   });
-  return response.parsed_output;
+  return response.parsed_output as T;
 }
