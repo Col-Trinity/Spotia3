@@ -20,6 +20,7 @@ export function GeneratePlaylist() {
   const [namePlayList, setNamePlayList] = useState("");
   const [error, setError] = useState<string | null>(null);
 
+  const [playlistId, setPlaylistId] = useState<string | null>(null)
   async function handleGenerate() {
     if (loading) return;
     setLoading(true);
@@ -33,6 +34,7 @@ export function GeneratePlaylist() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error al generar la playlist");
+      setPlaylistId(data.playlistId)
       setNamePlayList(data.result.playlist.title);
       setSongs(data.result.playlist.songs);
     } catch (e: unknown) {
@@ -42,54 +44,36 @@ export function GeneratePlaylist() {
     }
   }
 
-  async function handleConfirm() {
-    if (!songs) return;
-    setConfirming(true);
-    setError(null);
-    try {
-      const spotifyRes = await Promise.all(
-        songs.map(async (song) => {
-          try {
-            const response = await fetch("/api/spotify/search-track", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ song }),
-            });
-            return response.json();
-          } catch {
-            return null;
-          }
-        })
-      );
-      const trackIds = spotifyRes
-        .filter((track) => track != null)
-        .map((track) => track.trackId)
-        .filter((id) => id != null);
+async function handleConfirm() {
+  if (!songs || !playlistId) return
+  setConfirming(true)
+  setError(null)
 
-      const res = await fetch("/api/spotify/create-playList", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: namePlayList, trackIds, prompt, songs }),
-      });
+  try {
+    const res = await fetch("/api/spotify/create-playList", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ playlistId }) // ✅ solo el playlistId
+    })
 
-      if (!res.ok) throw new Error("Error creando playlist");
+    if (!res.ok) throw new Error("Error creando playlist")
 
-      await queryClient.invalidateQueries({ queryKey: ["playlists"] });
-      setSongs(undefined);
-      setNamePlayList("");
-      setPrompt("");
-    } catch {
-      setError("No se pudo crear la playlist. Intentá de nuevo.");
-    } finally {
-      setConfirming(false);
-    }
+    await queryClient.invalidateQueries({ queryKey: ["playlists"] })
+    setSongs(undefined)
+    setNamePlayList("")
+    setPrompt("")
+    setPlaylistId(null)
+  } catch {
+    setError("No se pudo crear la playlist. Intentá de nuevo.")
+  } finally {
+    setConfirming(false)
   }
+}
 
   const optionBtn = (active: boolean) =>
-    `px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
-      active
-        ? "bg-violet-500 text-white shadow shadow-violet-300"
-        : "border border-violet-200 text-violet-500 hover:border-violet-400 hover:bg-violet-50"
+    `px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${active
+      ? "bg-violet-500 text-white shadow shadow-violet-300"
+      : "border border-violet-200 text-violet-500 hover:border-violet-400 hover:bg-violet-50"
     }`;
 
   return (

@@ -69,6 +69,7 @@ export async function POST(req: Request) {
 
       if (trackId) {
         await db.update(songs).set({ spotifyTrackId: trackId }).where(eq(songs.id, song.id))
+        song.spotifyTrackId = trackId
       }
 
     }
@@ -84,10 +85,12 @@ export async function POST(req: Request) {
       .filter(id => id !== null) as string[]
 
     // creamos la playlist en spotifi 
-    const spotifyPlaylist = await createPlaylist(accessToken,spotifyUserId,playList.title)
-    await addTracksToPlaylist(accessToken,spotifyPlaylist.id, trackIds)
-    return NextResponse.json({ ok: true ,spotifyPlaylistId:spotifyPlaylist.id})
+    const spotifyPlaylist = await createPlaylist(accessToken, spotifyUserId, playList.title)
+    await addTracksToPlaylist(accessToken, spotifyPlaylist.id, trackIds)
+    console.log("[create-playList] allSongs:", allSongs.length)
+    return NextResponse.json({ ok: true, spotifyPlaylistId: spotifyPlaylist.id })
   } catch (error) {
+
     console.error("[create-playList] ERROR completo:", error)
     return NextResponse.json({ error: String(error) }, { status: 500 })
   }
