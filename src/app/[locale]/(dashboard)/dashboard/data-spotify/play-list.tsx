@@ -19,7 +19,7 @@ export function Playlist() {
         "playlists",
         "/api/spotify/play-list"
     );
-
+    console.log(playList, 'playlists')
     const effectivePlaylistId = selectedPlaylistId || playList[0]?.id || '';
 
     const {
@@ -142,8 +142,11 @@ export function Playlist() {
                 `}
                             >
                                 {/* Área de icono */}
-                                <div className={`relative h-20 sm:h-24 bg-linear-to-br ${gradient} flex items-center justify-center`}>
-                                    <HiSparkles className="text-white/70" size={32} />
+                                <div className={`relative h-20 sm:h-24 ${pl.imageUrl ? '' : `bg-linear-to-br ${gradient}`} flex items-center justify-center`}>
+                                    {pl.imageUrl
+                                        ? <img src={pl.imageUrl} alt={pl.name} className="w-full h-full object-cover" />
+                                        : <HiSparkles className="text-white/70" size={32} />
+                                    }
 
                                     {/* Overlay hover con botón play */}
                                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
