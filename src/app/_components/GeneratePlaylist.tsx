@@ -105,7 +105,7 @@ export function GeneratePlaylist() {
           </div>
           <div>
             <h2 className="text-base font-bold leading-tight">{t("title")}</h2>
-            <p className="text-xl text-violet-300/70">{t("subtitle")}</p>
+            <p className="text-xl text-violet-400">{t("subtitle")}</p>
           </div>
         </div>
 
@@ -118,7 +118,7 @@ export function GeneratePlaylist() {
               onChange={(e) => setPrompt(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && prompt.trim() && !loading && handleGenerate()}
               placeholder={t("placeholder")}
-              className="w-full bg-white/5 border border-violet-500/20 rounded-xl px-4 py-3 text-sm placeholder-violet-300/40 focus:outline-none focus:border-violet-500/60 focus:shadow-[0_0_12px_1px_rgba(139,92,246,0.2)] transition-all duration-200"
+              className="w-full bg-white/5 border border-violet-500/20 rounded-xl px-4 py-3 text-sm placeholder-violet-400/80 focus:outline-none focus:border-violet-500/60 focus:shadow-[0_0_12px_1px_rgba(139,92,246,0.2)] transition-all duration-200"
             />
           </div>
           <button
