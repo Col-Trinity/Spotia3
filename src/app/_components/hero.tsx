@@ -1,35 +1,18 @@
-import Image from 'next/image';
-import SpotiALogo from "@/public/SpotIALogo.png"
-import IlustracionOnboarding from "@/public/IlustracionOnboarding.png"
-import OnBoarding from "@/src/app/_components/OnBoarding"
 import { getTranslations } from 'next-intl/server';
+import HeroSwiper from './HeroSwiper';
 
-export async function Hero() {
-    const t = await getTranslations('hero');
+export async function Hero({ locale = 'es' }: { locale?: string }) {
+    const tHero = await getTranslations('hero');
+    const tLogin = await getTranslations('login');
 
     return (
-        <div className=" flex flex-col items-center justify-center  w-full  font-sf-pro ">
-            <Image
-                className='mt-[20vh]'
-                src={SpotiALogo}
-                alt={"logo"}
-                width={171}
-                height={141} />
-
-            <h6 className="font-medium text-base leading-none tracking-tight text-center w-full mt-2">{t('title')}</h6>
-            <p className=' font-normal  text-sm text-center max-w-[30vh] mt-10  '>{t('description')}</p>
-            <div className=' relative  flex items-center  justify-center mt-10 '>
-                <div className='absolute w-[40vh] h-[40vh] rounded-full  blur-xl  bg-[radial-gradient(50%_50%_at_50%_50%,#EBE7FF_0%,rgba(147,128,255,0.25)_100%)]' />
-                <Image
-                    className='z-10'
-                    src={IlustracionOnboarding}
-                    alt='IlustracionOnboarding'
-                    width={318}
-                    height={318}
-                />
-            </div>
-
-            <OnBoarding page={1} />
-        </div>
-    )
+        <HeroSwiper
+            heroTitle={tHero('title')}
+            heroDescription={tHero('description')}
+            loginTitle={tLogin('connectMusic')}
+            loginDescription={tLogin('description')}
+            loginContinueWith={tLogin('continueWith')}
+            locale={locale}
+        />
+    );
 }
