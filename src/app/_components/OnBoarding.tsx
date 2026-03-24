@@ -8,7 +8,7 @@ export default function OnBoarding({ page }: Props) {
     const router = useRouter()
     const handleClick = () => {
         if (page === 1) {
-            router.push('/auth/login')
+            router.push('/es/login')
         } else {
             router.back()
         }
