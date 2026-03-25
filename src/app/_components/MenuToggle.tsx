@@ -21,7 +21,6 @@ export default function MenuToggle({ setButtonClose, onRefresh }: Props) {
                 <button onClick={() => router.push(`/${locale}/dashboard`)} className="hover:bg-[rgb(215,206,253)] p-2 mb-4 mx-4 rounded-xl">{t("home")}</button>
                 <button className="hover:bg-[rgb(215,206,253)] p-2 mb-4 mx-4 rounded-xl">{t("favorites")}</button>
                 <button onClick={() => router.push(`/${locale}/dashboard/historial`)} className="hover:bg-[rgb(215,206,253)] p-2 mb-4 mx-4 rounded-xl">{t("fullHistory")}</button>
-                <button onClick={onRefresh} className="hover:bg-[rgb(215,206,253)] p-2 mb-4 mx-3 text-left rounded-xl">{t("generateNew")}</button>
             </div>
         </div>
     )
