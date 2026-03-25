@@ -23,6 +23,7 @@ export function GeneratePlaylist() {
   const [loading, setLoading] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [namePlayList, setNamePlayList] = useState("");
+  const [descriptionPlayList, setDescriptionPlayList] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   async function handleGenerate() {
@@ -39,6 +40,7 @@ export function GeneratePlaylist() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error al generar la playlist");
       setNamePlayList(data.result.playlist.title);
+      setDescriptionPlayList(data.result.playlist.description);
       setSongs(data.result.playlist.songs);
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "";
@@ -89,6 +91,7 @@ export function GeneratePlaylist() {
       await queryClient.invalidateQueries({ queryKey: ["playlists"] });
       setSongs(undefined);
       setNamePlayList("");
+      setDescriptionPlayList("");
       setPrompt("");
     } catch (e) {
       const msg = e instanceof Error ? e.message : "";
@@ -231,11 +234,9 @@ export function GeneratePlaylist() {
               <div>
                 <h3 className="text-base font-bold text-gray-800">{namePlayList}</h3>
                 <p className="text-xs text-violet-400 mt-0.5">{songs.length} canciones generadas</p>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-linear-to-br from-purple-500 to-violet-400 flex items-center justify-center shadow shadow-purple-200">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
-                </svg>
+                {descriptionPlayList && (
+                  <p className="text-xs text-gray-500 mt-1">{descriptionPlayList}</p>
+                )}
               </div>
             </div>
 
