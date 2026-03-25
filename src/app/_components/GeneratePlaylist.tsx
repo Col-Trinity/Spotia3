@@ -142,7 +142,7 @@ export function GeneratePlaylist() {
         </div>
 
         {/* Opciones configurables */}
-        {!songs && !loading && (
+        {!loading && (
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
 
             <div>
