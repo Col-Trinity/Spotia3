@@ -40,7 +40,7 @@ export function TopArtist(timeRange: TypeTimeRange) {
       <div className="flex flex-col h-full">
         <h1 className="text-2xl font-bold mb-6 bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent text-center">{t("title")}</h1>
         <p className="text-gray-400 text-center mb-4">{t("subtitle")}</p>
-        <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 w-full max-w-4xl overflow-y-auto pr-2 max-h-[60vh]">
+        <div className="grid grid-cols-2 gap-2 w-full max-w-4xl overflow-y-auto px-2 py-3 max-h-[60vh]">
           {artists?.map((artist: Artist) => (
             <CardArtist key={artist.id} artist={artist} />
           ))}
