@@ -41,7 +41,11 @@ export function GeneratePlaylist() {
       setNamePlayList(data.result.playlist.title);
       setSongs(data.result.playlist.songs);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "No se pudo generar la playlist. Intentá de nuevo.");
+      const msg = e instanceof Error ? e.message : "";
+      setError(msg.includes("403")
+        ? "Tenemos problemas interactuando con Spotify. Intentá de nuevo en unos minutos."
+        : msg || "No se pudo generar la playlist. Intentá de nuevo."
+      );
     } finally {
       setLoading(false);
     }
@@ -77,14 +81,21 @@ export function GeneratePlaylist() {
         body: JSON.stringify({ name: namePlayList, trackIds, prompt, songs }),
       });
 
-      if (!res.ok) throw new Error("Error creando playlist");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error ?? "Error creando playlist");
+      }
 
       await queryClient.invalidateQueries({ queryKey: ["playlists"] });
       setSongs(undefined);
       setNamePlayList("");
       setPrompt("");
-    } catch {
-      setError("No se pudo crear la playlist. Intentá de nuevo.");
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "";
+      setError(msg.includes("403")
+        ? "Tenemos problemas interactuando con Spotify. Intentá de nuevo en unos minutos."
+        : "No se pudo crear la playlist. Intentá de nuevo."
+      );
     } finally {
       setConfirming(false);
     }
