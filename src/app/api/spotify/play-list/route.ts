@@ -7,7 +7,7 @@ import { PlaylistItem } from "@/src/types/playList";
 export async function GET(req: Request) {
     try {
         const session = await getServerSession(authOptions);
-      
+
 
         if (!session || !session.accessToken) {
             return NextResponse.json(
@@ -23,12 +23,13 @@ export async function GET(req: Request) {
             session.accessToken,
             limite
         );
-        const playlists = data.items.map((p: PlaylistItem) => ({
+        const playlists = data.items.map((p: PlaylistItem & { images: { url: string }[] }) => ({
             id: p.id,
             name: p.name,
-            description: p.description,
+            description: p.description && p.description !== "null" ? p.description : "",
             url: p.external_urls.spotify,
             tracksTotal: p.tracks.total,
+            imageUrl: p.images?.[0]?.url ?? null,
         }));
 
 

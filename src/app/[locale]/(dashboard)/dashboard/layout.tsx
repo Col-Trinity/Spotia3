@@ -24,7 +24,9 @@ export default function DashboardLayout({
       <section className="flex-1 overflow-y-auto">
         {children}
       </section>
-      <NavBar locale={locale} />
+      <div className="hidden sm:block">
+        <NavBar locale={locale} />
+      </div>
     </div>
   )
 }

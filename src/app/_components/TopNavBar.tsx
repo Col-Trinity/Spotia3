@@ -15,7 +15,7 @@ export default function TopNavBar({ onRefresh }: { onRefresh: () => void }) {
 
   return (
     <div className="flex justify-between items-center w-[90%] sm:w-[80%]">
-      <div className="relative">
+      <div className="relative sm:hidden">
         <button className="" onClick={() => setButton((prev) => !prev)}>
           <MdMenu size={34} />
         </button>

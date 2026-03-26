@@ -30,7 +30,8 @@ export default function LoginPage() {
   const [providers, setProviders] = useState<Awaited<ReturnType<typeof getProviders>> | null>(null);
   const t = useTranslations('login');
   const params = useParams();
-  const locale = (params.locale as string) || 'es';
+  const localeParam = params.locale as string;
+  const locale = ['es', 'en'].includes(localeParam) ? localeParam : 'es';
 
   useEffect(() => {
     getProviders().then((prov) => setProviders(prov));
@@ -47,7 +48,7 @@ export default function LoginPage() {
           alt={"logo"}
           width={171}
           height={141} />
-        <h6 className="text-lg font-medium text-base pb-2 w-full text-center">
+        <h6 className="font-medium text-base pb-2 w-full text-center">
           {t('connectMusic')}
         </h6>
         <p className='text-center mt-[10vh] mb-[30vh]'>{t('description')}</p>
@@ -61,7 +62,7 @@ export default function LoginPage() {
                   signIn(provider.id, { callbackUrl: `/${locale}/dashboard` })
                 }
                 className="w-full bg-[rgb(104,82,224)] text-white rounded-full
-                  hover:bg-gray-200 text-black font-semibold py-3 px-6 rounded flex items-center justify-center transition shadow-sm"
+                  hover:bg-gray-200 font-semibold py-3 px-6 flex items-center justify-center transition shadow-sm"
               >
                 {providerIcons[provider.id]}
                 {t('continueWith')} {provider.name}
