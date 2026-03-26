@@ -87,7 +87,6 @@ export async function POST(req: Request) {
     // creamos la playlist en spotifi 
     const spotifyPlaylist = await createPlaylist(accessToken, spotifyUserId, playList.title)
     await addTracksToPlaylist(accessToken, spotifyPlaylist.id, trackIds)
-    console.log("[create-playList] allSongs:", allSongs.length)
     return NextResponse.json({ ok: true, spotifyPlaylistId: spotifyPlaylist.id })
   } catch (error) {
 
