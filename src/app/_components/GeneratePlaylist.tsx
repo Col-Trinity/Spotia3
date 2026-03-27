@@ -8,16 +8,22 @@ export function GeneratePlaylist() {
   const queryClient = useQueryClient();
   const t = useTranslations("generatePlaylist");
   const [prompt, setPrompt] = useState("");
-  const [options, setOptions] = useState({
-    quantity: 10,
-    nationality: "Cualquiera",
-    era: "Actualidad",
-    userAge: "18-25",
+  const [options, setOptions] = useState<{
+    quantity: number;
+    nationality: string | null;
+    era: string | null;
+    userAge: string | null;
+  }>({
+    quantity: 5,
+    nationality: null,
+    era: null,
+    userAge: null,
   });
   const [songs, setSongs] = useState<{ title: string; artist: string }[]>();
   const [loading, setLoading] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [namePlayList, setNamePlayList] = useState("");
+  const [descriptionPlayList, setDescriptionPlayList] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const [playlistId, setPlaylistId] = useState<string | null>(null)
@@ -36,9 +42,14 @@ export function GeneratePlaylist() {
       if (!res.ok) throw new Error(data.error ?? "Error al generar la playlist");
       setPlaylistId(data.playlistId)
       setNamePlayList(data.result.playlist.title);
+      setDescriptionPlayList(data.result.playlist.description);
       setSongs(data.result.playlist.songs);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "No se pudo generar la playlist. Intentá de nuevo.");
+      const msg = e instanceof Error ? e.message : "";
+      setError(msg.includes("403")
+        ? "Tenemos problemas interactuando con Spotify. Intentá de nuevo en unos minutos."
+        : msg || "No se pudo generar la playlist. Intentá de nuevo."
+      );
     } finally {
       setLoading(false);
     }
@@ -56,18 +67,27 @@ async function handleConfirm() {
       body: JSON.stringify({ playlistId }) // ✅ solo el playlistId
     })
 
-    if (!res.ok) throw new Error("Error creando playlist")
 
+     if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error ?? "Error creando playlist");
+      }
     await queryClient.invalidateQueries({ queryKey: ["playlists"] })
     setSongs(undefined)
     setNamePlayList("")
+    setDescriptionPlayList("");
     setPrompt("")
     setPlaylistId(null)
-  } catch {
-    setError("No se pudo crear la playlist. Intentá de nuevo.")
+  } catch (e) {
+      const msg = e instanceof Error ? e.message : "";
+      setError(msg.includes("403")
+        ? "Tenemos problemas interactuando con Spotify. Intentá de nuevo en unos minutos."
+        : "No se pudo crear la playlist. Intentá de nuevo."
+      );
   } finally {
     setConfirming(false)
-  }
+
+    }
 }
 
   const optionBtn = (active: boolean) =>
@@ -89,7 +109,7 @@ async function handleConfirm() {
           </div>
           <div>
             <h2 className="text-base font-bold leading-tight">{t("title")}</h2>
-            <p className="text-xl text-violet-300/70">{t("subtitle")}</p>
+            <p className="text-xl text-violet-400">{t("subtitle")}</p>
           </div>
         </div>
 
@@ -102,7 +122,7 @@ async function handleConfirm() {
               onChange={(e) => setPrompt(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && prompt.trim() && !loading && handleGenerate()}
               placeholder={t("placeholder")}
-              className="w-full bg-white/5 border border-violet-500/20 rounded-xl px-4 py-3 text-sm placeholder-violet-300/40 focus:outline-none focus:border-violet-500/60 focus:shadow-[0_0_12px_1px_rgba(139,92,246,0.2)] transition-all duration-200"
+              className="w-full bg-white/5 border border-violet-500/20 rounded-xl px-4 py-3 text-sm placeholder-violet-400/80 focus:outline-none focus:border-violet-500/60 focus:shadow-[0_0_12px_1px_rgba(139,92,246,0.2)] transition-all duration-200"
             />
           </div>
           <button
@@ -122,7 +142,7 @@ async function handleConfirm() {
         </div>
 
         {/* Opciones configurables */}
-        {!songs && !loading && (
+        {!loading && (
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
 
             <div>
@@ -137,10 +157,10 @@ async function handleConfirm() {
             </div>
 
             <div>
-              <p className="text-xs font-semibold text-gray-500 mb-2">Nacionalidad</p>
+              <p className="text-xs font-semibold text-gray-500 mb-2">Nacionalidad <span className="font-normal text-gray-400">(opcional)</span></p>
               <div className="flex gap-2 flex-wrap">
                 {["Argentina", "España", "EEUU", "Cualquiera"].map((n) => (
-                  <button key={n} onClick={() => setOptions({ ...options, nationality: n })} className={optionBtn(options.nationality === n)}>
+                  <button key={n} onClick={() => setOptions({ ...options, nationality: options.nationality === n ? null : n })} className={optionBtn(options.nationality === n)}>
                     {n}
                   </button>
                 ))}
@@ -148,10 +168,10 @@ async function handleConfirm() {
             </div>
 
             <div>
-              <p className="text-xs font-semibold text-gray-500 mb-2">Época</p>
+              <p className="text-xs font-semibold text-gray-500 mb-2">Época <span className="font-normal text-gray-400">(opcional)</span></p>
               <div className="flex gap-2 flex-wrap">
                 {["80s", "90s", "2000s", "Actualidad"].map((e) => (
-                  <button key={e} onClick={() => setOptions({ ...options, era: e })} className={optionBtn(options.era === e)}>
+                  <button key={e} onClick={() => setOptions({ ...options, era: options.era === e ? null : e })} className={optionBtn(options.era === e)}>
                     {e}
                   </button>
                 ))}
@@ -159,10 +179,10 @@ async function handleConfirm() {
             </div>
 
             <div>
-              <p className="text-xs font-semibold text-gray-500 mb-2">Tu edad</p>
+              <p className="text-xs font-semibold text-gray-500 mb-2">Tu edad <span className="font-normal text-gray-400">(opcional)</span></p>
               <div className="flex gap-2 flex-wrap">
                 {["18-25", "26-35", "36-50", "50+"].map((a) => (
-                  <button key={a} onClick={() => setOptions({ ...options, userAge: a })} className={optionBtn(options.userAge === a)}>
+                  <button key={a} onClick={() => setOptions({ ...options, userAge: options.userAge === a ? null : a })} className={optionBtn(options.userAge === a)}>
                     {a}
                   </button>
                 ))}
@@ -200,11 +220,9 @@ async function handleConfirm() {
               <div>
                 <h3 className="text-base font-bold text-gray-800">{namePlayList}</h3>
                 <p className="text-xs text-violet-400 mt-0.5">{songs.length} canciones generadas</p>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-violet-400 flex items-center justify-center shadow shadow-purple-200">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
-                </svg>
+                {descriptionPlayList && (
+                  <p className="text-xs text-gray-500 mt-1">{descriptionPlayList}</p>
+                )}
               </div>
             </div>
 
@@ -240,13 +258,6 @@ async function handleConfirm() {
                 ) : (
                   "Crear playlist en Spotify ✦"
                 )}
-              </button>
-              <button
-                onClick={handleGenerate}
-                disabled={loading}
-                className="px-5 py-3 rounded-xl font-semibold text-sm border border-violet-500/30 text-violet-300 hover:bg-violet-500/10 active:scale-95 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                {loading ? "Generando..." : "Regenerar"}
               </button>
             </div>
           </div>
