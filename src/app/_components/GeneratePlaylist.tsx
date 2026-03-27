@@ -26,6 +26,7 @@ export function GeneratePlaylist() {
   const [descriptionPlayList, setDescriptionPlayList] = useState("");
   const [error, setError] = useState<string | null>(null);
 
+  const [playlistId, setPlaylistId] = useState<string | null>(null)
   async function handleGenerate() {
     if (loading) return;
     setLoading(true);
@@ -39,6 +40,7 @@ export function GeneratePlaylist() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error al generar la playlist");
+      setPlaylistId(data.playlistId)
       setNamePlayList(data.result.playlist.title);
       setDescriptionPlayList(data.result.playlist.description);
       setSongs(data.result.playlist.songs);
@@ -53,56 +55,40 @@ export function GeneratePlaylist() {
     }
   }
 
-  async function handleConfirm() {
-    if (!songs) return;
-    setConfirming(true);
-    setError(null);
-    try {
-      const spotifyRes = await Promise.all(
-        songs.map(async (song) => {
-          try {
-            const response = await fetch("/api/spotify/search-track", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ song }),
-            });
-            return response.json();
-          } catch {
-            return null;
-          }
-        })
-      );
-      const trackIds = spotifyRes
-        .filter((track) => track != null)
-        .map((track) => track.trackId)
-        .filter((id) => id != null);
+async function handleConfirm() {
+  if (!songs || !playlistId) return
+  setConfirming(true)
+  setError(null)
 
-      const res = await fetch("/api/spotify/create-playList", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: namePlayList, trackIds, prompt, songs }),
-      });
+  try {
+    const res = await fetch("/api/spotify/create-playList", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ playlistId }) // ✅ solo el playlistId
+    })
 
-      if (!res.ok) {
+
+     if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error ?? "Error creando playlist");
       }
-
-      await queryClient.invalidateQueries({ queryKey: ["playlists"] });
-      setSongs(undefined);
-      setNamePlayList("");
-      setDescriptionPlayList("");
-      setPrompt("");
-    } catch (e) {
+    await queryClient.invalidateQueries({ queryKey: ["playlists"] })
+    setSongs(undefined)
+    setNamePlayList("")
+    setDescriptionPlayList("");
+    setPrompt("")
+    setPlaylistId(null)
+  } catch (e) {
       const msg = e instanceof Error ? e.message : "";
       setError(msg.includes("403")
         ? "Tenemos problemas interactuando con Spotify. Intentá de nuevo en unos minutos."
         : "No se pudo crear la playlist. Intentá de nuevo."
       );
-    } finally {
-      setConfirming(false);
+  } finally {
+    setConfirming(false)
+
     }
-  }
+}
 
   const optionBtn = (active: boolean) =>
     `px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${active

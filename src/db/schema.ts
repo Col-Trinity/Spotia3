@@ -116,23 +116,52 @@ export const playlistAiGenerations = pgTable(
   })
 )
 
-export const playlistGenerations = pgTable(
-  'playlistGenerations', {
-  id: uuid('id').defaultRandom().primaryKey(),
-  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  prompt: text('prompt').notNull(),
-  playlistName: varchar('playlist_name', { length: 255 }).notNull(),
-  songs: json().$type<{ title: string, artist: string, spotifyId?: string }[]>().notNull(),
-  spotifyPlaylistId: varchar('spotify_playlist_id', { length: 255 }),
-  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
-},
+// Tabla de playlists generadas por la IA
+export const playlists = pgTable(
+  'playlists',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description').notNull(),
+    createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  },
   (table) => ({
-    userIdIdx: index('playlist_generations_user_id_idx').on(table.userId),
+    userIdIdx: index('playlists_user_id_idx').on(table.userId),
   })
 )
+
+// Tabla de canciones
+export const songs = pgTable(
+  'songs',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    artist: varchar('artist', { length: 255 }).notNull(),
+    title: varchar('title', { length: 255 }).notNull(),
+    spotifyTrackId: varchar('spotify_track_id', { length: 255 }), // puede ser null si no se buscó todavía
+    timesUsed: integer('times_used').default(0).notNull(),
+  }
+)
+
+// Tabla intermedia playlist_songs
+export const playlistSongs = pgTable(
+  'playlist_songs',
+  {
+    playlistId: uuid('playlist_id').notNull().references(() => playlists.id, { onDelete: 'cascade' }),
+    songId: uuid('song_id').notNull().references(() => songs.id, { onDelete: 'cascade' }),
+  },
+  (table) => ({
+    compoundKey: primaryKey({ columns: [table.playlistId, table.songId] }),
+  })
+)
+
 // Types
-export type PlaylistGeneration = typeof playlistGenerations.$inferSelect;
-export type NewPlaylistGeneration = typeof playlistGenerations.$inferInsert;
+export type Playlist = typeof playlists.$inferSelect
+export type NewPlaylist = typeof playlists.$inferInsert
+export type Song = typeof songs.$inferSelect
+export type NewSong = typeof songs.$inferInsert
+export type PlaylistSong = typeof playlistSongs.$inferSelect
+
 
 export type PlaylistAiGeneration = typeof playlistAiGenerations.$inferSelect;
 export type NewPlaylistAiGeneration = typeof playlistAiGenerations.$inferInsert;
