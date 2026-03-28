@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import LogOut from "@/src/app/_components/LogOut";
 import UseImg from "@/src/app/_components/UseImg";
+import TopNavBar from "@/src/app/_components/TopNavBar";
 import { useTranslations } from "next-intl";
 
 export default function ProfilePage() {
@@ -15,14 +16,17 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen p-6 pb-24 mt-4">
-      <h1 className="text-2xl font-bold mb-4">{t("title")}</h1>
+      <TopNavBar onRefresh={() => {}} />
+      <h1 className="text-2xl font-bold mb-4 mt-4">{t("title")}</h1>
 
-      <div className="bg-white rounded-lg p-6 shadow">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow">
         <div className="flex items-center gap-4 mb-6">
           <UseImg />
           <div>
             <h2 className="text-xl font-semibold">{session.user?.name}</h2>
-            <p className="text-gray-600">{session.user?.email}</p>
+            <p className="text-gray-600 dark:text-gray-400">
+              {session.user?.email}
+            </p>
           </div>
         </div>
 

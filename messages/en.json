@@ -8,7 +8,8 @@
     "home": "Home",
     "favorites": "Favorites",
     "fullHistory": "Full history",
-    "generateNew": "Generate new\nanalysis"
+    "generateNew": "Generate new\nanalysis",
+    "profile": "Profile"
   },
   "login": {
     "connectMusic": "Connect your music",
