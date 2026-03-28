@@ -56,7 +56,7 @@ export default function PerfilMusicalIA({ onResult, onData, refresh }: Props) {
   return (
     <div className="flex justify-center items-center w-full">
       <div className="border border-violet-300 rounded-3xl p-4 w-full">
-        <h1 className="font-semibold text-gray-800">{t("title")}</h1>
+        <h1 className="font-semibold ">{t("title")}</h1>
 
         <p className="text-xs text-gray-500">{t("subtitle")}</p>
         {isPending && <p>{t("thinking")}</p>}
