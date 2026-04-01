@@ -29,7 +29,27 @@ export async function GET(req: Request) {
       rangoTiempo
     );
 
-    return NextResponse.json(data);
+    const items = data.items.map((track: {
+      id: string;
+      name: string;
+      duration_ms: number;
+      artists: { id: string; name: string }[];
+      album: { id: string; name: string; images: { url: string; height?: number; width?: number }[] };
+      external_urls: { spotify: string };
+    }) => ({
+      id: track.id,
+      name: track.name,
+      duration_ms: track.duration_ms,
+      artists: track.artists.map((a) => ({ id: a.id, name: a.name })),
+      album: {
+        id: track.album.id,
+        name: track.album.name,
+        images: track.album.images,
+      },
+      external_urls: { spotify: track.external_urls.spotify },
+    }));
+
+    return NextResponse.json({ items });
   } catch (error) {
     console.error("Error top artists:", error);
     return NextResponse.json(

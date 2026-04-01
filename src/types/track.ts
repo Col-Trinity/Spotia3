@@ -21,11 +21,4 @@ export interface Track {
   external_urls: {
     spotify: string;
   };
-   track: {
-    id: string;
-    name: string;
-    artists: { name: string }[];
-    album: { name: string };
-  };
-
 }
