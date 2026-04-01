@@ -64,7 +64,7 @@ async function handleConfirm() {
     const res = await fetch("/api/spotify/create-playList", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ playlistId }) // ✅ solo el playlistId
+      body: JSON.stringify({ playlistId }) //solo el playlistId
     })
 
 

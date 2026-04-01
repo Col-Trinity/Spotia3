@@ -152,8 +152,9 @@ export function Playlist() {
                     <Image
                       src={pl.imageUrl}
                       alt={pl.name}
-                      fill
-                      className="object-cover"
+                      width={144}
+                      height={96}
+                      className="w-full h-full object-cover"
                     />
                   ) : (
                     <HiSparkles className="text-white/70" size={32} />
