@@ -8,7 +8,8 @@
     "home": "Inicio",
     "favorites": "Favoritos",
     "fullHistory": "Historial completo",
-    "generateNew": "Generar nueva\ndevolucion"
+    "generateNew": "Generar nueva\ndevolucion",
+    "profile": "Perfil"
   },
   "login": {
     "connectMusic": "Conecta tu musica",

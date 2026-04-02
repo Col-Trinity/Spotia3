@@ -4,7 +4,7 @@ import { topGenres } from "@/src/utils/topGenere";
 import { useEffect, useMemo, useState } from "react";
 import { useTopArtists } from "@/src/hooks/useTopArtists";
 import { Artist } from "@/src/types/spotify";
-import Image from 'next/image';
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 
 export default function TopGenere() {
@@ -12,12 +12,12 @@ export default function TopGenere() {
   const { data: artists, isLoading, isError, error, refetch } = useTopArtists();
   const [animated, setAnimated] = useState(false);
 
-  const artistsKey = artists?.map((a) => a.id).join(',') ?? '';
+  const artistsKey = artists?.map((a) => a.id).join(",") ?? "";
 
   const topGenere = useMemo(
     () => (artists ? topGenres(artists as Artist[]) : []),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [artistsKey]
+    [artistsKey],
   );
 
   useEffect(() => {
@@ -28,22 +28,20 @@ export default function TopGenere() {
 
   if (isLoading) return <p>{t("loading")}</p>;
 
-  if (isError) return (
-    <div>
-      <p>{(error as Error).message}</p>
-      <button onClick={() => refetch()}>{t("retry")}</button>
-    </div>
-  );
+  if (isError)
+    return (
+      <div>
+        <p>{(error as Error).message}</p>
+        <button onClick={() => refetch()}>{t("retry")}</button>
+      </div>
+    );
   if (!artists) return null;
 
   return (
     <div className="w-full max-w-sm rounded-2xl p-6 border border-purple-500/20 shadow-2xl">
-
       <div className="text-center mb-6">
-        <h2 className="text-lg font-bold tracking-tight mb-1">
-          {t("title")}
-        </h2>
-        <p className="text-xs text-[#888899]">
+        <h2 className="text-lg font-bold tracking-tight mb-1">{t("title")}</h2>
+        <p className="text-xs text-[#888899] dark:text-gray-400">
           {t("subtitle")}
         </p>
       </div>
@@ -51,7 +49,6 @@ export default function TopGenere() {
       <div className="flex flex-col gap-4">
         {topGenere.map((item, index) => (
           <div key={index} className="flex items-center gap-3">
-
             <div className="w-10 h-10 rounded-full shrink-0 overflow-hidden border border-purple-500/40 bg-[#1A1A2E] flex items-center justify-center">
               {item.image ? (
                 <Image
@@ -76,7 +73,7 @@ export default function TopGenere() {
                 </span>
               </div>
 
-              <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+              <div className="w-full h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-purple-500 to-violet-400"
                   style={{
@@ -86,15 +83,13 @@ export default function TopGenere() {
                 />
               </div>
 
-              <span className="text-[11px] text-[#555566] mt-1 block">
+              <span className="text-[11px] text-[#555566] dark:text-gray-400 mt-1 block">
                 {item.count} {item.count === 1 ? t("artist") : t("artists")}
               </span>
             </div>
-
           </div>
         ))}
       </div>
-
     </div>
   );
 }

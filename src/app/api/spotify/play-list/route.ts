@@ -20,8 +20,7 @@ export async function GET(req: Request) {
         const limite = Number(searchParams.get("limit")) || 10;
 
         const data = await getPlayList(
-            session.accessToken,
-            limite
+            session.accessToken
         );
         const playlists = data.items.map((p: PlaylistItem & { images: { url: string }[] }) => ({
             id: p.id,

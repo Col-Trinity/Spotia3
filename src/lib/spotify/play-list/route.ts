@@ -15,13 +15,12 @@ async function fetchWithToken(url: string, token: string) {
   return res.json();
 }
 
-export async function getPlayList(token: string,
-  limite: number = 10) {
+export async function getPlayList(token: string) {
 
-  const url = `${SPOTIFY_API}/me/playlists?limit=${limite}`;
+  const url = `${SPOTIFY_API}/me/playlists`;
   return fetchWithToken(url, token);
 
-}
+} 
 
 export async function createPlaylist(token: string, spotifyUserId: string, name: string) {
   const res = await fetch(`${SPOTIFY_API}/users/${spotifyUserId}/playlists`, {
