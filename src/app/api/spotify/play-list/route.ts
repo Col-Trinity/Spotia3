@@ -4,7 +4,7 @@ import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { getPlayList } from "@/src/lib/spotify/play-list/route";
 import { PlaylistItem } from "@/src/types/playList";
 
-export async function GET(req: Request) {
+export async function GET() {
     try {
         const session = await getServerSession(authOptions);
 
@@ -15,10 +15,6 @@ export async function GET(req: Request) {
                 { status: 401 }
             );
         }
-
-        const { searchParams } = new URL(req.url);
-        const limite = Number(searchParams.get("limit")) || 10;
-
         const data = await getPlayList(
             session.accessToken
         );

@@ -124,6 +124,7 @@ export const playlists = pgTable(
     userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     title: varchar('title', { length: 255 }).notNull(),
     description: text('description').notNull(),
+    spotifyPlaylistId: varchar('spotify_playlist_id', { length: 255 }),
     createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
   },
   (table) => ({
