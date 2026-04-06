@@ -29,7 +29,7 @@ export default function Dashboard() {
         src={spotiaLogo}
         width={100}
         height={100}
-        className="dark:invert"
+        className="dark:brightness-0 dark:invert"
       />
       <TopNavBar onRefresh={() => setRefresh((prev) => prev + 1)} />
       <div>

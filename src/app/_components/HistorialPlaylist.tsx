@@ -43,17 +43,17 @@ export function HistorialPlaylists() {
           className="border border-violet-300/50 rounded-xl p-4 bg-violet-50/10 backdrop-blur-sm"
         >
           <div className="flex items-start justify-between gap-2 mb-1">
-            <h3 className="text-sm font-bold text-violet-900 leading-tight">
+            <h3 className="text-sm font-bold text-violet-900 dark:text-white leading-tight">
               {playlist.title}
             </h3>
-            <span className="text-xs text-violet-700 shrink-0">
+            <span className="text-xs text-violet-700 dark:text-violet-300 shrink-0">
               {new Date(playlist.createdAt).toLocaleDateString()}
             </span>
           </div>
 
           {playlist.description && (
             <div className="max-h-20 overflow-y-auto pr-1 mb-3 scrollbar-thin">
-              <p className="text-xs text-violet-800 leading-relaxed">
+              <p className="text-xs text-violet-800 dark:text-gray-300 leading-relaxed">
                 {playlist.description}
               </p>
             </div>

@@ -75,172 +75,172 @@ export function Playlist() {
       </div>
     );
   }
-    return (
-      <div className="py-2 w-full">
-        <div className="mb-5">
-          <div className="flex items-center gap-2 mb-1">
-            <HiSparkles className="text-pink-400" size={22} />
-            <h2 className="text-xl font-bold bg-linear-to-r from-pink-500 via-fuchsia-500 to-violet-500 bg-clip-text text-transparent">
-              Tus Playlists
-            </h2>
-          </div>
+  return (
+    <div className="py-2 w-full">
+      <div className="mb-5">
+        <div className="flex items-center gap-2 mb-1">
+          <HiSparkles className="text-pink-400" size={22} />
+          <h2 className="text-xl font-bold bg-linear-to-r from-pink-500 via-fuchsia-500 to-violet-500 bg-clip-text text-transparent">
+            Tus Playlists
+          </h2>
         </div>
+      </div>
 
-        <div className="relative flex items-center">
-          {/* Flecha izquierda */}
-          {playList.length > 3 && (
-            <button
-              onClick={() => {
-                document
-                  .getElementById("carousel")
-                  ?.scrollBy({ left: -280, behavior: "smooth" });
-              }}
-              className="absolute -left-3 z-10
+      <div className="relative flex items-center">
+        {/* Flecha izquierda */}
+        {playList.length > 3 && (
+          <button
+            onClick={() => {
+              document
+                .getElementById("carousel")
+                ?.scrollBy({ left: -280, behavior: "smooth" });
+            }}
+            className="absolute -left-3 z-10
             w-7 h-7 rounded-full
             bg-white shadow-md border border-pink-100
             text-fuchsia-400 text-lg
             flex items-center justify-center
             hover:bg-pink-50 hover:text-fuchsia-600
             active:scale-90 transition-all duration-200"
-            >
-              ‹
-            </button>
-          )}
-
-          <div
-            id="carousel"
-            className={`flex gap-3 pb-2 w-full overflow-x-hidden ${playList.length > 3 ? "scroll-smooth snap-x snap-mandatory px-6" : ""}`}
           >
-            {playList.map((pl, index) => {
-              const gradients = [
-                "from-pink-400 to-rose-400",
-                "from-fuchsia-400 to-pink-400",
-                "from-violet-400 to-fuchsia-400",
-                "from-purple-400 to-violet-400",
-                "from-pink-300 to-violet-400",
-              ];
-              const gradient = gradients[index % gradients.length];
-              const isSelected = effectivePlaylistId === pl.id;
+            ‹
+          </button>
+        )}
 
-              return (
-                <div
-                  key={pl.id}
-                  onClick={() => {
-                    setSelectedPlaylistId(pl.id);
-                    refetchTracks();
-                  }}
-                  className={`
+        <div
+          id="carousel"
+          className={`flex gap-3 pb-2 w-full overflow-x-hidden ${playList.length > 3 ? "scroll-smooth snap-x snap-mandatory px-6" : ""}`}
+        >
+          {playList.map((pl, index) => {
+            const gradients = [
+              "from-pink-400 to-rose-400",
+              "from-fuchsia-400 to-pink-400",
+              "from-violet-400 to-fuchsia-400",
+              "from-purple-400 to-violet-400",
+              "from-pink-300 to-violet-400",
+            ];
+            const gradient = gradients[index % gradients.length];
+            const isSelected = effectivePlaylistId === pl.id;
+
+            return (
+              <div
+                key={pl.id}
+                onClick={() => {
+                  setSelectedPlaylistId(pl.id);
+                  refetchTracks();
+                }}
+                className={`
                     group relative shrink-0 cursor-pointer
                     w-32 sm:w-36
                     mt-2
                     snap-center
-                    bg-white rounded-2xl overflow-hidden
+                    bg-white dark:bg-white/10 rounded-2xl overflow-hidden
                     border-2 transition-all duration-300
                     hover:-translate-y-1 hover:shadow-lg
                     ${
                       isSelected
                         ? "border-fuchsia-400 shadow-md shadow-fuchsia-200"
-                        : "border-pink-100 hover:border-fuchsia-300 shadow-sm"
+                        : "border-pink-100 dark:border-white/10 hover:border-fuchsia-300 shadow-sm"
                     }
                   `}
+              >
+                {/* Área de icono */}
+                <div
+                  className={`relative h-20 sm:h-24 ${pl.imageUrl ? "" : `bg-linear-to-br ${gradient}`} flex items-center justify-center`}
                 >
-                  {/* Área de icono */}
-                  <div
-                    className={`relative h-20 sm:h-24 ${pl.imageUrl ? "" : `bg-linear-to-br ${gradient}`} flex items-center justify-center`}
-                  >
-                    {pl.imageUrl ? (
-                      <Image
-                        src={pl.imageUrl}
-                        alt={pl.name}
-                        width={144}
-                        height={96}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <HiSparkles className="text-white/70" size={32} />
-                    )}
+                  {pl.imageUrl ? (
+                    <Image
+                      src={pl.imageUrl}
+                      alt={pl.name}
+                      width={144}
+                      height={96}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <HiSparkles className="text-white/70" size={32} />
+                  )}
 
-                    {/* Overlay hover con botón play */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                      <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
-                        <div className="bg-white/90 rounded-full p-2 shadow-md">
-                          <HiPlay className="text-fuchsia-500" size={18} />
-                        </div>
+                  {/* Overlay hover con botón play */}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 scale-75 group-hover:scale-100">
+                      <div className="bg-white/90 rounded-full p-2 shadow-md">
+                        <HiPlay className="text-fuchsia-500" size={18} />
                       </div>
                     </div>
-
-                    {isSelected && (
-                      <div className="absolute top-2 right-2 bg-white text-fuchsia-500 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
-                        ▶
-                      </div>
-                    )}
                   </div>
 
-                  {/* Info */}
-                  <div className="px-3 py-2.5">
-                    <p className="font-semibold text-gray-800 text-xs leading-tight line-clamp-1 mb-0.5">
-                      {pl.name}
-                    </p>
-                    <p className="text-[10px] text-gray-400 line-clamp-1">
-                      {pl.description || `${pl.tracksTotal || 0} canciones`}
-                    </p>
-                  </div>
+                  {isSelected && (
+                    <div className="absolute top-2 right-2 bg-white text-fuchsia-500 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                      ▶
+                    </div>
+                  )}
                 </div>
-              );
-            })}
-          </div>
 
-          {/* Flecha derecha */}
-          {playList.length > 3 && (
-            <button
-              onClick={() => {
-                document
-                  .getElementById("carousel")
-                  ?.scrollBy({ left: 280, behavior: "smooth" });
-              }}
-              className="absolute -right-3 z-10
+                {/* Info */}
+                <div className="px-3 py-2.5">
+                  <p className="font-semibold text-gray-800 dark:text-white text-xs leading-tight line-clamp-1 mb-0.5">
+                    {pl.name}
+                  </p>
+                  <p className="text-[10px] text-gray-400 dark:text-gray-300 line-clamp-1">
+                    {pl.description || `${pl.tracksTotal || 0} canciones`}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Flecha derecha */}
+        {playList.length > 3 && (
+          <button
+            onClick={() => {
+              document
+                .getElementById("carousel")
+                ?.scrollBy({ left: 280, behavior: "smooth" });
+            }}
+            className="absolute -right-3 z-10
             w-7 h-7 rounded-full
             bg-white shadow-md border border-pink-100
             text-fuchsia-400 text-lg
             flex items-center justify-center
             hover:bg-pink-50 hover:text-fuchsia-600
             active:scale-90 transition-all duration-200"
-            >
-              ›
-            </button>
-          )}
-        </div>
-
-        {/* Player */}
-        {effectivePlaylistId && (
-          <div className="mt-5">
-            {isLoadingTracks && (
-              <div className="flex items-center justify-center py-8">
-                <div className="flex flex-col items-center gap-3">
-                  <div className="w-8 h-8 border-3 border-fuchsia-400 border-t-transparent rounded-full animate-spin" />
-                  <p className="text-sm text-gray-400">Cargando canciones...</p>
-                </div>
-              </div>
-            )}
-
-            {isErrorTracks && (
-              <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                <p className="text-sm text-red-500">
-                  {(errorTracks as Error).message}
-                </p>
-              </div>
-            )}
-
-            {!isLoadingTracks && !isErrorTracks && (
-              <div className="rounded-2xl overflow-hidden shadow-lg border-2 border-pink-100 w-full">
-                <Iframe
-                  key={effectivePlaylistId}
-                  src={`spotify:playlist:${effectivePlaylistId}`}
-                />
-              </div>
-            )}
-          </div>
+          >
+            ›
+          </button>
         )}
       </div>
-    );
+
+      {/* Player */}
+      {effectivePlaylistId && (
+        <div className="mt-5">
+          {isLoadingTracks && (
+            <div className="flex items-center justify-center py-8">
+              <div className="flex flex-col items-center gap-3">
+                <div className="w-8 h-8 border-3 border-fuchsia-400 border-t-transparent rounded-full animate-spin" />
+                <p className="text-sm text-gray-400">Cargando canciones...</p>
+              </div>
+            </div>
+          )}
+
+          {isErrorTracks && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+              <p className="text-sm text-red-500">
+                {(errorTracks as Error).message}
+              </p>
+            </div>
+          )}
+
+          {!isLoadingTracks && !isErrorTracks && (
+            <div className="rounded-2xl overflow-hidden shadow-lg border-2 border-pink-100 w-full">
+              <Iframe
+                key={effectivePlaylistId}
+                src={`spotify:playlist:${effectivePlaylistId}`}
+              />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
