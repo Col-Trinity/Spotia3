@@ -76,7 +76,7 @@ export function Playlist() {
     );
   }
   return (
-    <div className="px-4 py-5 mt-2 max-w-4xl mx-auto">
+    <div className="py-2 w-full">
       <div className="mb-5">
         <div className="flex items-center gap-2 mb-1">
           <HiSparkles className="text-pink-400" size={22} />
@@ -96,12 +96,12 @@ export function Playlist() {
                 ?.scrollBy({ left: -280, behavior: "smooth" });
             }}
             className="absolute -left-3 z-10
-          w-7 h-7 rounded-full
-          bg-white shadow-md border border-pink-100
-          text-fuchsia-400 text-lg
-          flex items-center justify-center
-          hover:bg-pink-50 hover:text-fuchsia-600
-          active:scale-90 transition-all duration-200"
+            w-7 h-7 rounded-full
+            bg-white shadow-md border border-pink-100
+            text-fuchsia-400 text-lg
+            flex items-center justify-center
+            hover:bg-pink-50 hover:text-fuchsia-600
+            active:scale-90 transition-all duration-200"
           >
             ‹
           </button>
@@ -130,19 +130,19 @@ export function Playlist() {
                   refetchTracks();
                 }}
                 className={`
-                  group relative shrink-0 cursor-pointer
-                  w-32 sm:w-36
-                  mt-2
-                  snap-center
-                  bg-white rounded-2xl overflow-hidden
-                  border-2 transition-all duration-300
-                  hover:-translate-y-1 hover:shadow-lg
-                  ${
-                    isSelected
-                      ? "border-fuchsia-400 shadow-md shadow-fuchsia-200"
-                      : "border-pink-100 hover:border-fuchsia-300 shadow-sm"
-                  }
-                `}
+                    group relative shrink-0 cursor-pointer
+                    w-32 sm:w-36
+                    mt-2
+                    snap-center
+                    bg-white dark:bg-white/10 rounded-2xl overflow-hidden
+                    border-2 transition-all duration-300
+                    hover:-translate-y-1 hover:shadow-lg
+                    ${
+                      isSelected
+                        ? "border-fuchsia-400 shadow-md shadow-fuchsia-200"
+                        : "border-pink-100 dark:border-white/10 hover:border-fuchsia-300 shadow-sm"
+                    }
+                  `}
               >
                 {/* Área de icono */}
                 <div
@@ -178,10 +178,10 @@ export function Playlist() {
 
                 {/* Info */}
                 <div className="px-3 py-2.5">
-                  <p className="font-semibold text-gray-800 text-xs leading-tight line-clamp-1 mb-0.5">
+                  <p className="font-semibold text-gray-800 dark:text-white text-xs leading-tight line-clamp-1 mb-0.5">
                     {pl.name}
                   </p>
-                  <p className="text-[10px] text-gray-400 line-clamp-1">
+                  <p className="text-[10px] text-gray-400 dark:text-gray-300 line-clamp-1">
                     {pl.description || `${pl.tracksTotal || 0} canciones`}
                   </p>
                 </div>
@@ -199,12 +199,12 @@ export function Playlist() {
                 ?.scrollBy({ left: 280, behavior: "smooth" });
             }}
             className="absolute -right-3 z-10
-          w-7 h-7 rounded-full
-          bg-white shadow-md border border-pink-100
-          text-fuchsia-400 text-lg
-          flex items-center justify-center
-          hover:bg-pink-50 hover:text-fuchsia-600
-          active:scale-90 transition-all duration-200"
+            w-7 h-7 rounded-full
+            bg-white shadow-md border border-pink-100
+            text-fuchsia-400 text-lg
+            flex items-center justify-center
+            hover:bg-pink-50 hover:text-fuchsia-600
+            active:scale-90 transition-all duration-200"
           >
             ›
           </button>
@@ -232,7 +232,7 @@ export function Playlist() {
           )}
 
           {!isLoadingTracks && !isErrorTracks && (
-            <div className="relative rounded-2xl overflow-hidden shadow-lg border-2 border-pink-100">
+            <div className="rounded-2xl overflow-hidden shadow-lg border-2 border-pink-100 w-full">
               <Iframe
                 key={effectivePlaylistId}
                 src={`spotify:playlist:${effectivePlaylistId}`}

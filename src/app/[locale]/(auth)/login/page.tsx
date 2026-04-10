@@ -1,12 +1,12 @@
-'use client';
-import OnBoarding from '@/src/app/_components/OnBoarding';
-import { signIn, getProviders } from 'next-auth/react';
-import { useEffect, useState, JSX } from 'react';
-import SpotiaLogo from "@/public/SpotIALogo.png"
-import Image from 'next/image';
-import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
-import LanguageSwitcher from '@/src/app/_components/LanguageSwitcher';
+"use client";
+import OnBoarding from "@/src/app/_components/OnBoarding";
+import { signIn, getProviders } from "next-auth/react";
+import { useEffect, useState, JSX } from "react";
+import SpotiaLogo from "@/public/SpotIALogo.png";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
+import LanguageSwitcher from "@/src/app/_components/LanguageSwitcher";
 
 const providerIcons: Record<string, JSX.Element> = {
   spotify: (
@@ -27,11 +27,13 @@ const providerIcons: Record<string, JSX.Element> = {
 };
 
 export default function LoginPage() {
-  const [providers, setProviders] = useState<Awaited<ReturnType<typeof getProviders>> | null>(null);
-  const t = useTranslations('login');
+  const [providers, setProviders] = useState<Awaited<
+    ReturnType<typeof getProviders>
+  > | null>(null);
+  const t = useTranslations("login");
   const params = useParams();
   const localeParam = params.locale as string;
-  const locale = ['es', 'en'].includes(localeParam) ? localeParam : 'es';
+  const locale = ["es", "en"].includes(localeParam) ? localeParam : "es";
 
   useEffect(() => {
     getProviders().then((prov) => setProviders(prov));
@@ -47,11 +49,13 @@ export default function LoginPage() {
           src={SpotiaLogo}
           alt={"logo"}
           width={171}
-          height={141} />
+          height={141}
+          className="dark:brightness-0 dark:invert"
+        />
         <h6 className="font-medium text-base pb-2 w-full text-center">
-          {t('connectMusic')}
+          {t("connectMusic")}
         </h6>
-        <p className='text-center mt-[10vh] mb-[30vh]'>{t('description')}</p>
+        <p className="text-center mt-[10vh] mb-[30vh]">{t("description")}</p>
 
         <div className="flex flex-col space-y-4 w-full">
           {providers &&
@@ -65,12 +69,11 @@ export default function LoginPage() {
                   hover:bg-gray-200 font-semibold py-3 px-6 flex items-center justify-center transition shadow-sm"
               >
                 {providerIcons[provider.id]}
-                {t('continueWith')} {provider.name}
+                {t("continueWith")} {provider.name}
               </button>
             ))}
         </div>
         <OnBoarding page={2} />
-
       </div>
     </div>
   );
