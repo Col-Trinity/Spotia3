@@ -4,14 +4,13 @@ interface SpotifyIframeApi {
     createController(
         element: HTMLDivElement,
         config: { uri: string },
-        callback: (controller: SpotifyIframeController) => void
+        callback: (controller: SpotifyIframeController) => void,
     ): void;
 }
 
 interface SpotifyIframeController {
     destroy?(): void;
 }
-
 
 let cachedApi: SpotifyIframeApi | null = null;
 const pendingCallbacks: Array<(api: SpotifyIframeApi) => void> = [];
@@ -26,25 +25,20 @@ export function Iframe({ src }: { src: string }) {
 
         const spotifyDiv = document.createElement("div");
         spotifyDiv.style.width = "100%";
-        spotifyDiv.style.height = "380px";
+        spotifyDiv.style.height = "500px";
         spotifyDiv.style.borderRadius = "16px";
         spotifyDiv.style.overflow = "hidden";
         spotifyDiv.style.boxShadow = "0 10px 30px rgba(0,0,0,0.3)";
         spotifyDivRef.current = spotifyDiv;
-
 
         wrapper?.appendChild(spotifyDiv);
 
         const initController = (api: SpotifyIframeApi) => {
             if (!spotifyDivRef.current) return;
 
-            api.createController(
-                spotifyDivRef.current,
-                { uri: src },
-                (c) => {
-                    controllerRef.current = c;
-                }
-            );
+            api.createController(spotifyDivRef.current, { uri: src }, (c) => {
+                controllerRef.current = c;
+            });
         };
 
         if (cachedApi) {
@@ -62,7 +56,7 @@ export function Iframe({ src }: { src: string }) {
 
             window.onSpotifyIframeApiReady = (api: SpotifyIframeApi) => {
                 cachedApi = api;
-                pendingCallbacks.forEach(cb => cb(api));
+                pendingCallbacks.forEach((cb) => cb(api));
                 pendingCallbacks.length = 0;
             };
         }
@@ -71,12 +65,10 @@ export function Iframe({ src }: { src: string }) {
             const idx = pendingCallbacks.indexOf(initController);
             if (idx !== -1) pendingCallbacks.splice(idx, 1);
 
-
             if (controllerRef.current?.destroy) {
                 controllerRef.current.destroy();
             }
             controllerRef.current = null;
-
 
             if (spotifyDivRef.current && wrapper?.contains(spotifyDivRef.current)) {
                 wrapper.removeChild(spotifyDivRef.current);
@@ -85,5 +77,5 @@ export function Iframe({ src }: { src: string }) {
         };
     }, [src]);
 
-    return <div ref={wrapperRef} />;
+    return <div ref={wrapperRef} style={{ width: "100%" }} />;
 }

@@ -12,6 +12,10 @@ html.dark body {
   background-color: #030712;
   color: #f9fafb;
 }
+
+html.dark img[alt="logo"] {
+  filter: brightness(0) invert(1);
+}
 /* 
 :root {
   --background: #ffffff;
